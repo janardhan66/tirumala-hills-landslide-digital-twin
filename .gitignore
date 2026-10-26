@@ -1,0 +1,66 @@
+
+# Python cache
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+credentials.json
+secrets.json
+
+# IDE and operating system files
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+*.log
+*.tmp
+
+# Raw satellite datasets and archives
+data/raw/
+*.zip
+*.SAFE/
+
+# Large raster and satellite image files
+*.tif
+*.tiff
+*.h5
+*.hdf5
+
+# Large training datasets
+data/features/landslide4sense_rf_training*.csv
+
+# Model checkpoints
+models/*.pth
+models/*.joblib
+
+# Generated NumPy arrays
+*.npy
+
+# Temporary generated outputs
+outputs/tmp/
+outputs/cache/
+
+# Backup applications
+*_backup.py
+
+# Unusual zero-byte entries in project root
+/0.8.5
+/1.13.3
+/2.5.1
+/4.10.0
+/5.3.0
+/77.0.3
+/python
+/torch)

@@ -1,0 +1,16 @@
+inventory_id,latitude,longitude,source,coordinate_quality,extraction_note,elevation_m,slope_deg,correlation,los_disp_m,los_abs_m
+GSI_FIG32_01,13.677154,79.372998,GSI Figure 3.2,map-derived approximate,Clearly separable red incidence symbol in right-hand enlarged panel,,,,,
+GSI_FIG32_02,13.676254,79.348198,GSI Figure 3.2,map-derived approximate,Clearly separable red incidence symbol in right-hand enlarged panel,801.3975219726562,4.915987968444824,0.6592966318130493,-0.031100384891033173,0.031100384891033173
+GSI_FIG32_03,13.676005,79.341878,GSI Figure 3.2,map-derived approximate,Clearly separable red incidence symbol in right-hand enlarged panel,,,,,
+GSI_FIG32_04,13.674553,79.352665,GSI Figure 3.2,map-derived approximate,Clearly separable red incidence symbol in right-hand enlarged panel,839.6343383789062,5.804941177368164,0.7470574378967285,-0.03212594613432884,0.03212594613432884
+GSI_FIG32_05,13.672488,79.398334,GSI Figure 3.2,map-derived approximate,Clearly separable red incidence symbol in right-hand enlarged panel,,,,,
+GSI_FIG32_06,13.672299,79.35853,GSI Figure 3.2,map-derived approximate,Clearly separable red incidence symbol in right-hand enlarged panel,750.1336669921875,14.295451164245605,0.6169320940971375,-0.031246637925505638,0.031246637925505638
+GSI_FIG32_07,13.671548,79.38334,GSI Figure 3.2,map-derived approximate,Clearly separable red incidence symbol in right-hand enlarged panel,578.2896728515625,16.64642333984375,0.6248528361320496,-0.019311439245939255,0.019311439245939255
+GSI_FIG32_08,13.671391,79.392952,GSI Figure 3.2,map-derived approximate,Clearly separable red incidence symbol in right-hand enlarged panel,,,,,
+GSI_FIG32_09,13.668302,79.349307,GSI Figure 3.2,map-derived approximate,Clearly separable red incidence symbol in right-hand enlarged panel,785.3585205078125,29.69178009033203,0.7530401349067688,-0.03490035608410835,0.03490035608410835
+GSI_FIG32_10,13.667115,79.358778,GSI Figure 3.2,map-derived approximate,Clearly separable red incidence symbol in right-hand enlarged panel,630.0925903320312,13.796331405639648,0.3115541338920593,,
+GSI_FIG32_11,13.666522,79.354556,GSI Figure 3.2,map-derived approximate,Clearly separable red incidence symbol in right-hand enlarged panel,702.8795166015625,20.563339233398438,0.47368332743644714,,
+GSI_FIG32_12,13.665913,79.37714,GSI Figure 3.2,map-derived approximate,Clearly separable red incidence symbol in right-hand enlarged panel,699.8218994140625,0.4543105363845825,0.4613126218318939,,
+GSI_FIG32_13,13.664322,79.388626,GSI Figure 3.2,map-derived approximate,Clearly separable red incidence symbol in right-hand enlarged panel,669.2091064453125,4.540536880493164,0.6952523589134216,-0.02161930315196514,0.02161930315196514
+GSI_FIG32_14,13.661516,79.359197,GSI Figure 3.2,map-derived approximate,Clearly separable red incidence symbol in right-hand enlarged panel,826.830810546875,4.65647029876709,0.5728886723518372,-0.03119483031332493,0.03119483031332493
+GSI_FIG32_15,13.652931,79.382447,GSI Figure 3.2,map-derived approximate,Clearly separable red incidence symbol in right-hand enlarged panel,685.309326171875,6.392997741699219,0.30418285727500916,,

@@ -1,0 +1,9 @@
+{
+"type": "FeatureCollection",
+"name": "gsi_tirumala_reference_points",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "name": "GSI Study Area NW Reference", "latitude": 13.691728, "longitude": 79.337403 }, "geometry": { "type": "Point", "coordinates": [ 79.337403, 13.691728 ] } },
+{ "type": "Feature", "properties": { "name": "GSI Study Area SE Reference", "latitude": 13.639739, "longitude": 79.423392 }, "geometry": { "type": "Point", "coordinates": [ 79.423392, 13.639739 ] } }
+]
+}

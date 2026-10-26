@@ -1,0 +1,9 @@
+metric,value
+Terrain observations,2650.0
+InSAR observations,2650.0
+Temporal InSAR observations,2569.0
+Agent observations,2650.0
+GSI historical locations,15.0
+GSI support within 160 m (%),53.333333333333336
+GSI support within 320 m (%),73.33333333333333
+GSI support within 500 m (%),80.0

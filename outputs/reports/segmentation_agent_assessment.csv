@@ -1,0 +1,2 @@
+timestamp,source_file,predicted_landslide_pixels,predicted_landslide_percentage,average_confidence,prediction_threshold,agent_action,agent_recommendation
+2026-10-25T22:32:41,image_7.h5,3,0.018310546875,0.7025051712989807,0.5,Priority review,"The U-Net identified a segmented region, but the average confidence is below 0.75. Cross-check the prediction with independent remote-sensing and field evidence before drawing conclusions."
