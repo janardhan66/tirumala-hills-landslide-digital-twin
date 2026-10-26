@@ -1,0 +1,12 @@
+,elevation_m,slope_deg,correlation,los_disp_m,los_abs_m,rain_3d_before_start_mm,rain_7d_before_start_mm,rain_14d_before_start_mm,rain_3d_before_end_mm,rain_7d_before_end_mm,rain_14d_before_end_mm
+elevation_m,1.0,-0.39407836920907985,0.053007301096381215,-0.16319295326416228,0.16319295326416228,,,,,,
+slope_deg,-0.39407836920907985,1.0,-0.25472596438297257,-0.04046335899484743,0.04046335899484743,,,,,,
+correlation,0.053007301096381215,-0.25472596438297257,1.0,0.046673112966986015,-0.046673112966986015,,,,,,
+los_disp_m,-0.16319295326416228,-0.04046335899484743,0.046673112966986015,1.0,-1.0,,,,,,
+los_abs_m,0.16319295326416228,0.04046335899484743,-0.046673112966986015,-1.0,1.0,,,,,,
+rain_3d_before_start_mm,,,,,,,,,,,
+rain_7d_before_start_mm,,,,,,,,,,,
+rain_14d_before_start_mm,,,,,,,,,,,
+rain_3d_before_end_mm,,,,,,,,,,,
+rain_7d_before_end_mm,,,,,,,,,,,
+rain_14d_before_end_mm,,,,,,,,,,,
