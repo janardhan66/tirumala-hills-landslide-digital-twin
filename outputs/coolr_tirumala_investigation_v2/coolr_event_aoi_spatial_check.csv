@@ -1,0 +1,3 @@
+event_id,event_title,event_date,latitude,longitude,reported_location_accuracy,inside_aoi_by_reported_coordinate,nearest_aoi_boundary_distance_m,source,source_url
+"12,957",Tirumala Road Landslide,"10/13/17, 5:30 AM",13.665,79.357,Known within 1 km,True,1035.61,The Hindu,https://www.thehindu.com/news/national/andhra-pradesh/landslip-hits-traffic-on-ghat-road/article19856565.ece
+"5,650","Tirumala, Andhra Pradesh","11/17/13, 11:30 AM",13.653,79.344,Known within 5 km,True,395.8,newindianexpress.com,http://newindianexpress.com/states/andhra_pradesh/Landslides-hit-traffic-on-Tirumala-ghat/2013/11/18/article1896764.ece

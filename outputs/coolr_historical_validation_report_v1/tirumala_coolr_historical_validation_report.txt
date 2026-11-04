@@ -1,0 +1,88 @@
+HISTORICAL LANDSLIDE VALIDATION INVESTIGATION
+TIRUMALA HILLS LANDSLIDE DIGITAL TWIN
+======================================================================
+
+Report type: Historical event spatial corroboration
+Study area: Tirumala Hills, Tirupati, Andhra Pradesh
+Preparation date: 31 October 2026
+
+1. OBJECTIVE
+----------------------------------------------------------------------
+To investigate whether independently reported historical landslide events provide useful spatial context for the two provisional InSAR reference candidate regions.
+
+2. DATA SOURCES
+----------------------------------------------------------------------
+COOLR historical landslide reports and their recorded original news-source links.
+GSI map-derived inventory and the Tirumala Hills AOI polygon.
+Reference candidate pixels from the existing screening results.
+
+3. HISTORICAL EVENT DETAILS
+----------------------------------------------------------------------
+
+Event: Tirumala Road Landslide
+COOLR Event ID: 12957
+Date: 13 October 2017
+Reported location accuracy: Known within 1 km
+Source: The Hindu
+Source link: https://www.thehindu.com/news/national/andhra-pradesh/landslip-hits-traffic-on-ghat-road/article19856565.ece
+Description: Reported landslip on the first ghat road to Tirupati, near Akkagarla temple, following recent rains. The report mentions an uprooted tree, boulders and soil affecting traffic.
+Reported coordinate: 13.665, 79.357
+Coordinate inside AOI by point-in-polygon: True
+Nearest AOI boundary distance: 1035.61 m
+
+Event: Tirumala, Andhra Pradesh
+COOLR Event ID: 5650
+Date: 17 November 2013
+Reported location accuracy: Known within 5 km
+Source: The New Indian Express
+Source link: http://newindianexpress.com/states/andhra_pradesh/Landslides-hit-traffic-on-Tirumala-ghat/2013/11/18/article1896764.ece
+Description: Reported landslides after heavy rainfall on the second ghat road to Tirumala, with boulders falling and traffic being blocked.
+Reported coordinate: 13.653, 79.344
+Coordinate inside AOI by point-in-polygon: True
+Nearest AOI boundary distance: 395.8 m
+
+4. DISTANCE TO PROVISIONAL REFERENCE REGIONS
+----------------------------------------------------------------------
+
+Event: Tirumala Road Landslide (13 October 2017)
+Region 1:
+  Nearest candidate pixel distance: 2124.3 m
+  Nearest pixel row/column: 12, 27
+  Region centre distance: 2461.78 m
+Region 3:
+  Nearest candidate pixel distance: 1426.11 m
+  Nearest pixel row/column: 22, 24
+  Region centre distance: 1794.79 m
+
+Event: Tirumala, Andhra Pradesh (17 November 2013)
+Region 1:
+  Nearest candidate pixel distance: 2933.25 m
+  Nearest pixel row/column: 18, 14
+  Region centre distance: 3637.84 m
+Region 3:
+  Nearest candidate pixel distance: 2708.91 m
+  Nearest pixel row/column: 22, 23
+  Region centre distance: 3081.78 m
+
+5. INTERPRETATION
+----------------------------------------------------------------------
+The 2017 event coordinate is approximately 2.12 km from the nearest Region 1 candidate pixel and 1.43 km from the nearest Region 3 candidate pixel.
+Its reported location accuracy is within 1 km. Both nearest-pixel distances exceed that reported accuracy range, when interpreted as a radius around the reported coordinate.
+The 2013 event coordinate is approximately 2.93 km from Region 1 and 2.71 km from Region 3. Its reported location accuracy is within 5 km, so the uncertainty range encompasses both candidate regions.
+Region 1 is farther from both reported event coordinates. This provides supporting historical spatial context for preferring Region 1 provisionally, but it does not establish ground stability.
+
+6. LIMITATIONS
+----------------------------------------------------------------------
+1. COOLR event coordinates are approximate and have reported location uncertainties.
+2. A coordinate falling inside the AOI does not prove that the actual landslide footprint was entirely inside the AOI.
+3. Distances are measured to candidate pixel centres, not to verified landslide boundaries or exact ground-failure footprints.
+4. Historical event proximity cannot independently validate the physical stability of an InSAR reference region.
+5. The historical events occurred in 2013 and 2017, whereas the available InSAR pairs cover August 2026.
+6. Independent GNSS measurements, geological evidence and additional temporally consistent observations are still required.
+
+7. CONCLUSION
+----------------------------------------------------------------------
+Region 1 remains the stronger provisional reference candidate based on the combined screening, terrain, GSI separation, sensitivity and historical-event distance investigations.
+However, neither Region 1 nor Region 3 can currently be labelled confirmed stable ground. The COOLR investigation provides historical corroboration context only, not definitive validation.
+
+END OF REPORT

@@ -1,15 +1,22 @@
 
-# Python cache
+# ==========================================
+# PYTHON CACHE
+# ==========================================
 __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
 
-# Virtual environments
+# ==========================================
+# VIRTUAL ENVIRONMENTS
+# ==========================================
 venv/
 .venv/
+.venv_test/
 env/
 
-# Secrets and credentials
+# ==========================================
+# SECRETS AND CREDENTIALS
+# ==========================================
 .env
 .env.*
 !.env.example
@@ -17,45 +24,101 @@ env/
 credentials.json
 secrets.json
 
-# IDE and operating system files
+# ==========================================
+# IDE AND OPERATING SYSTEM FILES
+# ==========================================
 .vscode/
 .idea/
 Thumbs.db
 Desktop.ini
 
-# Temporary files
+# ==========================================
+# TEMPORARY FILES AND LOGS
+# ==========================================
 *.log
 *.tmp
+*.temp
 
-# Raw satellite datasets and archives
+# ==========================================
+# BACKUP FILES
+# ==========================================
+*.bak
+*.bak.*
+*.backup
+*.backup.*
+*_backup.py
+*_before_*.py
+dashboard/app.py.bak*
+dashboard/app.py.backup*
+
+# ==========================================
+# RAW SATELLITE DATASETS AND ARCHIVES
+# ==========================================
 data/raw/
 *.zip
 *.SAFE/
 
-# Large raster and satellite image files
+# ==========================================
+# LARGE RASTER AND SATELLITE IMAGE FILES
+# ==========================================
 *.tif
 *.tiff
 *.h5
 *.hdf5
 
-# Large training datasets
+# ==========================================
+# LARGE TRAINING DATASETS
+# ==========================================
 data/features/landslide4sense_rf_training*.csv
 
-# Model checkpoints
-models/*.pth
-models/*.joblib
+# ==========================================
+# MODEL CHECKPOINTS
+# Keep the trained U-Net checkpoint for deployment.
+# ==========================================
+# models/*.pth
+# models/*.joblib
 
-# Generated NumPy arrays
+# ==========================================
+# GENERATED NUMPY ARRAYS
+# ==========================================
 *.npy
 
-# Temporary generated outputs
+# ==========================================
+# TEMPORARY GENERATED OUTPUTS
+# ==========================================
 outputs/tmp/
 outputs/cache/
 
-# Backup applications
-*_backup.py
+# ==========================================
+# EXPERIMENTAL RESEARCH INVESTIGATIONS
+# ==========================================
+outputs/boundary_*/
+outputs/common_reference_*/
+outputs/coolr_*/
+outputs/detrended_*/
+outputs/final_independent_validation_*/
+outputs/final_reference_*/
+outputs/gsi_distance_*/
+outputs/gsi_inventory_distance_*/
+outputs/gsi_spatial_maps_*/
+outputs/influential_pixel_*/
+outputs/leave_one_out_*/
+outputs/los_spatial_*/
+outputs/median_centered_*/
+outputs/moran_*/
+outputs/partial_spatial_*/
+outputs/pixel_*/
+outputs/reference_area_*/
+outputs/reference_region_*/
+outputs/residual_*/
+outputs/spatial_*/
+outputs/terrain_relationship_*/
+outputs/validation_analysis/
+outputs/validation_visuals/
 
-# Unusual zero-byte entries in project root
+# ==========================================
+# UNUSUAL ROOT-LEVEL ENTRIES
+# ==========================================
 /0.8.5
 /1.13.3
 /2.5.1
@@ -64,3 +127,24 @@ outputs/cache/
 /77.0.3
 /python
 /torch)
+
+# ==========================================
+# REQUIRED DASHBOARD RESEARCH ASSESSMENTS
+# ==========================================
+!outputs/final_reference_region_assessment_v2/
+!outputs/final_reference_region_assessment_v2/final_reference_comparison.csv
+
+!outputs/moran_permutation_test_v1/
+!outputs/moran_permutation_test_v1/moran_permutation_summary.csv
+
+!outputs/reference_region_robustness_v1/
+!outputs/reference_region_robustness_v1/reference_region_robustness_summary.csv
+
+!outputs/coolr_tirumala_investigation_v2/
+!outputs/coolr_tirumala_investigation_v2/coolr_event_aoi_spatial_check.csv
+
+!outputs/coolr_historical_validation_report_v1/
+!outputs/coolr_historical_validation_report_v1/tirumala_coolr_historical_validation_report.txt
+
+!outputs/boundary_refitted_plane_analysis_v1/
+!outputs/boundary_refitted_plane_analysis_v1/refitted_plane_summary.csv
