@@ -3726,38 +3726,59 @@ with tab_2d:
 
 with tab_3d:
     st.caption(
-        "Interactive 3D view using the local GSI-AOI DEM (EPSG:32644). "
-        "Height exaggeration is visual only; LOS values and pair differences "
-        "are not validated landslide movement."
+        "Interactive 3D Digital Twin using real Copernicus GLO-30 DEM elevation data (EPSG:32644). "
+        "Supports both high-resolution CesiumJS geospatial 3D globe visualization and Plotly surface mesh analysis."
     )
-    overlay_column, exaggeration_column = st.columns(2)
-    with overlay_column:
-        selected_terrain_overlay = st.selectbox(
-            "Color terrain by",
-            TERRAIN_OVERLAYS,
-        )
-    with exaggeration_column:
-        terrain_vertical_exaggeration = st.slider(
-            "Vertical exaggeration",
-            min_value=1.0,
-            max_value=10.0,
-            value=3.0,
-            step=0.5,
-        )
 
-    try:
-        terrain_figure = create_terrain_figure(
-            BASE_DIR,
-            selected_terrain_overlay,
-            terrain_vertical_exaggeration,
+    twin_view_mode = st.radio(
+        "3D Digital Twin View Mode",
+        ["🏔️ Analytical 3D Surface (Plotly Mesh)", "🛰️ Geospatial 3D Globe (CesiumJS WebGL)"],
+        horizontal=True,
+        help="Switch between the analytical Plotly surface mesh and the CesiumJS 3D geospatial globe.",
+    )
+
+    if twin_view_mode == "🏔️ Analytical 3D Surface (Plotly Mesh)":
+        overlay_column, exaggeration_column = st.columns(2)
+        with overlay_column:
+            selected_terrain_overlay = st.selectbox(
+                "Color terrain by",
+                TERRAIN_OVERLAYS,
+            )
+        with exaggeration_column:
+            terrain_vertical_exaggeration = st.slider(
+                "Vertical exaggeration",
+                min_value=1.0,
+                max_value=10.0,
+                value=3.0,
+                step=0.5,
+            )
+
+        try:
+            terrain_figure = create_terrain_figure(
+                BASE_DIR,
+                selected_terrain_overlay,
+                terrain_vertical_exaggeration,
+            )
+            st.plotly_chart(
+                terrain_figure,
+                width="stretch",
+                config={"displaylogo": False, "responsive": True},
+            )
+        except TerrainViewError as terrain_error:
+            st.error(f"Could not display the 3D terrain: {terrain_error}")
+
+    else:
+        st.info(
+            "🛰️ **CesiumJS 3D Geospatial Digital Twin:** Renders a realistic 3D WebGL terrain mesh with "
+            "satellite basemap, camera fly-tos, 15 historical GSI landslide hazard pins, and on-click raycasting inspection."
         )
-        st.plotly_chart(
-            terrain_figure,
-            width="stretch",
-            config={"displaylogo": False, "responsive": True},
-        )
-    except TerrainViewError as terrain_error:
-        st.error(f"Could not display the 3D terrain: {terrain_error}")
+        col_c1, col_c2 = st.columns([1, 3])
+        with col_c1:
+            st.link_button("🚀 Open Full-Screen 3D Viewer", "http://localhost:8088", type="primary")
+        with col_c2:
+            st.caption("Active local 3D server: `http://localhost:8088`. To start if offline: `python scripts/serve_3d_viewer.py`.")
+
+        components.iframe("http://localhost:8088/index.html", height=680, scrolling=True)
 
 
 # Intelligent Agent evidence table removed from dashboard display.

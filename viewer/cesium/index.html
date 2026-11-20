@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tirumala Hills 3D Digital Twin | Geospatial Landslide Monitoring</title>
+    <!-- CesiumJS Official Builds -->
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.119/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.119/Build/Cesium/Cesium.js"></script>
+    <link rel="stylesheet" href="./cesium.css">
+</head>
+<body>
+    <!-- Top Telemetry Header -->
+    <header class="hud-header">
+        <div class="hud-title">
+            <span>🏔️ Tirumala Hills 3D Digital Twin</span>
+            <span class="badge">CesiumJS Engine</span>
+        </div>
+        <div class="hud-telemetry">
+            <div class="telemetry-item">
+                <div class="status-dot"></div>
+                <span id="statusText">Active 3D Telemetry</span>
+            </div>
+            <div class="telemetry-item">
+                <span>📍 UTM 44N (EPSG:32644)</span>
+            </div>
+            <div class="telemetry-item">
+                <span>🛰️ Copernicus 80m DEM</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Cesium 3D Globe Canvas -->
+    <div id="cesiumContainer"></div>
+
+    <!-- Right Side Layer Control Panel -->
+    <aside class="hud-panel">
+        <!-- 3D Overlays -->
+        <div class="panel-section">
+            <div class="panel-title">🗺️ 3D Terrain Overlays</div>
+            <div class="control-group">
+                <label class="control-label">
+                    <input type="radio" name="overlay" value="relief" checked>
+                    <span>Elevation Shaded Relief</span>
+                </label>
+                <label class="control-label">
+                    <input type="radio" name="overlay" value="slope">
+                    <span>Slope Distribution (0°–50°)</span>
+                </label>
+                <label class="control-label">
+                    <input type="radio" name="overlay" value="los">
+                    <span>InSAR LOS Displacement (Pair 2)</span>
+                </label>
+                <label class="control-label">
+                    <input type="radio" name="overlay" value="corr">
+                    <span>InSAR Coherence (γ ≥ 0.50)</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Vertical Exaggeration Slider -->
+        <div class="panel-section">
+            <div class="panel-title">⛰️ Topographic Relief Scale</div>
+            <div class="slider-container">
+                <label>
+                    <span>Exaggeration</span>
+                    <span id="exagValue" style="color: #38bdf8; font-weight: 700;">2.0x</span>
+                </label>
+                <input type="range" id="exagSlider" min="1.0" max="5.0" step="0.5" value="2.0">
+            </div>
+        </div>
+
+        <!-- Vector Layers -->
+        <div class="panel-section">
+            <div class="panel-title">📍 GIS Evidence Layers</div>
+            <div class="control-group">
+                <label class="control-label">
+                    <input type="checkbox" id="chkGsi" checked>
+                    <span>Historical GSI Landslide Points</span>
+                </label>
+                <label class="control-label">
+                    <input type="checkbox" id="chkAoi" checked>
+                    <span>GSI Study Area Boundary</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Camera Viewpoints -->
+        <div class="panel-section">
+            <div class="panel-title">🔭 Camera Navigation</div>
+            <div class="view-buttons">
+                <button class="btn-view" data-view="overview">Overview</button>
+                <button class="btn-view" data-view="ghat1">1st Ghat Rd</button>
+                <button class="btn-view" data-view="ghat2">2nd Ghat Rd</button>
+                <button class="btn-view" data-view="township">Township</button>
+                <button class="btn-view" data-view="nadir" style="grid-column: span 2;">Top-Down Nadir</button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Bottom Left Raycasting Inspector Card -->
+    <div class="hud-inspector" id="inspectorCard">
+        <div class="inspector-header">
+            <span class="inspector-title">🎯 3D Terrain Raycast Inspector</span>
+            <span class="risk-pill risk-Low" id="cardRisk">Normal</span>
+        </div>
+        <div class="inspector-grid">
+            <div class="data-cell">
+                <div class="data-label">Coordinates</div>
+                <div class="data-value" id="cardCoord">13.6680°N, 79.3738°E</div>
+            </div>
+            <div class="data-cell">
+                <div class="data-label">Elevation</div>
+                <div class="data-value" id="cardElevation">580.4 m</div>
+            </div>
+            <div class="data-cell">
+                <div class="data-label">Slope</div>
+                <div class="data-value" id="cardSlope">24.1°</div>
+            </div>
+            <div class="data-cell">
+                <div class="data-label">InSAR LOS Disp</div>
+                <div class="data-value" id="cardLos">-22.5 mm</div>
+            </div>
+            <div class="data-cell">
+                <div class="data-label">Coherence (γ)</div>
+                <div class="data-value" id="cardCorr">0.76</div>
+            </div>
+            <div class="data-cell">
+                <div class="data-label">3-Day Rain</div>
+                <div class="data-value" id="cardRain">44.8 mm</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Right Dynamic Legend -->
+    <div class="hud-legend" id="hudLegend">
+        <div id="legendTitle" style="font-weight: 700; color: #f1f5f9; margin-bottom: 2px;">Elevation (GLO-30 DEM)</div>
+        <div class="legend-bar" id="legendBar" style="background: linear-gradient(to right, #2b83ba, #abdda4, #ffffbf, #fdae61, #d7191c);"></div>
+        <div class="legend-labels">
+            <span id="legendMin">192 m</span>
+            <span id="legendMax">884 m</span>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script src="./app.js"></script>
+</body>
+</html>

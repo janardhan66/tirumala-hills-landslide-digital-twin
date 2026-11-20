@@ -1,0 +1,245 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.372998,
+          13.677154
+        ]
+      },
+      "properties": {
+        "id": "GSI_FIG32_01",
+        "source": "GSI Figure 3.2",
+        "quality": "map-derived approximate",
+        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.348198,
+          13.676254
+        ]
+      },
+      "properties": {
+        "id": "GSI_FIG32_02",
+        "source": "GSI Figure 3.2",
+        "quality": "map-derived approximate",
+        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.341878,
+          13.676005
+        ]
+      },
+      "properties": {
+        "id": "GSI_FIG32_03",
+        "source": "GSI Figure 3.2",
+        "quality": "map-derived approximate",
+        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.352665,
+          13.674553
+        ]
+      },
+      "properties": {
+        "id": "GSI_FIG32_04",
+        "source": "GSI Figure 3.2",
+        "quality": "map-derived approximate",
+        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.398334,
+          13.672488
+        ]
+      },
+      "properties": {
+        "id": "GSI_FIG32_05",
+        "source": "GSI Figure 3.2",
+        "quality": "map-derived approximate",
+        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.35853,
+          13.672299
+        ]
+      },
+      "properties": {
+        "id": "GSI_FIG32_06",
+        "source": "GSI Figure 3.2",
+        "quality": "map-derived approximate",
+        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.38334,
+          13.671548
+        ]
+      },
+      "properties": {
+        "id": "GSI_FIG32_07",
+        "source": "GSI Figure 3.2",
+        "quality": "map-derived approximate",
+        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.392952,
+          13.671391
+        ]
+      },
+      "properties": {
+        "id": "GSI_FIG32_08",
+        "source": "GSI Figure 3.2",
+        "quality": "map-derived approximate",
+        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.349307,
+          13.668302
+        ]
+      },
+      "properties": {
+        "id": "GSI_FIG32_09",
+        "source": "GSI Figure 3.2",
+        "quality": "map-derived approximate",
+        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.358778,
+          13.667115
+        ]
+      },
+      "properties": {
+        "id": "GSI_FIG32_10",
+        "source": "GSI Figure 3.2",
+        "quality": "map-derived approximate",
+        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.354556,
+          13.666522
+        ]
+      },
+      "properties": {
+        "id": "GSI_FIG32_11",
+        "source": "GSI Figure 3.2",
+        "quality": "map-derived approximate",
+        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.37714,
+          13.665913
+        ]
+      },
+      "properties": {
+        "id": "GSI_FIG32_12",
+        "source": "GSI Figure 3.2",
+        "quality": "map-derived approximate",
+        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.388626,
+          13.664322
+        ]
+      },
+      "properties": {
+        "id": "GSI_FIG32_13",
+        "source": "GSI Figure 3.2",
+        "quality": "map-derived approximate",
+        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.359197,
+          13.661516
+        ]
+      },
+      "properties": {
+        "id": "GSI_FIG32_14",
+        "source": "GSI Figure 3.2",
+        "quality": "map-derived approximate",
+        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.382447,
+          13.652931
+        ]
+      },
+      "properties": {
+        "id": "GSI_FIG32_15",
+        "source": "GSI Figure 3.2",
+        "quality": "map-derived approximate",
+        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+      }
+    }
+  ]
+}

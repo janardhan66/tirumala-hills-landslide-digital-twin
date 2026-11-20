@@ -1,0 +1,300 @@
+/* Tirumala Hills 3D Digital Twin - Geospatial HUD Styling */
+html, body, #cesiumContainer {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #0b0f19;
+    color: #e2e8f0;
+}
+
+/* Header Telemetry Bar */
+.hud-header {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    right: 16px;
+    height: 48px;
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+}
+
+.hud-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    color: #f8fafc;
+}
+
+.hud-title span.badge {
+    background: #0284c7;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.hud-telemetry {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 12px;
+}
+
+.telemetry-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #94a3b8;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+}
+
+/* Layer Control Drawer (Top Right) */
+.hud-panel {
+    position: absolute;
+    top: 72px;
+    right: 16px;
+    width: 280px;
+    background: rgba(15, 23, 42, 0.90);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    padding: 14px;
+    z-index: 1000;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+}
+
+.panel-section {
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.panel-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.panel-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #38bdf8;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+}
+
+.control-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #cbd5e1;
+    user-select: none;
+    padding: 3px 0;
+}
+
+.control-label:hover {
+    color: #ffffff;
+}
+
+.control-label input[type="radio"],
+.control-label input[type="checkbox"] {
+    accent-color: #0284c7;
+    cursor: pointer;
+}
+
+.slider-container {
+    margin-top: 6px;
+}
+
+.slider-container label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #94a3b8;
+    margin-bottom: 4px;
+}
+
+.slider-container input[type="range"] {
+    width: 100%;
+    accent-color: #0284c7;
+    cursor: pointer;
+}
+
+/* Camera Viewpoint Toolbar */
+.view-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+
+.btn-view {
+    background: rgba(30, 41, 59, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #e2e8f0;
+    padding: 6px 8px;
+    font-size: 11px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s ease;
+}
+
+.btn-view:hover {
+    background: #0284c7;
+    color: #ffffff;
+    border-color: #38bdf8;
+}
+
+/* On-Click Inspector Card (Bottom Left) */
+.hud-inspector {
+    position: absolute;
+    bottom: 24px;
+    left: 16px;
+    width: 320px;
+    background: rgba(15, 23, 42, 0.92);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    padding: 14px;
+    z-index: 1000;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+    transition: opacity 0.2s ease;
+}
+
+.inspector-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+}
+
+.inspector-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #f1f5f9;
+}
+
+.risk-pill {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+}
+
+.risk-High {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+.risk-Medium {
+    background: #f59e0b;
+    color: #0f172a;
+}
+
+.risk-Low {
+    background: #10b981;
+    color: #ffffff;
+}
+
+.risk-Unknown {
+    background: #64748b;
+    color: #ffffff;
+}
+
+.inspector-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    font-size: 11px;
+}
+
+.data-cell {
+    background: rgba(30, 41, 59, 0.6);
+    padding: 6px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.data-label {
+    color: #94a3b8;
+    margin-bottom: 2px;
+    font-size: 10px;
+}
+
+.data-value {
+    color: #f8fafc;
+    font-weight: 600;
+}
+
+/* Legend in bottom right */
+.hud-legend {
+    position: absolute;
+    bottom: 24px;
+    right: 16px;
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 11px;
+    z-index: 1000;
+}
+
+.legend-bar {
+    width: 140px;
+    height: 10px;
+    border-radius: 2px;
+    margin: 4px 0;
+}
+
+.legend-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: #94a3b8;
+}
+
+/* Cesium UI Overrides */
+.cesium-viewer-bottom {
+    display: none !important; /* Hide default credit bar for cleaner HUD */
+}
