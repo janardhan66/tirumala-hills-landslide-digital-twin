@@ -26,6 +26,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
+from src.digital_twin.terrain_3d import (
+    TERRAIN_OVERLAYS,
+    TerrainViewError,
+    create_terrain_figure,
+)
+
 FINAL_AGENT_FILE = (
     BASE_DIR
     / "data"
@@ -1080,12 +1086,12 @@ def answer_project_question(
         and not asks_limitations
     ):
         return (
-            "The Tirumala Digital Twin is a 2D Leaflet map embedded in Streamlit. "
-            "It brings together the AOI, InSAR overlay, historical GSI locations "
-            "and related map context with dashboard evidence tables and temporal "
-            "features. It is not a 3D model. Rainfall is contextual information, "
-            "and uploaded U-Net masks are not georeferenced or automatically "
-            "integrated as map layers."
+            "The Tirumala dashboard keeps its Leaflet-based 2D map as the default "
+            "and offers an optional experimental Plotly 3D terrain view based "
+            "on the local DEM. The 3D view can be colored by elevation, slope, "
+            "Pair 2 correlation, or Pair 2 LOS displacement. Rainfall is "
+            "contextual information, and uploaded U-Net masks are not "
+            "georeferenced or automatically integrated as map layers."
         )
 
     if (
@@ -2706,9 +2712,11 @@ vertical movement.
     # -------------------------------
     if "digital twin" in q:
         return (
-            "The Digital Twin is an interactive representation of "
-            "Tirumala Hills that visualizes integrated spatial evidence, "
-            "temporal InSAR change, historical GSI locations and rainfall context."
+            "The Digital Twin keeps the existing 2D Leaflet map and offers an "
+            "optional experimental 3D view of the local elevation surface. "
+            "The 3D terrain can be colored by slope or selected Pair 2 InSAR "
+            "layers. These are visualization layers, not a validated landslide "
+            "prediction or full 3D ground-motion measurement."
         )
     
     
@@ -3716,6 +3724,49 @@ else:
         str(DIGITAL_TWIN_FILE),
         language="text"
     )
+
+show_3d_terrain = st.checkbox(
+    "Show experimental 3D terrain view",
+    help=(
+        "Displays the local 80 m terrain DEM with an optional aligned "
+        "evidence overlay. The existing 2D map remains available above."
+    ),
+)
+
+if show_3d_terrain:
+    st.caption(
+        "Experimental 3D view using the local GSI-AOI DEM (EPSG:32644). "
+        "Height exaggeration is visual only; LOS values and pair differences "
+        "are not validated landslide movement."
+    )
+    overlay_column, exaggeration_column = st.columns(2)
+    with overlay_column:
+        selected_terrain_overlay = st.selectbox(
+            "Color terrain by",
+            TERRAIN_OVERLAYS,
+        )
+    with exaggeration_column:
+        terrain_vertical_exaggeration = st.slider(
+            "Vertical exaggeration",
+            min_value=1.0,
+            max_value=10.0,
+            value=3.0,
+            step=0.5,
+        )
+
+    try:
+        terrain_figure = create_terrain_figure(
+            BASE_DIR,
+            selected_terrain_overlay,
+            terrain_vertical_exaggeration,
+        )
+        st.plotly_chart(
+            terrain_figure,
+            width="stretch",
+            config={"displaylogo": False, "responsive": True},
+        )
+    except TerrainViewError as terrain_error:
+        st.error(f"Could not display the experimental 3D terrain: {terrain_error}")
 
 
 # Intelligent Agent evidence table removed from dashboard display.

@@ -20,7 +20,8 @@ Objectives:
 
 - Prepare spatial and temporal evidence tables from existing remote-sensing
   and reference datasets.
-- Display the evidence in a 2D GIS-based Digital Twin and Streamlit dashboard.
+- Display the evidence in the default 2D GIS-based Digital Twin and an
+  optional experimental 3D terrain view in the Streamlit dashboard.
 - Apply transparent, rule-based evidence categories and monitoring prompts.
 - Demonstrate a separately trained Landslide4Sense U-Net on compatible HDF5
   patches, without implying Tirumala-specific validation.
@@ -64,7 +65,7 @@ Landslide4Sense HDF5 patches ─> PyTorch 14-channel U-Net ───────
                                                                   v
                                                      Streamlit dashboard
                                                                   │
-                                                     2D Leaflet Digital Twin
+                                              2D Leaflet map + optional 3D terrain
 ```
 
 Spatial evidence, temporal InSAR features, rainfall context, and U-Net patch
@@ -244,6 +245,15 @@ Leaflet-based map**, not a 3D terrain model. It includes the AOI, an
 InSAR overlay, historical point context, and map layers. The U-Net upload
 workflow is not linked to the map.
 
+The dashboard also has an opt-in experimental 3D terrain view. It uses the
+local 80 m GSI-AOI DEM and can color the terrain by elevation, slope, Pair 2
+correlation, or Pair 2 LOS displacement. The existing 2D map remains unchanged
+and available as the default. The terrain and overlay rasters must share the
+same EPSG:32644 grid. Vertical exaggeration is visual only; the Pair 2 LOS
+values are not calibrated landslide movement, and the independent-reference
+pair difference is not shown as a validated time series. The raster files are
+local data assets and are not included in Git.
+
 Local dashboard smoke-test screenshot:
 
 ![Tirumala Hills Streamlit dashboard landing page](./results/digital_twin/tirumala_dashboard_screenshot.png)
@@ -274,7 +284,8 @@ identify their physical cause or prove stability/instability.
 - The Intelligent Agent is rule-based, not a calibrated predictive AI model.
 - Rainfall is event-level temporal context, not a pixel-specific spatial
   predictor.
-- The Digital Twin is a 2D map, not a 3D model.
+- The default Leaflet map is 2D; the optional 3D terrain view is experimental
+  and requires evaluation before replacing the current interface.
 - Atmospheric effects, phase-unwrapping quality, and other residual spatial
   structures are not fully resolved.
 - The application is a research prototype, not an operational early-warning
@@ -324,5 +335,7 @@ preserved.
   making local performance claims.
 - Add georeferencing and map alignment before displaying U-Net masks as map
   layers.
+- Validate the experimental 3D terrain view before adopting it as the primary
+  Digital Twin interface.
 - Validate the dashboard and documented installation from a clean,
   reproducible environment.
