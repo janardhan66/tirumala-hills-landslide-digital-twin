@@ -1,4 +1,5 @@
 import streamlit as st
+import hashlib
 import pandas as pd
 import numpy as np
 import h5py
@@ -7,6 +8,7 @@ import torch.nn as nn
 from pathlib import Path
 from datetime import datetime
 import streamlit.components.v1 as components
+import sys
 
 # ============================================================
 # PAGE CONFIGURATION
@@ -21,6 +23,8 @@ st.set_page_config(
 # PROJECT PATHS
 # ============================================================
 BASE_DIR = Path(__file__).resolve().parent.parent
+if str(BASE_DIR) not in sys.path:
+    sys.path.insert(0, str(BASE_DIR))
 
 FINAL_AGENT_FILE = (
     BASE_DIR
@@ -594,6 +598,32 @@ def research_agent_decision(
             "Continue monitoring",
             "No high spatial evidence is identified by the current rule-based integration. This does not establish that the area is safe."
         )
+    )
+
+
+# ============================================================
+# UPLOADED-IMAGE SCREENING BAND
+# ============================================================
+# These are provisional display bands based only on the percentage
+# of pixels segmented by U-Net. They are NOT calibrated landslide-risk
+# thresholds and must be validated against labelled independent data.
+IMAGE_COVERAGE_LOW_MAX = 1.0
+IMAGE_COVERAGE_MEDIUM_MAX = 5.0
+
+
+def classify_uploaded_image_coverage(area_percent):
+    """Describe predicted mask coverage; do not interpret as probability."""
+    if area_percent < IMAGE_COVERAGE_LOW_MAX:
+        return "Low", (
+            f"Less than {IMAGE_COVERAGE_LOW_MAX:.1f}% of pixels were segmented."
+        )
+    if area_percent < IMAGE_COVERAGE_MEDIUM_MAX:
+        return "Medium", (
+            f"{IMAGE_COVERAGE_LOW_MAX:.1f}% to less than "
+            f"{IMAGE_COVERAGE_MEDIUM_MAX:.1f}% of pixels were segmented."
+        )
+    return "High", (
+        f"{IMAGE_COVERAGE_MEDIUM_MAX:.1f}% or more of pixels were segmented."
     )
 
 
@@ -3052,7 +3082,23 @@ def run_unet_prediction(
         area_percent,
         confidence
     )
+def create_risk_classification_map(probability_map):
+    import numpy as np
 
+    risk_map = np.zeros(
+        (*probability_map.shape, 3),
+        dtype=np.uint8
+    )
+
+    low = (probability_map >= 0.50) & (probability_map < 0.65)
+    medium = (probability_map >= 0.65) & (probability_map < 0.80)
+    high = probability_map >= 0.80
+
+    risk_map[low] = [34, 197, 94]       # Green
+    risk_map[medium] = [250, 204, 21]   # Yellow
+    risk_map[high] = [239, 68, 68]     # Red
+
+    return risk_map
 
 # ============================================================
 # RGB PREVIEW
@@ -3183,7 +3229,7 @@ st.write(
 
 st.write(
     "This research prototype integrates terrain evidence, "
-    "Sentinel-1 InSAR monitoring, multi-temporal InSAR change, "
+    "Sentinel-1 InSAR monitoring, exploratory InSAR pair differences, "
     "rainfall context, historical GSI evidence, and an "
     "explainable intelligent-agent evidence framework."
 )
@@ -3217,7 +3263,7 @@ st.sidebar.metric(
 )
 
 st.sidebar.metric(
-    "Temporal feature records",
+    "Pair-difference records",
     f"{temporal_count:,}" if not temporal_features.empty else "N/A"
 )
 
@@ -3290,15 +3336,19 @@ st.write(
     "for U-Net landslide segmentation."
 )
 
-uploaded_file = st.file_uploader(
-    "Upload 14-channel satellite image",
-    type=["h5"],
+uploaded_files = st.file_uploader(
+    "Upload multiple 14-channel satellite images",
+    type=["h5", "hdf5"],
+    accept_multiple_files=True,
     help=(
-        "The trained checkpoint expects an HDF5 "
-        "file containing an 'img' dataset with "
-        "shape (128, 128, 14)."
+        "Upload 1 to 10 HDF5 files (.h5 or .hdf5). Each file must "
+        "contain an 'img' dataset with shape (128, 128, 14)."
     ),
 )
+
+if len(uploaded_files) > 10:
+    st.error("Please upload a maximum of 10 HDF5 images.")
+    uploaded_files = []
 
 st.info(
     "The current trained U-Net accepts only a "
@@ -3310,1067 +3360,312 @@ st.info(
 )
 
 
+# Holds only the prediction generated during this Streamlit run.
+# Historical CSV reports are displayed separately and are not treated as current input.
+
 # ============================================================
-# UPLOADED IMAGE PREDICTION
+# MULTI-IMAGE UPLOADED IMAGE PREDICTION
 # ============================================================
-if uploaded_file is not None:
+
+uploaded_image_assessments = []
+
+if uploaded_files:
 
     if not model_loaded:
-
         st.error(
             "Prediction cannot start because the "
             "U-Net checkpoint failed to load."
         )
 
     else:
+        research_observation_count = len(df)
 
-        try:
+        for image_index, uploaded_file in enumerate(uploaded_files):
 
-            image = read_h5_image(
-                uploaded_file
-            )
+            st.divider()
 
-            (
-                probability,
-                prediction_mask,
-                predicted_pixels,
-                landslide_percentage,
-                average_confidence
-            ) = run_unet_prediction(
-                image
-            )
-
-            # ------------------------------------------------
-            # U-NET AGENT DECISION
-            # ------------------------------------------------
-            (
-                agent_action,
-                agent_recommendation
-            ) = segmentation_agent_decision(
-                landslide_percentage,
-                average_confidence,
-                predicted_pixels
-            )
-
-            # ------------------------------------------------
-            # EXISTING RESEARCH CONTEXT
-            # ------------------------------------------------
-            research_observation_count = len(
-                df
-            )
-
-            # ------------------------------------------------
-            # INTEGRATED AGENT
-            # ------------------------------------------------
-            (
-                integrated_action,
-                integrated_recommendation
-            ) = integrated_agent_decision(
-                predicted_pixels,
-                landslide_percentage,
-                average_confidence,
-                research_observation_count
-            )
-
-            # ------------------------------------------------
-            # SAVE REPORT
-            # ------------------------------------------------
-            saved_report_path = save_segmentation_report(
-                source_file=uploaded_file.name,
-                predicted_pixels=predicted_pixels,
-                area_percent=landslide_percentage,
-                confidence=average_confidence,
-                action=agent_action,
-                recommendation=agent_recommendation
-            )
-
-            st.success(
-                "U-Net landslide segmentation "
-                "completed successfully."
-            )
-
-            # =================================================
-            # UPLOADED IMAGE ASSESSMENT
-            # =================================================
             st.subheader(
-                "Uploaded Image Assessment"
+                f"Image {image_index + 1}: {uploaded_file.name}"
             )
 
-            col1, col2, col3, col4 = st.columns(
-                4
-            )
+            try:
+                # ------------------------------------------------
+                # READ HDF5 IMAGE AND RUN EXISTING U-NET
+                # ------------------------------------------------
+                image = read_h5_image(uploaded_file)
+                (
+                    probability,
+                    prediction_mask,
+                    predicted_pixels,
+                    landslide_percentage,
+                    average_confidence
+                ) = run_unet_prediction(image)
 
-            with col1:
 
-                st.metric(
+                # Generate LOW / MEDIUM / HIGH risk map
+                risk_class_map = create_risk_classification_map(
+                    probability
+                )
+
+                st.subheader("Landslide Risk Classification Map")
+
+                st.image(
+                    risk_class_map,
+                    caption=(
+                        "Green: LOW | Yellow: MEDIUM | "
+                        "Red: HIGH | Black: No detected landslide"
+                    ),
+                    width="stretch"
+                )
+
+                st.write("### U-Net Agent Decision")
+                # ------------------------------------------------
+                # U-NET AGENT DECISION
+                # ------------------------------------------------
+                (
+                    agent_action,
+                    agent_recommendation
+                ) = segmentation_agent_decision(
+                    landslide_percentage,
+                    average_confidence,
+                    predicted_pixels
+                )
+
+                # ------------------------------------------------
+                # INTEGRATED AGENT DECISION
+                # ------------------------------------------------
+                (
+                    integrated_action,
+                    integrated_recommendation
+                ) = integrated_agent_decision(
+                    predicted_pixels,
+                    landslide_percentage,
+                    average_confidence,
+                    research_observation_count
+                )
+
+                # ------------------------------------------------
+                # IMAGE-SPECIFIC SCREENING BAND
+                # ------------------------------------------------
+                image_band, image_band_basis = (
+                    classify_uploaded_image_coverage(
+                        landslide_percentage
+                    )
+                )
+
+                current_assessment = {
+                    "filename": uploaded_file.name,
+                    "predicted_pixels": int(predicted_pixels),
+                    "coverage_percent": float(landslide_percentage),
+                    "mean_positive_score": float(average_confidence),
+                    "screening_band": image_band,
+                    "agent_action": agent_action,
+                }
+
+                uploaded_image_assessments.append(
+                    current_assessment
+                )
+
+                # ------------------------------------------------
+                # SAVE A SEPARATE REPORT FOR EACH IMAGE
+                # ------------------------------------------------
+                upload_signature = hashlib.sha256(
+                    uploaded_file.name.encode("utf-8")
+                    + uploaded_file.getvalue()
+                ).hexdigest()
+
+                saved_upload_signatures = (
+                    st.session_state.setdefault(
+                        "saved_upload_signatures", {}
+                    )
+                )
+
+                if upload_signature not in saved_upload_signatures:
+
+                    saved_report_path = save_segmentation_report(
+                        source_file=uploaded_file.name,
+                        predicted_pixels=predicted_pixels,
+                        area_percent=landslide_percentage,
+                        confidence=average_confidence,
+                        action=agent_action,
+                        recommendation=agent_recommendation
+                    )
+
+                    saved_upload_signatures[upload_signature] = (
+                        str(saved_report_path)
+                    )
+
+                else:
+                    saved_report_path = Path(
+                        saved_upload_signatures[upload_signature]
+                    )
+
+                    if not saved_report_path.exists():
+                        saved_report_path = save_segmentation_report(
+                            source_file=uploaded_file.name,
+                            predicted_pixels=predicted_pixels,
+                            area_percent=landslide_percentage,
+                            confidence=average_confidence,
+                            action=agent_action,
+                            recommendation=agent_recommendation
+                        )
+
+                        saved_upload_signatures[upload_signature] = (
+                            str(saved_report_path)
+                        )
+
+                # ------------------------------------------------
+                # IMAGE ASSESSMENT METRICS
+                # ------------------------------------------------
+                st.success(
+                    "U-Net landslide segmentation completed."
+                )
+
+                col1, col2, col3, col4 = st.columns(4)
+
+                col1.metric(
                     "Predicted Landslide Pixels",
                     f"{predicted_pixels:,}"
                 )
 
-            with col2:
-
-                st.metric(
+                col2.metric(
                     "Predicted Area",
                     f"{landslide_percentage:.2f}%"
                 )
 
-            with col3:
-
-                st.metric(
-                    "Mean predicted-positive model score",
+                col3.metric(
+                    "Mean Positive Model Score",
                     f"{average_confidence * 100:.2f}%"
                 )
 
-            with col4:
-
-                st.metric(
+                col4.metric(
                     "Agent Action",
                     agent_action
                 )
 
-            st.write(
-                f"**Uploaded file:** "
-                f"`{uploaded_file.name}`"
-            )
+                # ------------------------------------------------
+                # PREDICTED LANDSLIDE MASK
+                # ------------------------------------------------
+                st.markdown("#### Predicted Landslide Mask")
 
-            st.caption(
-                "This inference was saved as a separate report: "
-                f"`{saved_report_path.name}`. Earlier reports are preserved."
-            )
-
-            st.write(
-                "**Important:** The segmentation "
-                "output is model evidence from the "
-                "uploaded image. It is not a calibrated "
-                "landslide probability."
-            )
-
-            # =================================================
-            # PROBABILITY MAP
-            # =================================================
-            st.subheader(
-                "U-Net Segmentation Score Map"
-            )
-
-            st.image(
-                probability,
-                caption=(
-                    "Pixel-wise sigmoid model score (0–1); "
-                    "not a calibrated landslide probability"
-                ),
-                clamp=True,
-                use_container_width=True
-            )
-
-            # =================================================
-            # PREDICTED LANDSLIDE MASK
-            # =================================================
-            st.subheader(
-                "Predicted Landslide Mask"
-            )
-
-            st.image(
-                prediction_mask * 255,
-                caption=(
-                    "White = pixels predicted "
-                    "as landslide "
-                    f"(threshold = "
-                    f"{PREDICTION_THRESHOLD:.2f})"
-                ),
-                clamp=True,
-                use_container_width=True
-            )
-
-            # =================================================
-            # LANDSLIDE DETECTION OVERLAY
-            # =================================================
-            st.subheader(
-                "Landslide Detection Overlay"
-            )
-
-            rgb_image = make_rgb_preview(
-                image
-            )
-
-            overlay = rgb_image.copy()
-
-            overlay[
-                prediction_mask == 1
-            ] = [
-                1.0,
-                0.0,
-                0.0
-            ]
-
-            st.image(
-                overlay,
-                caption=(
-                    "Red = predicted "
-                    "landslide regions"
-                ),
-                clamp=True,
-                use_container_width=True
-            )
-
-            # =================================================
-            # U-NET SEGMENTATION AGENT
-            # =================================================
-            st.subheader(
-                "🧠 U-Net Segmentation Agent"
-            )
-
-            agent_col1, agent_col2 = st.columns(
-                2
-            )
-
-            with agent_col1:
-
-                st.metric(
-                    "Agent Action",
-                    agent_action
+                st.image(
+                    prediction_mask * 255,
+                    caption=(
+                        "White = pixels predicted as landslide "
+                        f"(threshold = {PREDICTION_THRESHOLD:.2f})"
+                    ),
+                    clamp=True,
+                    use_container_width=True
                 )
 
-            with agent_col2:
+                # ------------------------------------------------
+                # LANDSLIDE DETECTION OVERLAY
+                # ------------------------------------------------
+                st.markdown("#### Landslide Detection Overlay")
 
-                st.write(
-                    "**Agent Recommendation**"
+                rgb_image = make_rgb_preview(image)
+                overlay = rgb_image.copy()
+
+                overlay[prediction_mask == 1] = [
+                    1.0, 0.0, 0.0
+                ]
+
+                st.image(
+                    overlay,
+                    caption="Red = predicted landslide regions",
+                    clamp=True,
+                    use_container_width=True
+                )
+            except Exception as exc:
+                st.error(
+                    f"Could not process {uploaded_file.name}: {exc}"
                 )
 
-                st.write(
-                    agent_recommendation
-                )
 
-            st.caption(
-                "The action above is an "
-                "evidence-based rule applied "
-                "to the uploaded U-Net result. "
-                "It is not a calibrated "
-                "landslide probability."
-            )
-
-            # =================================================
-            # INTEGRATED INTELLIGENT AGENT
-            # =================================================
-            st.subheader(
-                "Integrated Intelligent-Agent Assessment"
-            )
-
-            st.write(
-                "**Existing research context:** "
-                f"{research_observation_count:,} "
-                "spatial observations"
-            )
-
-            if integrated_action == "Priority review":
-
-                st.warning(
-                    integrated_recommendation
-                )
-
-            elif integrated_action == "Enhanced monitoring":
-
-                st.info(
-                    integrated_recommendation
-                )
-
-            else:
-
-                st.success(
-                    integrated_recommendation
-                )
-
-            st.caption(
-                "The integrated assessment combines "
-                "existing research-evidence context "
-                "with the uploaded U-Net segmentation "
-                "evidence. It is not a calibrated "
-                "landslide-risk probability."
-            )
-
-            # =================================================
-            # SPATIAL LIMITATION
-            # =================================================
-            st.warning(
-                "The uploaded HDF5 prediction is "
-                "currently model evidence only. "
-                "Because the HDF5 input does not "
-                "provide the geographic transform "
-                "needed to place its pixels on the "
-                "Tirumala Digital Twin, the prediction "
-                "is not automatically added as a "
-                "georeferenced map layer."
-            )
-
-        except Exception as prediction_error:
-
-            st.error(
-                f"Prediction failed: "
-                f"{prediction_error}"
-            )
 
 
 # ============================================================
-# CURRENT RESEARCH ASSESSMENT
+# LANDSLIDE RISK ASSESSMENT (DATA-DRIVEN RELATIVE EVIDENCE INDEX)
 # ============================================================
-st.header(
-    "📊 Current Research Assessment"
-)
+from src.risk_assessment import build_spatial_risk
 
-if df.empty:
+risk_df, risk_summary = build_spatial_risk(df)
 
+if risk_summary["score"] is None:
     st.warning(
-        "No Tirumala final agent evidence CSV "
-        "was found."
+        "Risk assessment is unavailable: the spatial evidence table does not "
+        "contain usable slope, terrain, InSAR, or temporal indicator columns. "
+        "No default score is substituted."
     )
-
-    st.code(
-        str(FINAL_AGENT_FILE),
-        language="text"
-    )
-
 else:
+    st.subheader("Spatial Risk Assessment")
+    st.markdown("### Risk Category Distribution")
 
-    evidence_series, evidence_column = (
-        get_evidence_series(df)
+    category_order = ["Low", "Medium", "High"]
+    category_counts = (
+        risk_df["risk_category"]
+        .value_counts()
+        .reindex(category_order, fill_value=0)
+    )
+    total_observations = int(category_counts.sum())
+    count_cols = st.columns(3)
+
+    count_cols[0].metric(
+        "🟢 LOW Risk", f"{int(category_counts['Low']):,}",
+        f"{category_counts['Low'] / total_observations * 100:.1f}%" if total_observations else "0%"
+    )
+    count_cols[1].metric(
+        "🟡 MEDIUM Risk", f"{int(category_counts['Medium']):,}",
+        f"{category_counts['Medium'] / total_observations * 100:.1f}%" if total_observations else "0%"
+    )
+    count_cols[2].metric(
+        "🔴 HIGH Risk", f"{int(category_counts['High']):,}",
+        f"{category_counts['High'] / total_observations * 100:.1f}%" if total_observations else "0%"
     )
 
-    if evidence_series is not None:
-
-        counts = (
-            evidence_series
-            .value_counts()
-        )
-
-        preferred_labels = [
-
-            "Multiple spatial + temporal",
-
-            "Multiple spatial",
-
-            "InSAR + temporal",
-
-            "InSAR monitoring",
-
-            "Terrain + temporal",
-
-            "Terrain",
-
-            "Temporal-change",
-
-            "No high spatial",
-        ]
-
-        evidence_display = pd.Series(
-            {
-                label:
-                    int(
-                        counts.get(
-                            label,
-                            0
-                        )
-                    )
-
-                for label in preferred_labels
-            }
-        )
-
-        c1, c2, c3, c4 = st.columns(
-            4
-        )
-
-        with c1:
-
-            st.metric(
-                "Multiple spatial + temporal",
-                int(
-                    counts.get(
-                        "Multiple spatial + temporal",
-                        0
-                    )
+    st.markdown("#### Observation Distribution")
+    chart_df = pd.DataFrame({
+        "Risk Category": category_order,
+        "Observations": [int(category_counts[label]) for label in category_order]
+    }).set_index("Risk Category")
+    st.bar_chart(chart_df, use_container_width=True)
+    coordinate_columns = {"latitude", "longitude"}
+    if coordinate_columns.issubset(risk_df.columns):
+        map_data = risk_df.copy()
+        map_data["latitude"] = pd.to_numeric(map_data["latitude"], errors="coerce")
+        map_data["longitude"] = pd.to_numeric(map_data["longitude"], errors="coerce")
+        map_data = map_data.dropna(subset=["latitude", "longitude", "risk_score"])
+        if not map_data.empty:
+            try:
+                import pydeck as pdk
+                color_lookup = {
+                    "Low": [34, 197, 94, 190],
+                    "Medium": [234, 179, 8, 210],
+                    "High": [239, 68, 68, 220],
+                }
+                map_data["marker_color"] = map_data["risk_category"].map(color_lookup)
+                layer = pdk.Layer(
+                    "ScatterplotLayer", data=map_data,
+                    get_position="[longitude, latitude]",
+                    get_fill_color="marker_color", get_radius=45,
+                    pickable=True, auto_highlight=True,
                 )
-            )
-
-        with c2:
-
-            st.metric(
-                "Multiple spatial",
-                int(
-                    counts.get(
-                        "Multiple spatial",
-                        0
-                    )
+                view = pdk.ViewState(
+                    latitude=float(map_data["latitude"].mean()),
+                    longitude=float(map_data["longitude"].mean()),
+                    zoom=11, pitch=0,
                 )
-            )
-
-        with c3:
-
-            st.metric(
-                "InSAR + temporal",
-                int(
-                    counts.get(
-                        "InSAR + temporal",
-                        0
-                    )
-                )
-            )
-
-        with c4:
-
-            st.metric(
-                "No high spatial evidence",
-                int(
-                    counts.get(
-                        "No high spatial",
-                        0
-                    )
-                )
-            )
-
-        
-        
-        
-        
-        
-        
-        st.subheader("Agent Evidence Distribution")
-
-        # Keep the source evidence counts unchanged.
-        evidence_counts = evidence_display.copy()
-        evidence_counts.index = evidence_counts.index.map(str)
-        evidence_counts = pd.to_numeric(
-            evidence_counts, errors="coerce"
-        ).fillna(0).astype(int)
-
-        # Short labels are used only for the chart.
-        short_labels = {
-            "InSAR + temporal evidence": "InSAR + temporal",
-            "InSAR + temporal": "InSAR + temporal",
-            "InSAR monitoring evidence": "InSAR monitoring",
-            "InSAR monitoring": "InSAR monitoring",
-            "Multiple spatial evidence": "Multiple spatial",
-            "Multiple spatial": "Multiple spatial",
-            "Multiple spatial + temporal evidence": "Spatial + temporal",
-            "Multiple spatial + temporal": "Spatial + temporal",
-            "No high spatial evidence": "No high spatial",
-            "No high spatial": "No high spatial",
-            "Temporal-change evidence": "Temporal change",
-            "Temporal-change": "Temporal change",
-            "Temporal change": "Temporal change",
-            "Terrain evidence": "Terrain",
-            "Terrain": "Terrain",
-            "Terrain + temporal evidence": "Terrain + temporal",
-            "Terrain + temporal": "Terrain + temporal",
-        }
-
-        if not evidence_counts.empty:
-            # Highest-count categories appear first in the table.
-            evidence_summary = (
-                evidence_counts.rename_axis("Evidence category")
-                .rename("Observations")
-                .reset_index()
-                .sort_values(
-                    "Observations",
-                    ascending=False,
-                    kind="stable"
-                )
-                .reset_index(drop=True)
-            )
-
-            total_observations = int(
-                evidence_summary["Observations"].sum()
-            )
-
-            evidence_summary["Percentage"] = (
-                evidence_summary["Observations"]
-                .div(total_observations)
-                .mul(100)
-                .round(2)
-                .map(lambda value: f"{value:.2f}%")
-                if total_observations > 0
-                else "0.00%"
-            )
-
-            # Draw the chart from a separate copy so full table
-            # category names remain unchanged.
-            evidence_chart = evidence_counts.sort_values(
-                ascending=True,
-                kind="stable"
-            ).copy()
-
-            evidence_chart.index = [
-                short_labels.get(label, label)
-                for label in evidence_chart.index
-            ]
-
-            st.bar_chart(
-                evidence_chart,
-                horizontal=True
-            )
-
-            st.caption(
-                f"Total spatial observations represented: "
-                f"{total_observations:,}"
-            )
-
-            st.dataframe(
-                evidence_summary,
-                hide_index=True,
-                use_container_width=True
-            )
-            st.caption(
-                "Interpretation: These categories summarize the evidence "
-                "assigned to spatial observations. They do not represent "
-                "confirmed landslides or calibrated landslide probabilities. "
-                "Observations with no high spatial evidence may still have "
-                "other evidence or require further investigation."
-            )
-
+                st.pydeck_chart(pdk.Deck(
+                    layers=[layer], initial_view_state=view,
+                    tooltip={"text": "Risk: {risk_category}\\nScore: {risk_score}\\nEvidence coverage: {risk_evidence_coverage}%"},
+                ), use_container_width=True)
+                st.caption("Map points are coloured by relative evidence category, not validated hazard zones.")
+            except Exception as map_error:
+                st.info(f"Spatial map could not be rendered; showing the location table instead. ({map_error})")
         else:
-            st.info(
-                "No agent evidence records are available to display."
-            )
-
-# ============================================================
-# RAINFALL CONTEXT
-# ============================================================
-st.header("🌧️ Rainfall Context")
-
-if not rainfall_df.empty and "date" in rainfall_df.columns:
-    rainfall_display = rainfall_df.copy()
-    rainfall_display["date"] = pd.to_datetime(
-        rainfall_display["date"],
-        errors="coerce"
-    )
-    rainfall_display = rainfall_display.dropna(
-        subset=["date"]
-    ).sort_values("date")
-
-    daily_rainfall = pd.to_numeric(
-        rainfall_display.get(
-            "rainfall_mean_mm",
-            pd.Series(index=rainfall_display.index, dtype="float64")
-        ),
-        errors="coerce"
-    )
-    valid_daily = daily_rainfall.notna()
-
-    if valid_daily.any():
-        latest_index = daily_rainfall[valid_daily].index[-1]
-        latest_record = rainfall_display.loc[latest_index]
-        metric_columns = st.columns(4)
-        metric_columns[0].metric(
-            "Daily records",
-            f"{int(valid_daily.sum()):,}"
-        )
-        metric_columns[1].metric(
-            "Latest record",
-            latest_record["date"].strftime("%d %b %Y")
-        )
-        for column, title, slot in [
-            ("rainfall_3day_mm", "Latest 3-day total (mm)", 2),
-            ("rainfall_7day_mm", "Latest 7-day total (mm)", 3),
-        ]:
-            values = pd.to_numeric(
-                rainfall_display[column],
-                errors="coerce"
-            ).dropna() if column in rainfall_display.columns else pd.Series(dtype="float64")
-            metric_columns[slot].metric(
-                title,
-                f"{values.iloc[-1]:.1f}" if not values.empty else "N/A"
-            )
-
-        chart_data = rainfall_display.loc[
-            valid_daily,
-            ["date"]
-        ].copy()
-        chart_data["Daily area-mean rainfall (mm)"] = daily_rainfall[valid_daily]
-        chart_data = chart_data.set_index("date")
-        st.line_chart(chart_data, use_container_width=True)
-
-        if "rainfall_14day_mm" in rainfall_display.columns:
-            fourteen_day = pd.to_numeric(
-                rainfall_display["rainfall_14day_mm"],
-                errors="coerce"
-            ).dropna()
-            if not fourteen_day.empty:
-                st.caption(
-                    f"Latest available 14-day accumulation: "
-                    f"{fourteen_day.iloc[-1]:.1f} mm."
-                )
-    else:
-        st.info("The rainfall file has no valid daily rainfall values to display.")
-else:
-    st.info("Rainfall context is unavailable because its dataset or date field is missing.")
-
-st.caption(
-    "Rainfall is study-area-level temporal context, not a pixel-specific "
-    "spatial predictor. It does not independently confirm a landslide."
-)
-
-# ============================================================
-# INDEPENDENT VALIDATION & REFERENCE REGION ASSESSMENT
-# ============================================================
-st.header("🧪 Independent Validation & Reference Region Assessment")
-st.caption(
-    "Evidence-based screening of candidate InSAR reference regions, "
-    "spatial residual diagnostics, robustness tests and historical events."
-)
-
-st.warning(
-    "Scientific status: Region 1 is the stronger provisional reference-region "
-    "candidate, but neither Region 1 nor Region 3 is confirmed stable ground. "
-    "Independent GNSS/geological validation and a longer, consistently "
-    "referenced InSAR time series are still required."
-)
-
-
-def _load_assessment_csv(path):
-    """Load a dashboard assessment CSV without interrupting the app."""
-    try:
-        if path.exists():
-            return pd.read_csv(path)
-    except Exception as load_error:
-        st.error(f"Could not read {path.name}: {load_error}")
-    return pd.DataFrame()
-
-
-reference_df = _load_assessment_csv(REFERENCE_ASSESSMENT_FILE)
-moran_df = _load_assessment_csv(MORAN_SUMMARY_FILE)
-robustness_df = _load_assessment_csv(REFERENCE_ROBUSTNESS_FILE)
-coolr_df = _load_assessment_csv(COOLR_SPATIAL_CHECK_FILE)
-plane_df = _load_assessment_csv(REFITTED_PLANE_FILE)
-
-if reference_df.empty:
-    st.info(
-        "Reference-region assessment data are not available yet. "
-        f"Expected file: {REFERENCE_ASSESSMENT_FILE}"
-    )
-else:
-    # Keep region ordering stable and numeric fields numeric.
-    reference_df = reference_df.copy()
-    if "region_id" in reference_df.columns:
-        reference_df["region_id"] = reference_df["region_id"].astype(str)
-        reference_df = reference_df.sort_values("region_id")
-
-    region1_rows = reference_df[reference_df["region_id"] == "1"]
-    region3_rows = reference_df[reference_df["region_id"] == "3"]
-
-    st.subheader("Candidate Region Comparison")
-    if not region1_rows.empty and not region3_rows.empty:
-        r1 = region1_rows.iloc[0]
-        r3 = region3_rows.iloc[0]
-        metric_cols = st.columns(4)
-        metric_cols[0].metric(
-            "Region 1 area", f"{float(r1['baseline_area_hectares']):.2f} ha"
-        )
-        metric_cols[1].metric(
-            "Region 1 pixels", f"{int(r1['baseline_pixel_count']):,}"
-        )
-        metric_cols[2].metric(
-            "Region 3 area", f"{float(r3['baseline_area_hectares']):.2f} ha"
-        )
-        metric_cols[3].metric(
-            "Region 3 pixels", f"{int(r3['baseline_pixel_count']):,}"
-        )
-
-        comparison_columns = {
-            "region_id": "Region",
-            "baseline_area_hectares": "Area (ha)",
-            "baseline_pixel_count": "Pixels",
-            "mean_slope_degrees": "Mean slope (°)",
-            "mean_pair1_correlation": "Mean Pair 1 correlation",
-            "mean_pair2_correlation": "Mean Pair 2 correlation",
-            "minimum_distance_all_15_gsi_m": "Minimum GSI distance (m)",
-            "median_distance_all_15_gsi_m": "Median GSI distance (m)",
-            "pixels_at_least_500m_from_gsi": "Pixels ≥500 m from GSI",
-            "pair1_plane_residual_sd_mm": "Pair 1 residual SD (mm)",
-            "pair2_plane_residual_sd_mm": "Pair 2 residual SD (mm)",
-        }
-        available_comparison = [
-            c for c in comparison_columns if c in reference_df.columns
-        ]
-        display_comparison = reference_df[available_comparison].rename(
-            columns=comparison_columns
-        )
-        st.dataframe(
-            display_comparison.round(3),
-            hide_index=True,
-            use_container_width=True,
-        )
-        st.info(
-            "Region 1 is preferred provisionally because it is larger, has a "
-            "gentler mean slope, is farther from the mapped GSI inventory and "
-            "retains more area under stricter screening. This is a candidate "
-            "selection, not a stability certification."
-        )
-    else:
-        st.warning("The comparison CSV does not contain both Region 1 and Region 3.")
-
-    st.subheader("Moran's I: Residual Spatial Autocorrelation")
-    if not moran_df.empty:
-        moran_display = moran_df.copy()
-        rename_moran = {
-            "region_id": "Region",
-            "pair": "InSAR pair",
-            "pixel_count": "Pixels",
-            "observed_morans_I": "Observed Moran's I",
-            "permutation_count": "Permutations",
-            "holm_adjusted_p": "Holm-adjusted p-value",
-            "holm_significance_at_0_05": "Significant at 0.05",
-        }
-        moran_display = moran_display[
-            [c for c in rename_moran if c in moran_display.columns]
-        ].rename(columns=rename_moran)
-        st.dataframe(
-            moran_display.round(4),
-            hide_index=True,
-            use_container_width=True,
-        )
-        if {"region_id", "pair", "observed_morans_I"}.issubset(moran_df.columns):
-            chart_df = moran_df.copy()
-            chart_df["Label"] = (
-                "Region " + chart_df["region_id"].astype(str)
-                + " – " + chart_df["pair"].astype(str)
-            )
-            st.bar_chart(
-                chart_df.set_index("Label")["observed_morans_I"],
-                horizontal=True,
-            )
-        st.caption(
-            "Permutation test: 9,999 permutations per region/pair; Holm "
-            "correction across four tests. Region 1 shows significant positive "
-            "residual spatial autocorrelation in both pairs (adjusted p=0.0004). "
-            "Region 3 is not significant after Holm correction. Statistical "
-            "significance does not identify the cause and does not prove "
-            "physical instability or stability."
-        )
-    else:
-        st.info(f"Moran permutation results not found: {MORAN_SUMMARY_FILE}")
-
-    st.subheader("Reference-Region Robustness")
-    if not robustness_df.empty:
-        robustness_display = robustness_df.copy()
-        robustness_rename = {
-            "region_id": "Region",
-            "correlation_threshold_both_pairs": "Correlation threshold",
-            "minimum_gsi_distance_m": "GSI exclusion (m)",
-            "baseline_pixels": "Baseline pixels",
-            "retained_pixels": "Retained pixels",
-            "retained_percentage": "Retained (%)",
-            "retained_area_hectares": "Retained area (ha)",
-            "connected_component_count": "Components",
-            "all_retained_pixels_connected": "All connected",
-        }
-        robustness_display = robustness_display[
-            [c for c in robustness_rename if c in robustness_display.columns]
-        ].rename(columns=robustness_rename)
-        st.dataframe(
-            robustness_display.round(2),
-            hide_index=True,
-            use_container_width=True,
-        )
-        st.caption(
-            "The table tests correlation thresholds of 0.70, 0.75 and 0.80 "
-            "alongside GSI exclusion distances of 240–500 m. Region 1 retains "
-            "more pixels overall, but splits into two components at stricter "
-            "correlation thresholds. Region 3 remains connected but loses a "
-            "larger fraction of its already small area."
-        )
-    else:
-        st.info(f"Robustness results not found: {REFERENCE_ROBUSTNESS_FILE}")
-
-    st.subheader("Boundary Erosion and Refitted-Plane Sensitivity")
-    if not plane_df.empty:
-        erosion_display = plane_df.copy()
-        erosion_rename = {
-            "region_id": "Region",
-            "pair": "InSAR pair",
-            "erosion_layers": "Erosion layers",
-            "pixel_count": "Pixels remaining",
-            "retained_percentage": "Retained (%)",
-            "area_hectares": "Area (ha)",
-            "residual_SD_mm": "Residual SD (mm)",
-            "morans_I_8_neighbour": "Moran's I",
-        }
-        erosion_display = erosion_display[
-            [c for c in erosion_rename if c in erosion_display.columns]
-        ].rename(columns=erosion_rename)
-        st.dataframe(
-            erosion_display.round(3),
-            hide_index=True,
-            use_container_width=True,
-        )
-        st.caption(
-            "After one erosion layer, Region 1 retains 52 pixels (33.28 ha), "
-            "while Region 3 retains only 5 pixels (3.20 ha). A second erosion "
-            "leaves 9 Region 1 pixels and no Region 3 pixels. Very small "
-            "interiors have limited statistical support. Plane detrending can "
-            "remove nuisance spatial trends, but may also remove broad real "
-            "deformation; it is not proof that the remaining residuals are stable."
-        )
-    else:
-        st.info(f"Refitted-plane results not found: {REFITTED_PLANE_FILE}")
-
-st.subheader("Historical COOLR Event Evidence")
-if not coolr_df.empty:
-    coolr_display = coolr_df.copy()
-    coolr_rename = {
-        "event_id": "Event ID",
-        "event_title": "Event",
-        "event_date": "Reported date",
-        "reported_location_accuracy": "Reported location accuracy",
-        "inside_aoi_by_reported_coordinate": "Reported coordinate inside AOI",
-        "nearest_aoi_boundary_distance_m": "Distance to AOI boundary (m)",
-        "source": "Source",
-        "source_url": "Source link",
-    }
-    coolr_display = coolr_display[
-        [c for c in coolr_rename if c in coolr_display.columns]
-    ].rename(columns=coolr_rename)
-    st.dataframe(
-        coolr_display,
-        hide_index=True,
-        use_container_width=True,
-        column_config={
-            "Source link": st.column_config.LinkColumn("Source link")
-        },
-    )
-    st.warning(
-        "Two historical COOLR reports were identified near Tirumala. Their "
-        "reported coordinates fall inside the AOI polygon, but the stated "
-        "location accuracies (within 1 km and within 5 km) are too coarse to "
-        "confirm the precise event location or associate either event with a "
-        "specific InSAR pixel/reference candidate. These records corroborate "
-        "regional landslide history; they do not validate reference stability."
-    )
-else:
-    st.info(f"Historical event spatial-check file not found: {COOLR_SPATIAL_CHECK_FILE}")
-
-if COOLR_REPORT_FILE.exists():
-    with st.expander("View historical validation report"):
-        try:
-            st.text(COOLR_REPORT_FILE.read_text(encoding="utf-8"))
-        except Exception as report_error:
-            st.error(f"Could not read historical report: {report_error}")
-
-st.subheader("Independent Validation Gaps")
-st.markdown(
-    "- No independent GNSS/GPS displacement measurements or site-specific "
-    "geological validation data are currently available in the project dataset.\n"
-    "- The current InSAR analysis uses only three acquisition dates "
-    "(5, 17 and 29 August 2026), forming two 12-day pairs.\n"
-    "- The two HyP3 pairs use separate reference points and separate "
-    "zero-displacement conventions; direct Pair 2 minus Pair 1 LOS values "
-    "must not be interpreted as temporal displacement.\n"
-    "- Atmospheric effects and possible phase-unwrapping errors remain "
-    "potential sources of residual spatial structure."
-)
-st.caption(
-    "Interpretation: Region 1 is the preferred provisional candidate for "
-    "continued analysis. The present evidence is a screening and research "
-    "assessment, not a declaration of stable ground or an operational "
-    "landslide early-warning system."
-)
-
-# ============================================================
-# TEMPORAL INSAR MONITORING
-# ============================================================
-st.header("🛰️ Temporal InSAR Monitoring")
-st.caption(
-    "Study area: Tirumala Hills, Tirupati, Andhra Pradesh | "
-    "Observation period: 17 August 2026 – 29 August 2026 | "
-    "Interval: 12 days"
-)
-
-st.info(
-    "LOS displacement measures movement along the satellite's "
-    "line of sight. It is not a direct measurement of complete "
-    "three-dimensional ground movement, and displacement alone "
-    "does not confirm a landslide."
-)
-st.warning(
-    "The two pair products use independent phase-reference points "
-    "approximately 89 km apart. Their direct subtraction is not "
-    "established as physically valid displacement. The values below "
-    "are unharmonized exploratory pair differences, not confirmed "
-    "temporal ground movement."
-)
-if (
-    not temporal_features.empty
-    and {
-        "los_change_m",
-        "abs_los_change_m",
-        "corr_05_17",
-        "corr_17_29",
-    }.issubset(temporal_features.columns)
-):
-    temporal_display = temporal_features.copy()
-
-    # Convert displacement from metres to millimetres for display.
-    temporal_display["Stored pair difference (mm)"] = (
-        pd.to_numeric(
-            temporal_display["los_change_m"],
-            errors="coerce",
-        ) * 1000.0
-    )
-
-    temporal_display["Absolute stored pair difference (mm)"] = (
-        pd.to_numeric(
-            temporal_display["abs_los_change_m"],
-            errors="coerce",
-        ) * 1000.0
-    )
-
-    temporal_display["Correlation: first pair"] = pd.to_numeric(
-        temporal_display["corr_05_17"],
-        errors="coerce",
-    )
-
-    temporal_display["Correlation: second pair"] = pd.to_numeric(
-        temporal_display["corr_17_29"],
-        errors="coerce",
-    )
-
-    valid_change = temporal_display[
-        "Absolute stored pair difference (mm)"
-    ].dropna()
-
-    valid_signed_change = temporal_display[
-        "Stored pair difference (mm)"
-    ].dropna()
-
-    c1, c2, c3, c4 = st.columns(4)
-
-    with c1:
-        st.metric(
-            "Temporal feature records",
-            f"{len(temporal_display):,}",
-        )
-
-    with c2:
-        st.metric(
-            "Mean absolute stored difference",
-            (
-                f"{valid_change.mean():.2f} mm"
-                if not valid_change.empty
-                else "N/A"
-            ),
-        )
-
-    with c3:
-        st.metric(
-            "Maximum absolute stored difference",
-            (
-                f"{valid_change.max():.2f} mm"
-                if not valid_change.empty
-                else "N/A"
-            ),
-        )
-
-    with c4:
-        st.metric(
-            "Mean signed stored difference",
-            (
-                f"{valid_signed_change.mean():.2f} mm"
-                if not valid_signed_change.empty
-                else "N/A"
-            ),
-        )
-
-
-
-
-
-# ============================================================
-# RAW CROSS-PAIR DIFFERENCE DISTRIBUTION
-# ============================================================
-st.subheader("Absolute Unharmonized Pair-Difference Distribution")
-
-# Check that the temporal data and displacement values exist.
-if (
-    not temporal_features.empty
-    and "abs_los_change_m" in temporal_features.columns
-):
-    # Convert metres to millimetres.
-    histogram_data = (
-        pd.to_numeric(
-            temporal_features["abs_los_change_m"],
-            errors="coerce",
-        )
-        .mul(1000.0)
-        .dropna()
-    )
-
-    # Absolute displacement cannot be negative.
-    histogram_data = histogram_data[histogram_data >= 0]
-
-    if not histogram_data.empty:
-        min_value = float(histogram_data.min())
-        max_value = float(histogram_data.max())
-
-        # Build 20 equal-width bins, handling constant values.
-        if min_value == max_value:
-            padding = max(abs(min_value) * 0.001, 0.005)
-            bin_edges = [
-                max(0.0, min_value - padding),
-                max_value + padding,
-            ]
-
-            # Ensure the interval has a positive width at zero.
-            if bin_edges[0] == bin_edges[1]:
-                bin_edges[1] = bin_edges[0] + 0.01
-        else:
-            bin_edges = 20
-
-        histogram_bins = pd.cut(
-            histogram_data,
-            bins=bin_edges,
-            include_lowest=True,
-        )
-
-        # Count observations and sort bins numerically.
-        histogram_counts = (
-            histogram_bins.value_counts(sort=False)
-            .sort_index()
-            .astype(int)
-        )
-
-        interval_labels = [
-            f"{interval.left:.2f}–{interval.right:.2f} mm"
-            for interval in histogram_counts.index
-        ]
-
-        histogram_chart = pd.DataFrame({
-            "Bin": [
-                f"{i + 1:02d}. {label}"
-                for i, label in enumerate(interval_labels)
-            ],
-            "Number of records": histogram_counts.to_numpy(),
-        })
-
-        st.bar_chart(
-            histogram_chart.set_index("Bin"),
-            horizontal=True,
-        )
-
-        st.caption(
-            "Distribution of the absolute stored pair difference across "
-            f"{len(histogram_data):,} valid temporal records. "
-            "Bins are ordered from lower to higher displacement. "
-            "Values are in millimetres. Because the pair references differ, "
-            "this distribution must not be interpreted as measured temporal "
-            "ground displacement or landslide confirmation."
-        )
-    else:
-        st.info(
-            "No valid non-negative temporal displacement values "
-            "are available."
-        )
-else:
-    st.info(
-        "Temporal displacement data is unavailable or missing "
-        "the required abs_los_change_m column."
-    )
+            st.info("Latitude/longitude columns exist, but no valid coordinate rows are available.")
+    # Coordinate warning, detailed spatial-risk table, and methodology footer
+    # are intentionally omitted from the dashboard display.
 
 
 # ============================================================
@@ -4381,8 +3676,8 @@ st.header(
 )
 
 st.write(
-    "Integrated spatial evidence, temporal "
-    "InSAR change, historical GSI locations, "
+    "Integrated spatial evidence, exploratory "
+    "InSAR pair-difference evidence, historical GSI locations, "
     "and rainfall context."
 )
 
@@ -4423,112 +3718,7 @@ else:
     )
 
 
-# ============================================================
-# INTELLIGENT AGENT
-# ============================================================
-st.header(
-    "🤖 Intelligent Agent"
-)
-
-st.write(
-    "Explainable recommendations generated "
-    "from the current evidence-based Digital "
-    "Twin assessment."
-)
-
-if not df.empty:
-
-    agent_display = df.copy()
-
-    evidence_series, evidence_column = (
-        get_evidence_series(
-            agent_display
-        )
-    )
-
-    if evidence_series is not None:
-
-        agent_display[
-            "evidence_class"
-        ] = evidence_series
-
-        decisions = (
-            agent_display[
-                "evidence_class"
-            ]
-            .apply(
-                research_agent_decision
-            )
-        )
-
-        agent_display[
-            "agent_action"
-        ] = decisions.apply(
-            lambda x: x[0]
-        )
-
-        agent_display[
-            "agent_recommendation"
-        ] = decisions.apply(
-            lambda x: x[1]
-        )
-
-    preferred = [
-
-        "twin_id",
-
-        "row",
-
-        "col",
-
-        "latitude",
-
-        "longitude",
-
-        "risk_score",
-
-        "risk_category",
-
-        "evidence_class",
-
-        "agent_action",
-
-        "agent_recommendation",
-    ]
-
-    available = [
-
-        column
-
-        for column in preferred
-
-        if column in agent_display.columns
-    ]
-
-    if available:
-
-        st.dataframe(
-            agent_display[
-                available
-            ].head(50),
-            use_container_width=True,
-            height=420
-        )
-
-    else:
-
-        st.dataframe(
-            agent_display.head(50),
-            use_container_width=True,
-            height=420
-        )
-
-else:
-
-    st.info(
-        "No Digital Twin assessment "
-        "records available."
-    )
+# Intelligent Agent evidence table removed from dashboard display.
 
 # ============================================================
 # INTELLIGENT AGENT - QUESTION ANSWERING INTERFACE
@@ -4633,10 +3823,14 @@ else:
 
 
 # ============================================================
-# LATEST U-NET AGENT REPORT
+# U-NET PREDICTION HISTORY AND LATEST REPORT
 # ============================================================
 st.header(
-    "🧩 Latest U-Net Segmentation Agent Report"
+    "🧩 U-Net Prediction History & Latest Report"
+)
+st.caption(
+    "Saved upload results are shown here as history. This section may contain "
+    "previous uploads even when no file is currently selected above."
 )
 
 segmentation_report_files = list(
@@ -4647,206 +3841,76 @@ segmentation_report_files = list(
 if SEGMENTATION_AGENT_FILE.exists():
     segmentation_report_files.append(SEGMENTATION_AGENT_FILE)
 
+# Build a comparison table from all individually saved prediction reports.
 if segmentation_report_files:
+    history_frames = []
+    for report_file in segmentation_report_files:
+        try:
+            report_part = pd.read_csv(report_file)
+            if not report_part.empty:
+                history_frames.append(report_part)
+        except (OSError, ValueError, pd.errors.ParserError):
+            continue
 
-    try:
+    if history_frames:
+        history_df = pd.concat(history_frames, ignore_index=True)
+        if "timestamp" in history_df.columns:
+            history_df["timestamp"] = pd.to_datetime(
+                history_df["timestamp"], errors="coerce"
+            )
+            history_df = history_df.sort_values(
+                "timestamp", ascending=False, na_position="last"
+            )
 
-        latest_report_file = max(
-            segmentation_report_files,
-            key=lambda path: path.stat().st_mtime
+        if "predicted_landslide_percentage" in history_df.columns:
+            history_df["screening_level"] = history_df[
+                "predicted_landslide_percentage"
+            ].apply(
+                lambda value: classify_uploaded_image_coverage(
+                    safe_float(value)
+                )[0]
+            )
+
+        history_columns = {
+            "timestamp": "Assessment time",
+            "source_file": "Uploaded image",
+            "predicted_landslide_pixels": "Predicted pixels",
+            "predicted_landslide_percentage": "Segmented coverage (%)",
+            "average_confidence": "Mean predicted-positive score",
+            "screening_level": "Coverage band",
+            "agent_action": "Agent action",
+        }
+        visible_columns = [
+            column for column in history_columns if column in history_df.columns
+        ]
+        comparison_df = history_df[visible_columns].rename(
+            columns=history_columns
+        ).copy()
+        if "Assessment time" in comparison_df.columns:
+            comparison_df["Assessment time"] = comparison_df[
+                "Assessment time"
+            ].dt.strftime("%Y-%m-%d %H:%M:%S")
+        if "Mean predicted-positive score" in comparison_df.columns:
+            comparison_df["Mean predicted-positive score"] = (
+                pd.to_numeric(
+                    comparison_df["Mean predicted-positive score"],
+                    errors="coerce"
+                ) * 100
+            ).round(2)
+        if "Segmented coverage (%)" in comparison_df.columns:
+            comparison_df["Segmented coverage (%)"] = pd.to_numeric(
+                comparison_df["Segmented coverage (%)"], errors="coerce"
+            ).round(2)
+
+        st.subheader("Uploaded Image Comparison")
+        st.caption(
+            f"{len(comparison_df):,} saved assessment(s). New uploads are "
+            "compared using their own U-Net segmentation outputs."
         )
-        segmentation_df = pd.read_csv(
-            latest_report_file
+        st.dataframe(
+            comparison_df,
+            hide_index=True,
+            use_container_width=True
         )
-
-        if not segmentation_df.empty:
-
-            latest = (
-                segmentation_df.iloc[-1]
-            )
-
-            s1, s2, s3 = st.columns(
-                3
-            )
-
-            with s1:
-
-                st.metric(
-                    "Predicted Landslide Area",
-                    f"{safe_float(latest.get('predicted_landslide_percentage', 0)):.2f}%"
-                )
-
-            with s2:
-
-                st.metric(
-                    "Mean predicted-positive model score",
-                    f"{safe_float(latest.get('average_confidence', 0)) * 100:.2f}%"
-                )
-
-            with s3:
-
-                st.metric(
-                    "Agent Action",
-                    str(
-                        latest.get(
-                            "agent_action",
-                            "N/A"
-                        )
-                    )
-                )
-
-            st.write(
-                "**Source file:** "
-                f"{latest.get('source_file', 'N/A')}"
-            )
-
-            st.caption(
-                f"Report file: `{latest_report_file.name}`"
-            )
-
-            st.write(
-                "**Agent Recommendation:** "
-                f"{latest.get('agent_recommendation', 'N/A')}"
-            )
-
-            st.caption(
-                "For older saved reports, 'confidence' wording refers to "
-                "the model's mean predicted-positive score. It is not "
-                "calibrated confidence or prediction accuracy."
-            )
-
-            if "timestamp" in latest:
-
-                st.caption(
-                    f"Generated: "
-                    f"{latest['timestamp']}"
-                )
-
-    except Exception as report_error:
-
-        st.warning(
-            "Could not read the "
-            f"segmentation-agent report: "
-            f"{report_error}"
-        )
-
-else:
-
-    st.info(
-        "No saved U-Net segmentation report is available yet. "
-        "Upload a valid 14-channel HDF5 image to create one."
-    )
-
-
-# ============================================================
-# DIGITAL TWIN STATE
-# ============================================================
-st.header(
-    "📋 Digital Twin State"
-)
-
-if not df.empty:
-
-    preferred_columns = [
-
-        "twin_id",
-
-        "row",
-
-        "col",
-
-        "latitude",
-
-        "longitude",
-
-        "elevation_m",
-
-        "slope_deg",
-
-        "los_displacement_m",
-
-        "coherence",
-
-        "reference_daily_rainfall_mm",
-
-        "reference_3day_rainfall_mm",
-
-        "reference_7day_rainfall_mm",
-
-        "risk_score",
-
-        "risk_category",
-
-        "insar_confidence",
-
-        "evidence_class",
-
-        "final_agent_evidence",
-    ]
-
-    twin_display = df.copy()
-
-    evidence_series, _ = (
-        get_evidence_series(
-            twin_display
-        )
-    )
-
-    if evidence_series is not None:
-
-        twin_display[
-            "evidence_class"
-        ] = evidence_series
-
-    available_columns = [
-
-        column
-
-        for column in preferred_columns
-
-        if column in twin_display.columns
-    ]
-
-    st.dataframe(
-        (
-            twin_display[
-                available_columns
-            ]
-            if available_columns
-            else twin_display
-        ),
-        use_container_width=True,
-        height=450
-    )
-
-else:
-
-    st.info(
-        "Digital Twin state data "
-        "is not available."
-    )
-
-
-# ============================================================
-# FOOTER
-# ============================================================
-st.divider()
-
-st.caption(
-    "Data sources: Sentinel-1 InSAR, "
-    "Copernicus DEM, GPM IMERG rainfall, "
-    "and historical GSI evidence."
-)
-
-st.caption(
-    "Risk/evidence classes are relative "
-    "evidence indicators and are not "
-    "calibrated landslide probabilities."
-)
-
-st.caption(
-    "The uploaded U-Net segmentation "
-    "result is model evidence and should "
-    "be cross-checked with independent "
-    "remote-sensing and field evidence."
-)
+    else:
+        st.info("No readable prediction history is available yet.")

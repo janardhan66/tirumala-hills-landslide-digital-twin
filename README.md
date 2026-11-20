@@ -79,9 +79,12 @@ georeferenced and is not automatically added to the map.
   records** used by the dashboard’s current evidence summary.
 - `data/features/tirumala_temporal_insar_features.csv` contains **2,569
   temporal feature records**. In the spatial evidence table, 2,293 records
-  have matched temporal evidence and 357 do not. These counts describe table
-  records, not independent landslides. Missing temporal evidence is not proof
-  of no movement.
+  have matched temporal evidence and 357 spatial records have no temporal
+  counterpart. Conversely, 276 temporal records have no spatial counterpart.
+  Both tables have unique row/column keys; these differences reflect their
+  different valid-data masks. The counts describe table records, not
+  independent landslides. Missing temporal evidence is not proof of no
+  movement.
 - Terrain features include elevation and slope derived from DEM data. The
   project’s 80 m processing grid is not equivalent to independent field
   measurements at every pixel.
@@ -108,6 +111,15 @@ dashboard should be interpreted with this limitation in mind. Only three
 acquisition dates and two 12-day intervals are available; they do not establish
 a long-term trend.
 
+The two GSI-AOI pair grids are aligned at EPSG:32644, 80 m, and 110 × 69
+pixels. The temporal comparison uses pixels with nonzero LOS and coherence
+at least 0.5 in both pairs: 3,085 pixels pass for Pair 1, 2,957 for Pair 2,
+and 2,569 are common to the temporal feature table. These are quality-screened
+observations, not independently validated deformation. The existing
+`clipped/tirumala_insar_quality_mask_80m.tif` is the Pair 2 coherence-threshold
+mask (valid pixels are 1; other pixels are NoData/0); the pair-comparison
+workflow applies the threshold separately to both coherence rasters.
+
 ### Rainfall
 
 `data/processed/rainfall/tirumala/tirumala_rainfall_features_20260801_20260829.csv`
@@ -133,6 +145,20 @@ Training code uses the locally stored Landslide4Sense
 `data/raw/landslide4sense/`. The project code treats each image as 14 channels;
 channel indices 12 and 13 are used as slope and DEM, respectively. Inference
 expects an HDF5 file with an `img` dataset of shape `(128, 128, 14)`.
+The dashboard accepts 1–10 `.h5` or `.hdf5` patches in one upload and shows a
+separate segmentation and Low/Medium/High demo screening band for each file.
+The bands are based on segmented pixel coverage (<1% Low, 1–<5% Medium,
+5% or more High); they are provisional display categories, not calibrated
+landslide-risk probabilities. The upload workflow is for compatible
+Landslide4Sense-format patches, not arbitrary satellite GeoTIFFs.
+Upstream references: [ASF HyP3 documentation](https://hyp3-docs.asf.alaska.edu/),
+[NASA GPM IMERG](https://gpm.nasa.gov/data/imerg),
+[Copernicus DEM collection](https://spacedata.copernicus.eu/collections/copernicus-digital-elevation-model),
+and [Landslide4Sense](https://github.com/iarai/Landslide4Sense). The
+repository uses local copies/processed outputs; the dashboard does not download
+these datasets. The GSI point table records “GSI Figure 3.2” as its source,
+but the original report’s full bibliographic citation is not preserved with the
+local table and should be added before publication.
 
 Training preprocessing shown in `src/models/landslide_segmentation.py`
 converts images to float32, replaces non-finite training values with zero, and
@@ -176,11 +202,16 @@ map; sigmoid scores are thresholded at 0.50 for a binary segmentation mask.
 The dashboard visualizes the uploaded patch, score map, mask, and red
 segmentation overlay.
 
-Existing checkpoint validation results reported for the Landslide4Sense
-validation set are Dice **0.6561** and IoU **0.5101**. These overlap metrics
-are not Tirumala-specific ground-truth validation and do not guarantee
-real-world landslide detection. The average score over predicted-positive
-pixels is not calibrated confidence or prediction accuracy.
+The read-only validation run reproduced the project's deterministic 80/20
+split (random state 42): 760 held-out labeled images from the local training
+pool. At threshold 0.50, global pixel-aggregated Dice was **0.7188** and IoU
+was **0.5610** (precision 0.6921, recall 0.7477). Averaging the 190 batch-level
+overlap scores gives Dice **0.6561** and IoU **0.5101**, matching the checkpoint
+metadata and the dashboard. The different aggregation methods explain the
+different Dice/IoU values. These are Landslide4Sense held-out metrics, not
+Tirumala-specific ground-truth validation, and do not guarantee real-world
+landslide detection. The average score over predicted-positive pixels is not
+calibrated confidence or prediction accuracy.
 
 The currently saved inference report records one demonstration run for
 `image_5.h5`: 238 predicted pixels, 1.45% of the patch, mean
@@ -213,14 +244,17 @@ Leaflet-based map**, not a 3D terrain model. It includes the AOI, an
 InSAR overlay, historical point context, and map layers. The U-Net upload
 workflow is not linked to the map.
 
+Local dashboard smoke-test screenshot:
+
+![Tirumala Hills Streamlit dashboard landing page](./results/digital_twin/tirumala_dashboard_screenshot.png)
+
 ## 10. Experimental results
 
 The dashboard surfaces the existing spatial and temporal record counts,
 reference-region screening results, residual spatial-autorrelation
 diagnostics, and saved U-Net validation metrics. The key spatial/temporal
-counts are given above; existing segmentation validation values are Dice
-0.6561 and IoU 0.5101. These are prototype results, not independent
-Tirumala-wide predictive validation.
+counts and both validation metric aggregation methods are given above. These
+are prototype results, not independent Tirumala-wide predictive validation.
 
 Region 1 is a candidate reference region, not confirmed stable ground.
 Existing assessment reports significant residual spatial autocorrelation for
