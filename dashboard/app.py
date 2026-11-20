@@ -3689,53 +3689,44 @@ st.write(
     "and rainfall context."
 )
 
-if DIGITAL_TWIN_FILE.exists():
+tab_2d, tab_3d = st.tabs(["🗺️ 2D Digital Twin (GIS Map)", "🏔️ 3D Digital Twin (Terrain Mesh)"])
 
-    try:
-
-        html_content = (
-            DIGITAL_TWIN_FILE
-            .read_text(
-                encoding="utf-8"
+with tab_2d:
+    if DIGITAL_TWIN_FILE.exists():
+        try:
+            html_content = (
+                DIGITAL_TWIN_FILE
+                .read_text(
+                    encoding="utf-8"
+                )
             )
+
+            components.html(
+                html_content,
+                height=650,
+                scrolling=True
+            )
+
+        except Exception as map_error:
+            st.error(
+                f"Could not display the "
+                f"Digital Twin: {map_error}"
+            )
+
+    else:
+        st.warning(
+            "Tirumala Digital Twin HTML file "
+            "was not found."
         )
 
-        components.html(
-            html_content,
-            height=650,
-            scrolling=True
+        st.code(
+            str(DIGITAL_TWIN_FILE),
+            language="text"
         )
 
-    except Exception as map_error:
-
-        st.error(
-            f"Could not display the "
-            f"Digital Twin: {map_error}"
-        )
-
-else:
-
-    st.warning(
-        "Tirumala Digital Twin HTML file "
-        "was not found."
-    )
-
-    st.code(
-        str(DIGITAL_TWIN_FILE),
-        language="text"
-    )
-
-show_3d_terrain = st.checkbox(
-    "Show experimental 3D terrain view",
-    help=(
-        "Displays the local 80 m terrain DEM with an optional aligned "
-        "evidence overlay. The existing 2D map remains available above."
-    ),
-)
-
-if show_3d_terrain:
+with tab_3d:
     st.caption(
-        "Experimental 3D view using the local GSI-AOI DEM (EPSG:32644). "
+        "Interactive 3D view using the local GSI-AOI DEM (EPSG:32644). "
         "Height exaggeration is visual only; LOS values and pair differences "
         "are not validated landslide movement."
     )
@@ -3766,7 +3757,7 @@ if show_3d_terrain:
             config={"displaylogo": False, "responsive": True},
         )
     except TerrainViewError as terrain_error:
-        st.error(f"Could not display the experimental 3D terrain: {terrain_error}")
+        st.error(f"Could not display the 3D terrain: {terrain_error}")
 
 
 # Intelligent Agent evidence table removed from dashboard display.
