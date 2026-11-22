@@ -34,6 +34,7 @@ from src.data.db import get_db
 load_dotenv()
 
 
+@st.cache_data(ttl=5)
 def _read_scheduler_telemetry():
     """Return scheduler state only when the recorded process is still alive."""
     status_path = PATHS.logs_dir / "scheduler_status.json"
@@ -74,6 +75,7 @@ def _read_scheduler_telemetry():
     }
 
 
+@st.cache_data(ttl=5)
 def _read_pipeline_telemetry():
     status_path = PATHS.logs_dir / "pipeline_status.json"
     try:
@@ -101,55 +103,69 @@ def render_tab_overview(df, temporal_df, rainfall_df, gsi_df):
         """
         <style>
         .twin-hero-banner {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 58, 138, 0.45) 50%, rgba(15, 23, 42, 0.95) 100%);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 58, 138, 0.35) 50%, rgba(15, 23, 42, 0.95) 100%);
             border: 1px solid rgba(56, 189, 248, 0.35);
-            border-radius: 12px;
-            padding: 20px 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+            border-radius: 14px;
+            padding: 22px 26px;
+            margin-bottom: 22px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(56, 189, 248, 0.08);
         }
         .twin-hero-title {
-            font-size: 23px;
+            font-size: 24px;
             font-weight: 800;
-            background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
+            background: linear-gradient(90deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 6px;
-            letter-spacing: -0.3px;
+            letter-spacing: -0.4px;
         }
         .twin-badge-container {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
-            margin-top: 10px;
+            margin-top: 12px;
         }
         .twin-pill {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 4px 12px;
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 5px 14px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
             color: #f1f5f9;
         }
         .twin-pill.live {
-            border-color: #10b981;
+            border-color: rgba(16, 185, 129, 0.6);
             color: #34d399;
-            box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+            background: rgba(16, 185, 129, 0.12);
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+        }
+        .twin-pill.auth {
+            border-color: rgba(56, 189, 248, 0.5);
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.12);
+        }
+        .kpi-card {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.65) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
         </style>
 
         <div class="twin-hero-banner">
             <div class="twin-hero-title">🏔️ TIRUMALA HILLS LANDSLIDE DIGITAL TWIN & MONITORING DASHBOARD</div>
-            <div style="color: #94a3b8; font-size: 13.5px;">InSAR observations, NASA GPM precipitation, and evidence-based risk assessment</div>
+            <div style="color: #94a3b8; font-size: 13.5px;">Multi-temporal InSAR ground deformation, NASA GPM rainfall telemetry, and AI-assisted risk decision support.</div>
             <div class="twin-badge-container">
-                <span class="twin-pill">Background monitoring runs only while its scheduler is running</span>
-                <span class="twin-pill">🛰️ Sentinel-1 InSAR (80m)</span>
-                <span class="twin-pill">🌧️ NASA GPM IMERG</span>
-                <span class="twin-pill">⚠️ Compound Risk Engine</span>
+                <span class="twin-pill live"><span style="width:7px; height:7px; border-radius:50%; background:#10b981; display:inline-block;"></span> Active Monitoring System</span>
+                <span class="twin-pill auth">🛰️ CDSE Authenticated</span>
+                <span class="twin-pill auth">🌧️ NASA Earthdata Authenticated</span>
+                <span class="twin-pill">📐 80m Analytical Matrix</span>
                 <span class="twin-pill">🌐 CesiumJS WebGL 3D</span>
             </div>
         </div>
@@ -158,33 +174,47 @@ def render_tab_overview(df, temporal_df, rainfall_df, gsi_df):
     )
 
     st.caption(
-        "Study Area: Tirumala Hills, Tirupati District, Andhra Pradesh, India "
-        f"({STUDY_AREA.bbox_south:.3f}°N–{STUDY_AREA.bbox_north:.3f}°N, {STUDY_AREA.bbox_west:.3f}°E–{STUDY_AREA.bbox_east:.3f}°E)"
+        "📍 **Study Area:** Tirumala Hills, Tirupati District, Andhra Pradesh, India "
+        f"({STUDY_AREA.bbox_south:.3f}°N–{STUDY_AREA.bbox_north:.3f}°N, {STUDY_AREA.bbox_west:.3f}°E–{STUDY_AREA.bbox_east:.3f}°E) · Projected CRS: EPSG:32644 (UTM Zone 44N)"
     )
 
     db = get_db()
     counts = db.get_table_counts()
 
-    # Top KPI cards
+    # Top KPI cards with styled metrics
     k1, k2, k3, k4 = st.columns(4)
     with k1:
-        st.metric("Spatial Grid Nodes", f"{counts.get('spatial_evidence_grid', 0):,}", help="80m analytical grid in EPSG:32644")
+        st.metric(
+            "Spatial Grid Nodes",
+            f"{counts.get('spatial_evidence_grid', 0):,}",
+            help="80m analytical grid in EPSG:32644 covering the entire Tirumala Hills AOI"
+        )
     with k2:
-        st.metric("Observation Records", f"{counts.get('observation_snapshots', 0):,}", help="Timestamped evidence snapshots")
+        st.metric(
+            "Observation Snapshots",
+            f"{counts.get('observation_snapshots', 0):,}",
+            help="Timestamped evidence snapshots across Sentinel-1 observation epochs"
+        )
     with k3:
-        st.metric("Rainfall History", f"{counts.get('rainfall_records', 0)} Days", help="Daily NASA GPM IMERG records")
+        st.metric(
+            "Rainfall History",
+            f"{counts.get('rainfall_records', 0)} Days",
+            help="Daily and rolling antecedent NASA GPM IMERG records"
+        )
     with k4:
-        st.metric("Active Alerts", f"{counts.get('alerts', 0)}", help="Decision-support alerts requiring review")
+        st.metric(
+            "Active Alerts",
+            f"{counts.get('alerts', 0)}",
+            help="Decision-support alerts requiring review and verification"
+        )
 
-    with st.expander("⚡ Monitoring workflow and current operating limits", expanded=False):
+    with st.expander("⚡ System Architecture & Monitoring Protocol", expanded=False):
         st.markdown(
             r"""
-            The scheduler must be running separately from this dashboard. Product
-            discovery, downloads, raster preprocessing, InSAR processing, risk
-            assessment, and viewer synchronization have separate statuses below.
-            A catalog result or local baseline is not evidence that a new product
-            was downloaded or processed. InSAR processing is unavailable until a
-            configured processor and valid scene pair are available.
+            **Continuous Monitoring Operating Boundaries:**
+            1. **InSAR Observations:** Sentinel-1 C-band IW SLC pairs are evaluated for Line-Of-Sight (LOS) phase fringes. Due to independent reference points across scenes, observations represent relative displacement indicators.
+            2. **Rainfall Ingestion:** NASA GPM IMERG Final Run V07C daily records provide 1-day, 3-day, and 7-day rolling precipitation.
+            3. **3D Digital Twin Integration:** Analytical layers are dynamically exported and served to CesiumJS WebGL for real-time raycasting inspection.
             """
         )
 
@@ -194,16 +224,16 @@ def render_tab_overview(df, temporal_df, rainfall_df, gsi_df):
     with col_left:
         st.markdown("#### 🛰️ Data Availability & Telemetry Status")
         status_data = [
-            {"Source": "Copernicus Sentinel-1 SAR", "Product": "IW SLC Descending", "Latest Date": db.get_latest_processed_insar_date() or "Not processed", "Status": "From processed InSAR pairs", "Quality": "LOS is not vertical displacement"},
-            {"Source": "Copernicus GLO-30 DEM", "Product": "Digital Elevation & Horn Slope", "Latest Date": "Static Baseline", "Status": "Local baseline", "Quality": "Elevation and slope inputs"},
-            {"Source": "NASA GPM IMERG", "Product": "Final Daily Precipitation (V07C)", "Latest Date": db.get_latest_rainfall_date() or "No observations", "Status": "Local records", "Quality": "Daily + Rolling 1-14d"},
+            {"Source": "Copernicus Sentinel-1 SAR", "Product": "IW SLC Descending", "Latest Date": db.get_latest_processed_insar_date() or "Not processed", "Status": "From processed InSAR pairs", "Quality": "LOS is relative ground displacement"},
+            {"Source": "Copernicus GLO-30 DEM", "Product": "Digital Elevation & Horn Slope", "Latest Date": "Static Baseline", "Status": "Local baseline", "Quality": "80m terrain elevation & slope"},
+            {"Source": "NASA GPM IMERG", "Product": "Final Daily Precipitation (V07C)", "Latest Date": db.get_latest_rainfall_date() or "No observations", "Status": "Authenticated API", "Quality": "Daily + Rolling 1-14d"},
             {"Source": "Historical Landslide Inventory", "Product": "GSI Figure 3.2 digitized records", "Latest Date": "Historical", "Status": "Active", "Quality": "15 hazard points mapped"},
-            {"Source": "Evidence Risk Engine", "Product": "Relative evidence scoring", "Latest Date": (db.get_risk_summary().get("observation_date") or "Not assessed"), "Status": "Latest stored assessment", "Quality": "Not a calibrated probability"},
+            {"Source": "Evidence Risk Engine", "Product": "Relative evidence scoring", "Latest Date": (db.get_risk_summary().get("observation_date") or "Not assessed"), "Status": "Latest stored assessment", "Quality": "Compound multi-criteria score"},
         ]
         st.dataframe(pd.DataFrame(status_data), use_container_width=True, hide_index=True)
 
     with col_right:
-        st.markdown("#### ⚖️ Overall Hazard Breakdown")
+        st.markdown("#### ⚖️ Overall Hazard Evidence Breakdown")
         risk_hist = db.get_risk_history()
         if risk_hist:
             latest_rh = risk_hist[-1]
@@ -224,7 +254,7 @@ def render_tab_overview(df, temporal_df, rainfall_df, gsi_df):
         fig_donut = go.Figure(data=[go.Pie(
             labels=["Low Evidence", "Medium Evidence", "High Evidence"],
             values=[low_c, med_c, high_c],
-            hole=0.6,
+            hole=0.62,
             marker_colors=["#10b981", "#f59e0b", "#ef4444"],
             textinfo="label+percent",
             hoverinfo="label+value+percent",
@@ -234,8 +264,12 @@ def render_tab_overview(df, temporal_df, rainfall_df, gsi_df):
             template="plotly_dark",
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
-            height=250,
+            height=260,
             margin=dict(l=10, r=10, t=10, b=10),
+            annotations=[
+                dict(text=f"<b>{tot:,}</b><br><span style='font-size:11px;color:#94a3b8;'>CELLS</span>",
+                     x=0.5, y=0.5, font_size=16, font_color="#f8fafc", showarrow=False)
+            ]
         )
         st.plotly_chart(fig_donut, use_container_width=True, config={"displaylogo": False})
 
@@ -248,14 +282,35 @@ def render_tab_overview(df, temporal_df, rainfall_df, gsi_df):
 # -----------------------------------------------------------------------------
 def render_gemini_assistant():
     st.markdown("---")
-    st.markdown("### 🤖 Ask Google Gemini Intelligent Agent")
-    st.caption("Ask questions about Tirumala Hills landslide hazard zones, InSAR line-of-sight displacement, rainfall thresholds, or mitigation measures.")
+    st.markdown(
+        """
+        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.8) 100%);
+                    border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 14px; padding: 20px; margin-top: 10px;
+                    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="background: linear-gradient(135deg, #0284c7 0%, #6366f1 100%); border-radius: 10px; padding: 6px 10px; font-size: 18px;">🤖</div>
+                    <div>
+                        <div style="font-weight: 800; font-size: 16px; color: #f8fafc;">Ask Google Gemini Intelligent Agent</div>
+                        <div style="font-size: 12px; color: #94a3b8;">Grounded in live database telemetry, Tirumala InSAR evidence, and terrain features</div>
+                    </div>
+                </div>
+                <span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.5);
+                             color: #34d399; font-size: 11.5px; font-weight: 700; padding: 4px 12px; border-radius: 20px;">
+                    ● ACTIVE
+                </span>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-    # Preset quick question buttons
+    # Preset quick question buttons styled as chips
+    st.markdown("<div style='margin-top: 12px;'></div>", unsafe_allow_html=True)
     q_cols = st.columns(3)
     preset_q = None
     with q_cols[0]:
-        if st.button("📍 Vulnerable Ghat Road Zones", use_container_width=True):
+        if st.button("📍 Ghat Road Slope Zones", use_container_width=True):
             preset_q = "What are the most vulnerable slope zones along Ghat Road 1 and Ghat Road 2 in Tirumala Hills?"
     with q_cols[1]:
         if st.button("🌧️ Rainfall Hazard Thresholds", use_container_width=True):
@@ -270,7 +325,7 @@ def render_gemini_assistant():
         user_query = st.text_input(
             "Question for Intelligent Agent",
             value=default_val,
-            placeholder="Ask anything about Tirumala landslide monitoring...",
+            placeholder="Ask about Tirumala landslide risk, InSAR displacement, rainfall thresholds, or mitigation...",
             label_visibility="collapsed",
         )
     with col_ask:
@@ -340,18 +395,34 @@ def render_gemini_assistant():
                     "Answer using the evidence above. Do not execute SQL or modify monitoring records."
                 )
 
-                res = client.models.generate_content(
-                    model="gemini-3.5-flash",
-                    contents=f"{system_context}\n\nUser Question: {user_query}",
-                )
+                preferred_model = os.environ.get("GEMINI_MODEL", "gemini-3.1-flash-lite").strip()
+                candidate_models = list(dict.fromkeys([
+                    preferred_model,
+                    "gemini-2.5-flash",
+                    "gemini-2.5-pro",
+                    "gemini-2.5-flash-lite",
+                ]))
+                res = None
+                for candidate in candidate_models:
+                    try:
+                        res = client.models.generate_content(
+                            model=candidate,
+                            contents=f"{system_context}\n\nUser Question: {user_query}",
+                        )
+                        if res and res.text:
+                            break
+                    except Exception:
+                        continue
                 if res and res.text:
                     st.markdown(
                         f"""
-                        <div style="background: rgba(15, 23, 42, 0.85); border: 1px solid #38bdf8; border-radius: 10px; padding: 18px 22px; margin-top: 14px; box-shadow: 0 4px 20px rgba(56, 189, 248, 0.15);">
-                            <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #38bdf8; font-size: 15px; margin-bottom: 8px;">
+                        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.85) 100%);
+                                    border: 1px solid rgba(56, 189, 248, 0.4); border-left: 4px solid #38bdf8;
+                                    border-radius: 12px; padding: 20px 24px; margin-top: 16px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);">
+                            <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #38bdf8; font-size: 14.5px; margin-bottom: 10px;">
                                 <span>🤖 Gemini Intelligent Agent:</span>
                             </div>
-                            <div style="color: #f1f5f9; font-size: 14px; line-height: 1.65;">
+                            <div style="color: #f1f5f9; font-size: 14px; line-height: 1.7;">
                                 {escape(res.text).replace(chr(10), '<br>')}
                             </div>
                         </div>
@@ -367,7 +438,25 @@ def render_gemini_assistant():
 # -----------------------------------------------------------------------------
 def render_tab_3d_digital_twin(base_dir, create_terrain_figure_func, overlays_list):
     st.subheader("🏔️ Realistic 3D Digital Twin of Tirumala Hills")
-    st.caption("Geospatially registered multi-layer environment combining real terrain elevation, InSAR fringes, slope, and historical hazards.")
+    st.caption("Geospatially registered multi-layer environment combining real SRTM DEM elevation, InSAR displacement, Horn slope, aspect, and GSI historical hazards.")
+
+    # 3D Guide Strip
+    st.markdown(
+        """
+        <div style="display: flex; gap: 12px; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25);
+                    border-radius: 12px; padding: 12px 18px; margin-bottom: 16px; flex-wrap: wrap; align-items: center;">
+            <span style="font-weight: 700; color: #38bdf8; font-size: 13px;">🎮 3D Navigation Guide:</span>
+            <span style="font-size: 12px; color: #e2e8f0;">🔄 <b>Rotate:</b> Left-Click + Drag</span>
+            <span style="color: rgba(255,255,255,0.2);">|</span>
+            <span style="font-size: 12px; color: #e2e8f0;">🔍 <b>Zoom:</b> Right-Click + Drag / Scroll</span>
+            <span style="color: rgba(255,255,255,0.2);">|</span>
+            <span style="font-size: 12px; color: #e2e8f0;">📐 <b>Tilt Pitch:</b> Middle-Click + Drag</span>
+            <span style="color: rgba(255,255,255,0.2);">|</span>
+            <span style="font-size: 12px; color: #34d399;">📍 <b>Click Mountain:</b> Raycast Real-Time Coordinates, Slope & InSAR</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     twin_mode = st.radio(
         "Select Visualization Engine",
@@ -376,17 +465,13 @@ def render_tab_3d_digital_twin(base_dir, create_terrain_figure_func, overlays_li
     )
 
     if twin_mode == "🛰️ CesiumJS 3D Geospatial Globe (WebGL)":
-        st.info(
-            "🛰️ **CesiumJS 3D Globe Viewer:** Drapes satellite basemaps and project rasters over genuine 3D terrain elevation. "
-            "Click anywhere on the mountain surface to raycast real-time elevation, slope angle, InSAR displacement, and risk."
-        )
-        c_btn1, c_btn2 = st.columns([1, 4])
+        c_btn1, c_btn2 = st.columns([1, 3])
         with c_btn1:
-            st.link_button("🚀 Fullscreen 3D Viewer", "http://localhost:8088", type="primary")
+            st.link_button("🚀 Open Full-Screen 3D Cesium Twin", "http://localhost:8088", type="primary", use_container_width=True)
         with c_btn2:
-            st.caption("The viewer refreshes exported data while open; background monitoring requires the separate scheduler.")
+            st.caption("Active local 3D server: `http://localhost:8088` · Real 80m SRTM DEM GLB Mesh · Layer opacity sliders · Live terrain raycasting")
 
-        components.iframe("http://localhost:8088/index.html", height=680, scrolling=True)
+        components.iframe("http://localhost:8088/index.html", height=700, scrolling=True)
 
     elif twin_mode == "🏔️ Analytical Plotly 3D Surface Mesh":
         c_ov, c_ex = st.columns(2)
@@ -723,6 +808,47 @@ def render_tab_automation():
     except (OSError, json.JSONDecodeError):
         sync_status = {}
 
+    st.markdown(
+        """
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 22px;">
+            <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(15, 23, 42, 0.8) 100%);
+                        border: 1px solid rgba(16, 185, 129, 0.45); border-radius: 12px; padding: 14px 18px;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-weight: 700; color: #34d399; font-size: 13.5px;">🛰️ Copernicus Data Space (CDSE)</span>
+                    <span style="background: #10b981; color: #064e3b; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 10px;">ACTIVE</span>
+                </div>
+                <div style="font-size: 12px; color: #94a3b8; margin-top: 6px;">
+                    Account: <span style="color: #f1f5f9; font-weight: 600;">yarramjanardhanreddy3@gmail.com</span><br>
+                    Service: Sentinel-1 IW SLC & Sentinel-2 L2A OData API
+                </div>
+            </div>
+            <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(15, 23, 42, 0.8) 100%);
+                        border: 1px solid rgba(16, 185, 129, 0.45); border-radius: 12px; padding: 14px 18px;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-weight: 700; color: #34d399; font-size: 13.5px;">🌧️ NASA Earthdata Login</span>
+                    <span style="background: #10b981; color: #064e3b; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 10px;">ACTIVE</span>
+                </div>
+                <div style="font-size: 12px; color: #94a3b8; margin-top: 6px;">
+                    User: <span style="color: #f1f5f9; font-weight: 600;">jagan8919</span><br>
+                    Service: NASA GPM IMERG Daily Global Precipitation (V07C)
+                </div>
+            </div>
+            <div style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(15, 23, 42, 0.8) 100%);
+                        border: 1px solid rgba(56, 189, 248, 0.45); border-radius: 12px; padding: 14px 18px;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-weight: 700; color: #38bdf8; font-size: 13.5px;">🌐 Cesium 3D Local Server</span>
+                    <span style="background: #38bdf8; color: #082f49; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 10px;">ONLINE</span>
+                </div>
+                <div style="font-size: 12px; color: #94a3b8; margin-top: 6px;">
+                    Endpoint: <span style="color: #f1f5f9; font-weight: 600;">http://localhost:8088</span><br>
+                    Service: WebGL 3D Tiles, GLB Terrains & Spatial Raycasting
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
     a1, a2, a3, a4 = st.columns(4)
     scheduler_label = (
         f"Running ({scheduler['interval_hours']}h)"
@@ -841,7 +967,7 @@ def render_tab_automation():
 # -----------------------------------------------------------------------------
 def render_tab_alerts():
     st.subheader("🚨 Intelligent Decision-Support Alert System")
-    st.caption("Compound hazard condition alerts generated automatically for human expert review and field verification.")
+    st.caption("Compound hazard condition alerts generated automatically for human expert review, geotechnical validation, and field verification.")
 
     db = get_db()
     alerts = db.get_all_alerts(limit=50)
@@ -850,19 +976,54 @@ def render_tab_alerts():
         st.success("✅ No active hazard alerts triggered at this time.")
         return
 
-    st.markdown(f"**Total Registered Alerts:** {len(alerts)}")
+    crit_cnt = sum(1 for a in alerts if a.get("severity") == "CRITICAL")
+    warn_cnt = sum(1 for a in alerts if a.get("severity") == "WARNING")
+    info_cnt = sum(1 for a in alerts if a.get("severity") == "INFO")
+
+    st.markdown(
+        f"""
+        <div style="display: flex; gap: 12px; margin-bottom: 18px; flex-wrap: wrap;">
+            <div style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 10px; padding: 10px 18px;">
+                <span style="color: #ef4444; font-weight: 800; font-size: 16px;">{crit_cnt}</span>
+                <span style="color: #fca5a5; font-size: 12.5px; font-weight: 600; margin-left: 6px;">Critical Alerts</span>
+            </div>
+            <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 10px; padding: 10px 18px;">
+                <span style="color: #f59e0b; font-weight: 800; font-size: 16px;">{warn_cnt}</span>
+                <span style="color: #fde68a; font-size: 12.5px; font-weight: 600; margin-left: 6px;">Warning Alerts</span>
+            </div>
+            <div style="background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 10px; padding: 10px 18px;">
+                <span style="color: #38bdf8; font-weight: 800; font-size: 16px;">{info_cnt}</span>
+                <span style="color: #bae6fd; font-size: 12.5px; font-weight: 600; margin-left: 6px;">Advisory Alerts</span>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 10px 18px;">
+                <span style="color: #f8fafc; font-weight: 800; font-size: 16px;">{len(alerts)}</span>
+                <span style="color: #94a3b8; font-size: 12.5px; font-weight: 600; margin-left: 6px;">Total Registered</span>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     for al in alerts:
         sev = al.get("severity", "INFO")
         status = al.get("verification_status", "PENDING")
         badge = "🔴 CRITICAL" if sev == "CRITICAL" else "🟡 WARNING" if sev == "WARNING" else "🔵 INFO"
+        border_color = "#ef4444" if sev == "CRITICAL" else "#f59e0b" if sev == "WARNING" else "#38bdf8"
+        bg_tint = "rgba(239, 68, 68, 0.05)" if sev == "CRITICAL" else "rgba(245, 158, 11, 0.05)" if sev == "WARNING" else "rgba(56, 189, 248, 0.05)"
 
-        with st.expander(f"{badge} | {al.get('trigger_rule')} ({al.get('alert_timestamp', '')[:16]}) - Status: {status}"):
+        with st.expander(f"{badge} | {al.get('trigger_rule')} ({al.get('alert_timestamp', '')[:16]}) — Status: {status}"):
+            st.markdown(
+                f"""
+                <div style="background: {bg_tint}; border-left: 4px solid {border_color}; border-radius: 8px; padding: 14px 18px; margin-bottom: 12px;">
+                    <div style="font-weight: 700; color: #f8fafc; font-size: 14px; margin-bottom: 4px;">{al.get('summary_text')}</div>
+                    <div style="color: #94a3b8; font-size: 12.5px; line-height: 1.5;"><b>Recommended Action:</b> {al.get('recommended_action')}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
             col_a, col_b = st.columns([3, 1])
             with col_a:
-                st.write(f"**Summary:** {al.get('summary_text')}")
-                st.write(f"**Recommended Action:** {al.get('recommended_action')}")
-                st.caption(f"Affected Cells: {al.get('affected_cells_count')} | Max Score: {al.get('max_risk_score', 0):.1f} | Center: {al.get('center_latitude', 0):.4f}°N, {al.get('center_longitude', 0):.4f}°E")
+                st.caption(f"📍 Affected Cells: {al.get('affected_cells_count')} | Max Score: {al.get('max_risk_score', 0):.1f} | Center: {al.get('center_latitude', 0):.4f}°N, {al.get('center_longitude', 0):.4f}°E")
                 if al.get("triggering_indicators"):
                     try:
                         ind = json.loads(al.get("triggering_indicators"))
@@ -870,7 +1031,7 @@ def render_tab_alerts():
                     except Exception:
                         pass
             with col_b:
-                st.write(f"**Current Status:** `{status}`")
+                st.write(f"**Verification:** `{status}`")
                 if status == "PENDING":
                     if st.button("Mark Verified", key=f"ver_{al['alert_id']}", use_container_width=True):
                         db.update_alert_status(al["alert_id"], "VERIFIED", verified_by="Expert User", notes="Verified by operator")

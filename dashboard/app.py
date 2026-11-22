@@ -383,7 +383,7 @@ def load_segmentation_model():
 # ============================================================
 # LOAD RESEARCH DATA
 # ============================================================
-@st.cache_data
+@st.cache_data(ttl=300)
 def load_final_agent_data():
 
     if FINAL_AGENT_FILE.exists():
@@ -393,7 +393,7 @@ def load_final_agent_data():
         )
 
     return pd.DataFrame()
-@st.cache_data
+@st.cache_data(ttl=300)
 def load_temporal_feature_data():
     """Load temporal InSAR feature records safely."""
     if not TEMPORAL_FEATURE_FILE.exists():
@@ -407,7 +407,7 @@ def load_temporal_feature_data():
         )
         return pd.DataFrame()
 
-@st.cache_data
+@st.cache_data(ttl=300)
 def load_rainfall_data():
 
     if RAIN_FILE.exists():
@@ -419,7 +419,7 @@ def load_rainfall_data():
     return pd.DataFrame()
 
 
-@st.cache_data
+@st.cache_data(ttl=300)
 def load_gsi_validation_data():
     if not GSI_VALIDATION_FILE.exists():
         return pd.DataFrame()
@@ -431,36 +431,34 @@ def load_gsi_validation_data():
         return pd.DataFrame()
 
 
-try:
+segmentation_model = None
+segmentation_device = torch.device("cpu")
+model_epoch = "N/A"
+validation_dice = None
+validation_iou = None
+model_loaded = False
+model_error = None
 
-    (
-        segmentation_model,
-        segmentation_device,
-        model_epoch,
-        validation_dice,
-        validation_iou
-    ) = load_segmentation_model()
 
-    model_loaded = True
-    model_error = None
-
-except Exception as e:
-
-    segmentation_model = None
-
-    segmentation_device = torch.device(
-        "cpu"
-    )
-
-    model_epoch = "N/A"
-
-    validation_dice = None
-
-    validation_iou = None
-
-    model_loaded = False
-
-    model_error = str(e)
+def ensure_segmentation_model():
+    global segmentation_model, segmentation_device, model_epoch
+    global validation_dice, validation_iou, model_loaded, model_error
+    if model_loaded or model_error is not None:
+        return
+    try:
+        (
+            segmentation_model,
+            segmentation_device,
+            model_epoch,
+            validation_dice,
+            validation_iou,
+        ) = load_segmentation_model()
+        model_loaded = True
+    except Exception as exc:
+        segmentation_model = None
+        segmentation_device = torch.device("cpu")
+        model_loaded = False
+        model_error = str(exc)
 
 
 df = load_final_agent_data()
@@ -3225,80 +3223,127 @@ def save_segmentation_report(
 # ============================================================
 # CUSTOM CYBER STYLING & HERO HEADER
 # ============================================================
+# CUSTOM CYBER STYLING & HERO HEADER
+# ============================================================
 st.markdown(
     """
     <style>
-    /* Dark Theme & Cyber Glassmorphism */
-    .stApp {
-        background-color: #0b0f19;
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+    /* Global Typography & Deep Dark Background */
+    html, body, [class*="css"] {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
     }
     
-    /* Metrics Styling */
+    .stApp {
+        background: radial-gradient(circle at 10% 10%, rgba(14, 165, 233, 0.07) 0%, transparent 40%),
+                    radial-gradient(circle at 90% 90%, rgba(99, 102, 241, 0.07) 0%, transparent 40%),
+                    #070a12;
+        color: #f1f5f9;
+    }
+    
+    /* Metrics Styling - Glassmorphic Cyber Cards */
     div[data-testid="stMetric"] {
-        background: rgba(15, 23, 42, 0.75) !important;
-        border: 1px solid rgba(56, 189, 248, 0.25) !important;
-        border-radius: 12px !important;
-        padding: 14px 18px !important;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
-        transition: transform 0.2s ease, border-color 0.2s ease !important;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.6) 100%) !important;
+        border: 1px solid rgba(56, 189, 248, 0.22) !important;
+        border-top: 2px solid rgba(56, 189, 248, 0.7) !important;
+        border-radius: 14px !important;
+        padding: 16px 20px !important;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(56, 189, 248, 0.05) !important;
+        backdrop-filter: blur(12px) !important;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
     div[data-testid="stMetric"]:hover {
-        transform: translateY(-2px) !important;
-        border-color: rgba(56, 189, 248, 0.6) !important;
-        box-shadow: 0 8px 24px rgba(56, 189, 248, 0.15) !important;
+        transform: translateY(-3px) !important;
+        border-color: rgba(56, 189, 248, 0.7) !important;
+        box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.6), 0 0 25px rgba(56, 189, 248, 0.25) !important;
     }
     div[data-testid="stMetricLabel"] {
         color: #94a3b8 !important;
         font-weight: 600 !important;
         font-size: 13px !important;
+        letter-spacing: 0.3px !important;
+        text-transform: uppercase !important;
     }
     div[data-testid="stMetricValue"] {
-        color: #f8fafc !important;
+        color: #ffffff !important;
         font-weight: 800 !important;
+        font-size: 26px !important;
+        letter-spacing: -0.5px !important;
+        text-shadow: 0 2px 10px rgba(255, 255, 255, 0.15) !important;
     }
     
-    /* Tabs Styling */
+    /* Tabs Navigation Styling */
+    div[data-testid="stTabs"] {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 6px;
+        margin-bottom: 24px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
     div[data-testid="stTabs"] button[data-baseweb="tab"] {
-        font-size: 14.5px !important;
+        font-size: 14px !important;
         font-weight: 600 !important;
-        padding: 10px 20px !important;
+        padding: 12px 22px !important;
         color: #94a3b8 !important;
-        border-radius: 8px 8px 0 0 !important;
-        transition: all 0.2s ease !important;
+        border-radius: 10px !important;
+        transition: all 0.25s ease !important;
+        border: none !important;
+    }
+    div[data-testid="stTabs"] button[data-baseweb="tab"]:hover {
+        color: #f1f5f9 !important;
+        background: rgba(255, 255, 255, 0.05) !important;
     }
     div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] {
         color: #38bdf8 !important;
-        border-bottom: 3px solid #38bdf8 !important;
-        background: rgba(56, 189, 248, 0.08) !important;
+        background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%) !important;
+        border: 1px solid rgba(56, 189, 248, 0.35) !important;
+        box-shadow: 0 4px 15px rgba(56, 189, 248, 0.15) !important;
     }
     
-    /* Buttons */
+    /* Buttons - Glow on Hover */
     .stButton > button {
-        border-radius: 8px !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.2px !important;
-        transition: all 0.2s ease !important;
+        border-radius: 10px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.3px !important;
+        padding: 10px 20px !important;
+        transition: all 0.25s ease !important;
     }
-    .stButton > button:hover {
-        box-shadow: 0 0 16px rgba(56, 189, 248, 0.4) !important;
+    .stButton > button[kind="primary"] {
+        background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%) !important;
+        border: 1px solid rgba(56, 189, 248, 0.5) !important;
+        box-shadow: 0 4px 20px rgba(14, 165, 233, 0.35) !important;
+    }
+    .stButton > button[kind="primary"]:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 30px rgba(14, 165, 233, 0.55) !important;
     }
     
-    /* Header Card */
+    /* Sleek Expanders */
+    div[data-testid="stExpander"] {
+        background: rgba(15, 23, 42, 0.6) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 12px !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+    }
+
+    /* Top Hero Banner */
     .top-header-banner {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.8) 100%);
-        border: 1px solid rgba(56, 189, 248, 0.3);
-        border-radius: 12px;
-        padding: 18px 24px;
-        margin-bottom: 18px;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.85) 50%, rgba(15, 23, 42, 0.95) 100%);
+        border: 1px solid rgba(56, 189, 248, 0.35);
+        border-radius: 16px;
+        padding: 22px 28px;
+        margin-bottom: 22px;
+        box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.1);
     }
     .top-header-title {
         font-size: 26px;
         font-weight: 800;
-        background: linear-gradient(90deg, #38bdf8, #818cf8, #e879f9);
+        background: linear-gradient(90deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
@@ -3307,19 +3352,40 @@ st.markdown(
     .top-header-sub {
         color: #94a3b8;
         font-size: 13.5px;
-        margin-top: 4px;
+        margin-top: 5px;
+        font-weight: 500;
+    }
+    .top-badge-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
     }
     .live-status-pill {
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        background: rgba(16, 185, 129, 0.12);
-        border: 1px solid rgba(16, 185, 129, 0.4);
-        padding: 6px 14px;
+        background: rgba(16, 185, 129, 0.14);
+        border: 1px solid rgba(16, 185, 129, 0.5);
+        padding: 7px 16px;
         border-radius: 20px;
         color: #34d399;
-        font-size: 13px;
+        font-size: 12.5px;
         font-weight: 700;
+        letter-spacing: 0.3px;
+        box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+    }
+    .auth-badge-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(56, 189, 248, 0.12);
+        border: 1px solid rgba(56, 189, 248, 0.35);
+        padding: 7px 14px;
+        border-radius: 20px;
+        color: #38bdf8;
+        font-size: 12.5px;
+        font-weight: 600;
     }
     .pulse-dot {
         width: 8px;
@@ -3339,10 +3405,11 @@ st.markdown(
     <div class="top-header-banner">
         <div>
             <h1 class="top-header-title">⛰️ TIRUMALA HILLS LANDSLIDE DIGITAL TWIN</h1>
-            <div class="top-header-sub">Remote-Sensing Evidence, Risk Assessment & Monitoring Pipeline Status</div>
+            <div class="top-header-sub">Continuous InSAR Observations, NASA GPM IMERG Rainfall & 3D WebGL Multi-Layer Geovisualization</div>
         </div>
-        <div>
-            <span class="live-status-pill">AI QUESTION-ANSWERING</span>
+        <div class="top-badge-group">
+            <span class="auth-badge-pill">🛰️ CDSE & NASA AUTHENTICATED</span>
+            <span class="live-status-pill"><span class="pulse-dot"></span> LIVE TWIN SYNCHRONIZED</span>
         </div>
     </div>
     """,
@@ -3354,11 +3421,43 @@ st.markdown(
 # SIDEBAR
 # ============================================================
 
+st.sidebar.markdown(
+    """
+    <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.85) 100%);
+                border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 14px; padding: 16px; margin-bottom: 18px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.4);
+                        border-radius: 10px; padding: 6px 10px; font-size: 20px;">🏔️</div>
+            <div>
+                <div style="font-weight: 800; font-size: 15px; color: #f8fafc; letter-spacing: -0.3px;">TIRUMALA HILLS</div>
+                <div style="font-size: 11.5px; color: #38bdf8; font-weight: 700; letter-spacing: 0.3px;">DIGITAL TWIN AOI</div>
+            </div>
+        </div>
+        <div style="margin-top: 12px; font-size: 11.5px; color: #94a3b8; line-height: 1.5; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 10px;">
+            <div style="display: flex; justify-content: space-between;">
+                <span>Coordinates:</span>
+                <span style="color: #f1f5f9; font-weight: 600;">13.668°N, 79.374°E</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span>Grid CRS:</span>
+                <span style="color: #f1f5f9; font-weight: 600;">UTM Zone 44N</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span>Resolution:</span>
+                <span style="color: #f1f5f9; font-weight: 600;">80 m spacing</span>
+            </div>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
 # ============================================================
 # SYSTEM INFORMATION
 # ============================================================
 
-st.sidebar.header("System Information")
+st.sidebar.header("📊 Analytical Baseline")
 
 # Load temporal data BEFORE using it.
 temporal_features = load_temporal_feature_data()
@@ -3529,6 +3628,7 @@ with st.expander("🔬 Deep Dive Analytical Research Lab and Diagnostic Tools (M
     uploaded_image_assessments = []
 
     if uploaded_files:
+        ensure_segmentation_model()
 
         if not model_loaded:
             st.error(
@@ -4002,6 +4102,8 @@ with st.expander("🔬 Deep Dive Analytical Research Lab and Diagnostic Tools (M
     st.header(
         "🧠 U-Net Model Information"
     )
+
+    ensure_segmentation_model()
 
     if model_loaded:
 
