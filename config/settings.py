@@ -148,8 +148,10 @@ class Credentials:
     """Loaded from environment / .env — never hardcoded."""
     cdse_username: str = field(default_factory=lambda: os.environ.get("CDSE_USERNAME", ""))
     cdse_password: str = field(default_factory=lambda: os.environ.get("CDSE_PASSWORD", ""))
-    earthdata_username: str = field(default_factory=lambda: os.environ.get("EARTHDATA_USERNAME", ""))
-    earthdata_password: str = field(default_factory=lambda: os.environ.get("EARTHDATA_PASSWORD", ""))
+    earthdata_username: str = field(default_factory=lambda: os.environ.get("EARTHDATA_USERNAME", "") or os.environ.get("HYP3_USERNAME", ""))
+    earthdata_password: str = field(default_factory=lambda: os.environ.get("EARTHDATA_PASSWORD", "") or os.environ.get("HYP3_PASSWORD", ""))
+    hyp3_username: str = field(default_factory=lambda: os.environ.get("HYP3_USERNAME", "") or os.environ.get("EARTHDATA_USERNAME", ""))
+    hyp3_password: str = field(default_factory=lambda: os.environ.get("HYP3_PASSWORD", "") or os.environ.get("EARTHDATA_PASSWORD", ""))
     gemini_api_key: str = field(default_factory=lambda: os.environ.get("GEMINI_API_KEY", ""))
     telegram_bot_token: str = field(default_factory=lambda: os.environ.get("TELEGRAM_BOT_TOKEN", ""))
     telegram_chat_id: str = field(default_factory=lambda: os.environ.get("TELEGRAM_CHAT_ID", ""))
