@@ -1,0 +1,17 @@
+{
+  "observation_date": "2026-11-21",
+  "total_patches": 1,
+  "inference_duration_seconds": 0.4,
+  "mean_confidence": 0.0,
+  "positive_pixel_fraction": 0.0,
+  "total_positive_pixels": 0,
+  "grid_shape": [
+    69,
+    110
+  ],
+  "threshold": 0.5,
+  "has_optical_data": false,
+  "disclaimer": "Predictions from Landslide4Sense benchmark U-Net. Not validated on Tirumala-specific imagery.",
+  "prediction_tif": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\outputs\\unet_predictions\\unet_prediction_2026-11-21.tif",
+  "confidence_tif": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\outputs\\unet_predictions\\unet_confidence_2026-11-21.tif"
+}

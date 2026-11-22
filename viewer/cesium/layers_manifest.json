@@ -1,0 +1,189 @@
+{
+  "study_area": "Tirumala Hills, Andhra Pradesh, India",
+  "bounds": {
+    "west": 79.33335095975796,
+    "south": 13.642791691630347,
+    "east": 79.41434869959224,
+    "north": 13.693218205821346,
+    "min_value": 180.02676391601562,
+    "max_value": 899.16064453125
+  },
+  "terrain": {
+    "base_elevation_m": 180.02676391601562,
+    "center_longitude": 79.37384529023056,
+    "center_latitude": 13.66800780237739,
+    "cell_size_m": [
+      80.0,
+      80.0
+    ],
+    "vertical_exaggeration": 1.0
+  },
+  "temporal": {
+    "insar_pairs": [
+      {
+        "pair_id": "PAIR_20260805_20260817",
+        "reference_date": "2026-08-05",
+        "secondary_date": "2026-08-17",
+        "label": "05\u201317 Aug 2026",
+        "model_url": "./models/tirumala_terrain_los_pair_05_17.glb",
+        "unit": "mm",
+        "lookup_los_field": "los_pair_05_17_m",
+        "lookup_coherence_field": "corr_pair_05_17",
+        "reference_note": "LOS displacement is relative to this pair\u2019s own phase reference. Cross-pair subtraction is not shown."
+      },
+      {
+        "pair_id": "PAIR_20260817_20260829",
+        "reference_date": "2026-08-17",
+        "secondary_date": "2026-08-29",
+        "label": "17\u201329 Aug 2026",
+        "model_url": "./models/tirumala_terrain_los.glb",
+        "unit": "mm",
+        "lookup_los_field": "los_pair_17_29_m",
+        "lookup_coherence_field": "corr_pair_17_29",
+        "reference_note": "LOS displacement is relative to this pair\u2019s own phase reference. Cross-pair subtraction is not shown."
+      }
+    ],
+    "scope_note": "Only processed InSAR pairs have map layers; rainfall and risk snapshots are listed, not mapped.",
+    "comparison_note": "Each pair has its own phase reference; no cross-pair LOS difference is shown."
+  },
+  "layers": [
+    {
+      "id": "elevation",
+      "name": "Topographic Elevation",
+      "url": "./textures/layer_elevation.png",
+      "bounds": {
+        "west": 79.33335095975796,
+        "south": 13.642791691630347,
+        "east": 79.41434869959224,
+        "north": 13.693218205821346,
+        "min_value": 180.02676391601562,
+        "max_value": 899.16064453125
+      },
+      "unit": "meters",
+      "default_opacity": 0.9,
+      "default_visible": true,
+      "legend": {
+        "title": "Elevation (m)",
+        "min": "180 m",
+        "max": "899 m",
+        "gradient": "linear-gradient(to right, #2b83ba, #abdda4, #ffffbf, #fdae61, #d7191c)"
+      },
+      "model_url": "./models/tirumala_terrain_elevation.glb"
+    },
+    {
+      "id": "slope",
+      "name": "Topographic Slope",
+      "url": "./textures/layer_slope.png",
+      "bounds": {
+        "west": 79.33335095975796,
+        "south": 13.642791691630347,
+        "east": 79.41434869959224,
+        "north": 13.693218205821346,
+        "min_value": 0.2192028909921646,
+        "max_value": 46.07533264160156
+      },
+      "unit": "degrees",
+      "default_opacity": 0.75,
+      "default_visible": false,
+      "legend": {
+        "title": "Slope Angle (deg)",
+        "min": "0\u00b0 (Flat)",
+        "max": "50\u00b0 (Steep)",
+        "gradient": "linear-gradient(to right, #30123b, #4686fb, #1ae4b6, #a2fc3c, #fbb31e, #d82b04)"
+      },
+      "model_url": "./models/tirumala_terrain_slope.glb"
+    },
+    {
+      "id": "aspect",
+      "name": "Topographic Aspect (Slope Facing)",
+      "url": "./textures/layer_aspect.png",
+      "bounds": {
+        "west": 79.33335095975796,
+        "south": 13.642791691630347,
+        "east": 79.41434869959224,
+        "north": 13.693218205821346,
+        "min_value": 0.0,
+        "max_value": 359.986328125
+      },
+      "unit": "degrees",
+      "default_opacity": 0.7,
+      "default_visible": false,
+      "legend": {
+        "title": "Aspect (Azimuth)",
+        "min": "0\u00b0 (North)",
+        "max": "360\u00b0 (North)",
+        "gradient": "linear-gradient(to right, #e08282, #e0d082, #82e096, #82d0e0, #9682e0, #e08282)"
+      },
+      "model_url": "./models/tirumala_terrain_aspect.glb"
+    },
+    {
+      "id": "los",
+      "name": "Sentinel-1 LOS Displacement (Pair 2)",
+      "url": "./textures/layer_los.png",
+      "bounds": {
+        "west": 79.33335095975796,
+        "south": 13.642791691630347,
+        "east": 79.41434869959224,
+        "north": 13.693218205821346,
+        "min_value": -44.365238189697266,
+        "max_value": -6.585961818695068
+      },
+      "unit": "mm",
+      "default_opacity": 0.8,
+      "default_visible": false,
+      "legend": {
+        "title": "InSAR LOS Disp (mm)",
+        "min": "-48 mm (Subsidence)",
+        "max": "+12 mm (Uplift)",
+        "gradient": "linear-gradient(to right, #b2182b, #ef8a62, #f7f7f7, #67a9cf, #2166ac)"
+      },
+      "model_url": "./models/tirumala_terrain_los.glb"
+    },
+    {
+      "id": "coherence",
+      "name": "InSAR Quality Coherence (\u03b3 \u2265 0.50)",
+      "url": "./textures/layer_coherence.png",
+      "bounds": {
+        "west": 79.33335095975796,
+        "south": 13.642791691630347,
+        "east": 79.41434869959224,
+        "north": 13.693218205821346,
+        "min_value": 0.50007563829422,
+        "max_value": 0.9730386734008789
+      },
+      "unit": "ratio",
+      "default_opacity": 0.75,
+      "default_visible": false,
+      "legend": {
+        "title": "InSAR Coherence (\u03b3)",
+        "min": "0.50",
+        "max": "1.00",
+        "gradient": "linear-gradient(to right, #440154, #3b528b, #21918c, #5ec962, #fde725)"
+      },
+      "model_url": "./models/tirumala_terrain_coherence.glb"
+    },
+    {
+      "id": "risk_zones",
+      "name": "Landslide Risk Assessment Zones",
+      "url": "./textures/layer_risk_zones.png",
+      "bounds": {
+        "west": 79.33335095975796,
+        "south": 13.642791691630347,
+        "east": 79.41434869959224,
+        "north": 13.693218205821346,
+        "min_value": 0.0,
+        "max_value": 100.0
+      },
+      "unit": "category",
+      "default_opacity": 0.7,
+      "default_visible": false,
+      "legend": {
+        "title": "Risk Category",
+        "min": "Low (Green)",
+        "max": "High (Red)",
+        "gradient": "linear-gradient(to right, #10b981, #f59e0b, #ef4444)"
+      },
+      "model_url": "./models/tirumala_terrain_risk_zones.glb"
+    }
+  ]
+}

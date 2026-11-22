@@ -1,0 +1,2 @@
+timestamp,source_file,predicted_landslide_pixels,predicted_landslide_percentage,average_confidence,prediction_threshold,agent_action,agent_recommendation
+2026-11-12T08:50:07,image_5.h5,238,1.45263671875,0.8206268548965454,0.5,Enhanced monitoring,"The uploaded image contains a non-zero segmented region whose mean predicted-positive model score is at least 0.75. This score is not calibrated confidence. Review the predicted region against InSAR, terrain, rainfall, historical GSI evidence, and field evidence."

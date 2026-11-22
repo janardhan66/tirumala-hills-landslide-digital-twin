@@ -1,5 +1,6 @@
 import streamlit as st
 import hashlib
+import json
 import pandas as pd
 import numpy as np
 import h5py
@@ -7,6 +8,7 @@ import torch
 import torch.nn as nn
 from pathlib import Path
 from datetime import datetime
+from urllib.parse import quote
 import streamlit.components.v1 as components
 import sys
 
@@ -67,6 +69,7 @@ DIGITAL_TWIN_FILE = (
     / "digital_twin"
     / "tirumala_final_digital_twin.html"
 )
+CESIUM_LAYER_MANIFEST = BASE_DIR / "viewer" / "cesium" / "layers_manifest.json"
 
 MODEL_FILE = (
     BASE_DIR
@@ -3220,26 +3223,130 @@ def save_segmentation_report(
 
 
 # ============================================================
-# TITLE
+# CUSTOM CYBER STYLING & HERO HEADER
 # ============================================================
-st.title(
-    "🌍 Tirumala Hills Landslide Monitoring"
-)
+st.markdown(
+    """
+    <style>
+    /* Dark Theme & Cyber Glassmorphism */
+    .stApp {
+        background-color: #0b0f19;
+    }
+    
+    /* Metrics Styling */
+    div[data-testid="stMetric"] {
+        background: rgba(15, 23, 42, 0.75) !important;
+        border: 1px solid rgba(56, 189, 248, 0.25) !important;
+        border-radius: 12px !important;
+        padding: 14px 18px !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+        transition: transform 0.2s ease, border-color 0.2s ease !important;
+    }
+    div[data-testid="stMetric"]:hover {
+        transform: translateY(-2px) !important;
+        border-color: rgba(56, 189, 248, 0.6) !important;
+        box-shadow: 0 8px 24px rgba(56, 189, 248, 0.15) !important;
+    }
+    div[data-testid="stMetricLabel"] {
+        color: #94a3b8 !important;
+        font-weight: 600 !important;
+        font-size: 13px !important;
+    }
+    div[data-testid="stMetricValue"] {
+        color: #f8fafc !important;
+        font-weight: 800 !important;
+    }
+    
+    /* Tabs Styling */
+    div[data-testid="stTabs"] button[data-baseweb="tab"] {
+        font-size: 14.5px !important;
+        font-weight: 600 !important;
+        padding: 10px 20px !important;
+        color: #94a3b8 !important;
+        border-radius: 8px 8px 0 0 !important;
+        transition: all 0.2s ease !important;
+    }
+    div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] {
+        color: #38bdf8 !important;
+        border-bottom: 3px solid #38bdf8 !important;
+        background: rgba(56, 189, 248, 0.08) !important;
+    }
+    
+    /* Buttons */
+    .stButton > button {
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.2px !important;
+        transition: all 0.2s ease !important;
+    }
+    .stButton > button:hover {
+        box-shadow: 0 0 16px rgba(56, 189, 248, 0.4) !important;
+    }
+    
+    /* Header Card */
+    .top-header-banner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.8) 100%);
+        border: 1px solid rgba(56, 189, 248, 0.3);
+        border-radius: 12px;
+        padding: 18px 24px;
+        margin-bottom: 18px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+    .top-header-title {
+        font-size: 26px;
+        font-weight: 800;
+        background: linear-gradient(90deg, #38bdf8, #818cf8, #e879f9);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin: 0;
+        letter-spacing: -0.5px;
+    }
+    .top-header-sub {
+        color: #94a3b8;
+        font-size: 13.5px;
+        margin-top: 4px;
+    }
+    .live-status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        padding: 6px 14px;
+        border-radius: 20px;
+        color: #34d399;
+        font-size: 13px;
+        font-weight: 700;
+    }
+    .pulse-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #10b981;
+        box-shadow: 0 0 10px #10b981;
+        animation: pulseLive 2s infinite;
+    }
+    @keyframes pulseLive {
+        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+        70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+    </style>
 
-st.subheader(
-    "Remote Sensing-Enabled Digital Twin and Intelligent Agent"
-)
-
-st.write(
-    "**Study Area:** Tirumala Hills, "
-    "Tirupati, Andhra Pradesh"
-)
-
-st.write(
-    "This research prototype integrates terrain evidence, "
-    "Sentinel-1 InSAR monitoring, exploratory InSAR pair differences, "
-    "rainfall context, historical GSI evidence, and an "
-    "explainable intelligent-agent evidence framework."
+    <div class="top-header-banner">
+        <div>
+            <h1 class="top-header-title">⛰️ TIRUMALA HILLS LANDSLIDE DIGITAL TWIN</h1>
+            <div class="top-header-sub">Remote-Sensing Evidence, Risk Assessment & Monitoring Pipeline Status</div>
+        </div>
+        <div>
+            <span class="live-status-pill">AI QUESTION-ANSWERING</span>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 
@@ -3332,183 +3439,208 @@ st.sidebar.caption(
 # ============================================================
 
 # ============================================================
-# SATELLITE DATA INPUT
+# MASTER 7-DASHBOARD NAVIGATION (MODULE G)
 # ============================================================
-st.header(
-    "📡 Satellite Data Input"
+from dashboard.tabs_extension import (
+    render_tab_overview,
+    render_tab_3d_digital_twin,
+    render_tab_monitoring,
+    render_tab_risk_assessment,
+    render_tab_automation,
+    render_tab_alerts,
 )
 
-st.write(
-    "Upload a Landslide4Sense-compatible "
-    "14-channel HDF5 (.h5) satellite image "
-    "for U-Net landslide segmentation."
-)
+tab_overview, tab_twin, tab_monitoring, tab_risk, tab_automation, tab_alerts = st.tabs([
+    "📊 1. Overview",
+    "🏔️ 2. 3D Digital Twin",
+    "🛰️ 3. Continuous Monitoring",
+    "⚠️ 4. Risk Assessment",
+    "⚙️ 5. Automation Status",
+    "🚨 6. Alerts & Reports",
+])
 
-uploaded_files = st.file_uploader(
-    "Upload multiple 14-channel satellite images",
-    type=["h5", "hdf5"],
-    accept_multiple_files=True,
-    help=(
-        "Upload 1 to 10 HDF5 files (.h5 or .hdf5). Each file must "
-        "contain an 'img' dataset with shape (128, 128, 14)."
-    ),
-)
+with tab_overview:
+    render_tab_overview(df, temporal_features, rainfall_df, gsi_df)
 
-if len(uploaded_files) > 10:
-    st.error("Please upload a maximum of 10 HDF5 images.")
-    uploaded_files = []
+with tab_twin:
+    render_tab_3d_digital_twin(BASE_DIR, create_terrain_figure, TERRAIN_OVERLAYS)
 
-st.info(
-    "The current trained U-Net accepts only a "
-    "14-channel HDF5 input with shape "
-    "(128, 128, 14). A normal GeoTIFF or "
-    "Sentinel-1 ZIP cannot be passed directly "
-    "to this model without a separate "
-    "preprocessing/conversion pipeline."
-)
+with tab_monitoring:
+    render_tab_monitoring()
+
+with tab_risk:
+    render_tab_risk_assessment(df)
+
+with tab_automation:
+    render_tab_automation()
+
+with tab_alerts:
+    render_tab_alerts()
+
+st.markdown("---")
+with st.expander("🔬 Deep Dive Analytical Research Lab and Diagnostic Tools (Manual U-Net HDF5 Inference)", expanded=False):
+    st.markdown("## 🔬 Deep Dive Analytical Research Lab")
+    st.caption("Access the original file uploader, spatial reference screening, and intelligent agent question-answering below.")
+
+    # ============================================================
+    # SATELLITE DATA INPUT
+    # ============================================================
+    st.header(
+        "📡 Satellite Data Input"
+    )
+
+    st.write(
+        "Upload a Landslide4Sense-compatible "
+        "14-channel HDF5 (.h5) satellite image "
+        "for U-Net landslide segmentation."
+    )
+
+    uploaded_files = st.file_uploader(
+        "Upload multiple 14-channel satellite images",
+        type=["h5", "hdf5"],
+        accept_multiple_files=True,
+        help=(
+            "Upload 1 to 10 HDF5 files (.h5 or .hdf5). Each file must "
+            "contain an 'img' dataset with shape (128, 128, 14)."
+        ),
+    )
+
+    if len(uploaded_files) > 10:
+        st.error("Please upload a maximum of 10 HDF5 images.")
+        uploaded_files = []
+
+    st.info(
+        "The current trained U-Net accepts only a "
+        "14-channel HDF5 input with shape "
+        "(128, 128, 14). A normal GeoTIFF or "
+        "Sentinel-1 ZIP cannot be passed directly "
+        "to this model without a separate "
+        "preprocessing/conversion pipeline."
+    )
 
 
-# Holds only the prediction generated during this Streamlit run.
-# Historical CSV reports are displayed separately and are not treated as current input.
+    # Holds only the prediction generated during this Streamlit run.
+    # Historical CSV reports are displayed separately and are not treated as current input.
 
-# ============================================================
-# MULTI-IMAGE UPLOADED IMAGE PREDICTION
-# ============================================================
+    # ============================================================
+    # MULTI-IMAGE UPLOADED IMAGE PREDICTION
+    # ============================================================
 
-uploaded_image_assessments = []
+    uploaded_image_assessments = []
 
-if uploaded_files:
+    if uploaded_files:
 
-    if not model_loaded:
-        st.error(
-            "Prediction cannot start because the "
-            "U-Net checkpoint failed to load."
-        )
-
-    else:
-        research_observation_count = len(df)
-
-        for image_index, uploaded_file in enumerate(uploaded_files):
-
-            st.divider()
-
-            st.subheader(
-                f"Image {image_index + 1}: {uploaded_file.name}"
+        if not model_loaded:
+            st.error(
+                "Prediction cannot start because the "
+                "U-Net checkpoint failed to load."
             )
 
-            try:
-                # ------------------------------------------------
-                # READ HDF5 IMAGE AND RUN EXISTING U-NET
-                # ------------------------------------------------
-                image = read_h5_image(uploaded_file)
-                (
-                    probability,
-                    prediction_mask,
-                    predicted_pixels,
-                    landslide_percentage,
-                    average_confidence
-                ) = run_unet_prediction(image)
+        else:
+            research_observation_count = len(df)
 
+            for image_index, uploaded_file in enumerate(uploaded_files):
 
-                # Generate LOW / MEDIUM / HIGH risk map
-                risk_class_map = create_risk_classification_map(
-                    probability
+                st.divider()
+
+                st.subheader(
+                    f"Image {image_index + 1}: {uploaded_file.name}"
                 )
 
-                st.subheader("Landslide Risk Classification Map")
+                try:
+                    # ------------------------------------------------
+                    # READ HDF5 IMAGE AND RUN EXISTING U-NET
+                    # ------------------------------------------------
+                    image = read_h5_image(uploaded_file)
+                    (
+                        probability,
+                        prediction_mask,
+                        predicted_pixels,
+                        landslide_percentage,
+                        average_confidence
+                    ) = run_unet_prediction(image)
 
-                st.image(
-                    risk_class_map,
-                    caption=(
-                        "Green: LOW | Yellow: MEDIUM | "
-                        "Red: HIGH | Black: No detected landslide"
-                    ),
-                    width="stretch"
-                )
 
-                st.write("### U-Net Agent Decision")
-                # ------------------------------------------------
-                # U-NET AGENT DECISION
-                # ------------------------------------------------
-                (
-                    agent_action,
-                    agent_recommendation
-                ) = segmentation_agent_decision(
-                    landslide_percentage,
-                    average_confidence,
-                    predicted_pixels
-                )
-
-                # ------------------------------------------------
-                # INTEGRATED AGENT DECISION
-                # ------------------------------------------------
-                (
-                    integrated_action,
-                    integrated_recommendation
-                ) = integrated_agent_decision(
-                    predicted_pixels,
-                    landslide_percentage,
-                    average_confidence,
-                    research_observation_count
-                )
-
-                # ------------------------------------------------
-                # IMAGE-SPECIFIC SCREENING BAND
-                # ------------------------------------------------
-                image_band, image_band_basis = (
-                    classify_uploaded_image_coverage(
-                        landslide_percentage
-                    )
-                )
-
-                current_assessment = {
-                    "filename": uploaded_file.name,
-                    "predicted_pixels": int(predicted_pixels),
-                    "coverage_percent": float(landslide_percentage),
-                    "mean_positive_score": float(average_confidence),
-                    "screening_band": image_band,
-                    "agent_action": agent_action,
-                }
-
-                uploaded_image_assessments.append(
-                    current_assessment
-                )
-
-                # ------------------------------------------------
-                # SAVE A SEPARATE REPORT FOR EACH IMAGE
-                # ------------------------------------------------
-                upload_signature = hashlib.sha256(
-                    uploaded_file.name.encode("utf-8")
-                    + uploaded_file.getvalue()
-                ).hexdigest()
-
-                saved_upload_signatures = (
-                    st.session_state.setdefault(
-                        "saved_upload_signatures", {}
-                    )
-                )
-
-                if upload_signature not in saved_upload_signatures:
-
-                    saved_report_path = save_segmentation_report(
-                        source_file=uploaded_file.name,
-                        predicted_pixels=predicted_pixels,
-                        area_percent=landslide_percentage,
-                        confidence=average_confidence,
-                        action=agent_action,
-                        recommendation=agent_recommendation
+                    # Generate LOW / MEDIUM / HIGH risk map
+                    risk_class_map = create_risk_classification_map(
+                        probability
                     )
 
-                    saved_upload_signatures[upload_signature] = (
-                        str(saved_report_path)
+                    st.subheader("Landslide Risk Classification Map")
+
+                    st.image(
+                        risk_class_map,
+                        caption=(
+                            "Green: LOW | Yellow: MEDIUM | "
+                            "Red: HIGH | Black: No detected landslide"
+                        ),
+                        width="stretch"
                     )
 
-                else:
-                    saved_report_path = Path(
-                        saved_upload_signatures[upload_signature]
+                    st.write("### U-Net Agent Decision")
+                    # ------------------------------------------------
+                    # U-NET AGENT DECISION
+                    # ------------------------------------------------
+                    (
+                        agent_action,
+                        agent_recommendation
+                    ) = segmentation_agent_decision(
+                        landslide_percentage,
+                        average_confidence,
+                        predicted_pixels
                     )
 
-                    if not saved_report_path.exists():
+                    # ------------------------------------------------
+                    # INTEGRATED AGENT DECISION
+                    # ------------------------------------------------
+                    (
+                        integrated_action,
+                        integrated_recommendation
+                    ) = integrated_agent_decision(
+                        predicted_pixels,
+                        landslide_percentage,
+                        average_confidence,
+                        research_observation_count
+                    )
+
+                    # ------------------------------------------------
+                    # IMAGE-SPECIFIC SCREENING BAND
+                    # ------------------------------------------------
+                    image_band, image_band_basis = (
+                        classify_uploaded_image_coverage(
+                            landslide_percentage
+                        )
+                    )
+
+                    current_assessment = {
+                        "filename": uploaded_file.name,
+                        "predicted_pixels": int(predicted_pixels),
+                        "coverage_percent": float(landslide_percentage),
+                        "mean_positive_score": float(average_confidence),
+                        "screening_band": image_band,
+                        "agent_action": agent_action,
+                    }
+
+                    uploaded_image_assessments.append(
+                        current_assessment
+                    )
+
+                    # ------------------------------------------------
+                    # SAVE A SEPARATE REPORT FOR EACH IMAGE
+                    # ------------------------------------------------
+                    upload_signature = hashlib.sha256(
+                        uploaded_file.name.encode("utf-8")
+                        + uploaded_file.getvalue()
+                    ).hexdigest()
+
+                    saved_upload_signatures = (
+                        st.session_state.setdefault(
+                            "saved_upload_signatures", {}
+                        )
+                    )
+
+                    if upload_signature not in saved_upload_signatures:
+
                         saved_report_path = save_segmentation_report(
                             source_file=uploaded_file.name,
                             predicted_pixels=predicted_pixels,
@@ -3522,458 +3654,505 @@ if uploaded_files:
                             str(saved_report_path)
                         )
 
-                # ------------------------------------------------
-                # IMAGE ASSESSMENT METRICS
-                # ------------------------------------------------
-                st.success(
-                    "U-Net landslide segmentation completed."
-                )
+                    else:
+                        saved_report_path = Path(
+                            saved_upload_signatures[upload_signature]
+                        )
 
-                col1, col2, col3, col4 = st.columns(4)
+                        if not saved_report_path.exists():
+                            saved_report_path = save_segmentation_report(
+                                source_file=uploaded_file.name,
+                                predicted_pixels=predicted_pixels,
+                                area_percent=landslide_percentage,
+                                confidence=average_confidence,
+                                action=agent_action,
+                                recommendation=agent_recommendation
+                            )
 
-                col1.metric(
-                    "Predicted Landslide Pixels",
-                    f"{predicted_pixels:,}"
-                )
+                            saved_upload_signatures[upload_signature] = (
+                                str(saved_report_path)
+                            )
 
-                col2.metric(
-                    "Predicted Area",
-                    f"{landslide_percentage:.2f}%"
-                )
+                    # ------------------------------------------------
+                    # IMAGE ASSESSMENT METRICS
+                    # ------------------------------------------------
+                    st.success(
+                        "U-Net landslide segmentation completed."
+                    )
 
-                col3.metric(
-                    "Mean Positive Model Score",
-                    f"{average_confidence * 100:.2f}%"
-                )
+                    col1, col2, col3, col4 = st.columns(4)
 
-                col4.metric(
-                    "Agent Action",
-                    agent_action
-                )
+                    col1.metric(
+                        "Predicted Landslide Pixels",
+                        f"{predicted_pixels:,}"
+                    )
 
-                # ------------------------------------------------
-                # PREDICTED LANDSLIDE MASK
-                # ------------------------------------------------
-                st.markdown("#### Predicted Landslide Mask")
+                    col2.metric(
+                        "Predicted Area",
+                        f"{landslide_percentage:.2f}%"
+                    )
 
-                st.image(
-                    prediction_mask * 255,
-                    caption=(
-                        "White = pixels predicted as landslide "
-                        f"(threshold = {PREDICTION_THRESHOLD:.2f})"
-                    ),
-                    clamp=True,
-                    use_container_width=True
-                )
+                    col3.metric(
+                        "Mean Positive Model Score",
+                        f"{average_confidence * 100:.2f}%"
+                    )
 
-                # ------------------------------------------------
-                # LANDSLIDE DETECTION OVERLAY
-                # ------------------------------------------------
-                st.markdown("#### Landslide Detection Overlay")
+                    col4.metric(
+                        "Agent Action",
+                        agent_action
+                    )
 
-                rgb_image = make_rgb_preview(image)
-                overlay = rgb_image.copy()
+                    # ------------------------------------------------
+                    # PREDICTED LANDSLIDE MASK
+                    # ------------------------------------------------
+                    st.markdown("#### Predicted Landslide Mask")
 
-                overlay[prediction_mask == 1] = [
-                    1.0, 0.0, 0.0
-                ]
+                    st.image(
+                        prediction_mask * 255,
+                        caption=(
+                            "White = pixels predicted as landslide "
+                            f"(threshold = {PREDICTION_THRESHOLD:.2f})"
+                        ),
+                        clamp=True,
+                        use_container_width=True
+                    )
 
-                st.image(
-                    overlay,
-                    caption="Red = predicted landslide regions",
-                    clamp=True,
-                    use_container_width=True
-                )
-            except Exception as exc:
-                st.error(
-                    f"Could not process {uploaded_file.name}: {exc}"
-                )
+                    # ------------------------------------------------
+                    # LANDSLIDE DETECTION OVERLAY
+                    # ------------------------------------------------
+                    st.markdown("#### Landslide Detection Overlay")
+
+                    rgb_image = make_rgb_preview(image)
+                    overlay = rgb_image.copy()
+
+                    overlay[prediction_mask == 1] = [
+                        1.0, 0.0, 0.0
+                    ]
+
+                    st.image(
+                        overlay,
+                        caption="Red = predicted landslide regions",
+                        clamp=True,
+                        use_container_width=True
+                    )
+                except Exception as exc:
+                    st.error(
+                        f"Could not process {uploaded_file.name}: {exc}"
+                    )
 
 
 
 
-# ============================================================
-# LANDSLIDE RISK ASSESSMENT (DATA-DRIVEN RELATIVE EVIDENCE INDEX)
-# ============================================================
-from src.risk_assessment import build_spatial_risk
+    # ============================================================
+    # LANDSLIDE RISK ASSESSMENT (DATA-DRIVEN RELATIVE EVIDENCE INDEX)
+    # ============================================================
+    from src.risk_assessment import build_spatial_risk
 
-risk_df, risk_summary = build_spatial_risk(df)
+    risk_df, risk_summary = build_spatial_risk(df)
 
-if risk_summary["score"] is None:
-    st.warning(
-        "Risk assessment is unavailable: the spatial evidence table does not "
-        "contain usable slope, terrain, InSAR, or temporal indicator columns. "
-        "No default score is substituted."
+    if risk_summary["score"] is None:
+        st.warning(
+            "Risk assessment is unavailable: the spatial evidence table does not "
+            "contain usable slope, terrain, InSAR, or temporal indicator columns. "
+            "No default score is substituted."
+        )
+    else:
+        st.subheader("Spatial Risk Assessment")
+        st.markdown("### Risk Category Distribution")
+
+        category_order = ["Low", "Medium", "High"]
+        category_counts = (
+            risk_df["risk_category"]
+            .value_counts()
+            .reindex(category_order, fill_value=0)
+        )
+        total_observations = int(category_counts.sum())
+        count_cols = st.columns(3)
+
+        count_cols[0].metric(
+            "🟢 LOW Risk", f"{int(category_counts['Low']):,}",
+            f"{category_counts['Low'] / total_observations * 100:.1f}%" if total_observations else "0%"
+        )
+        count_cols[1].metric(
+            "🟡 MEDIUM Risk", f"{int(category_counts['Medium']):,}",
+            f"{category_counts['Medium'] / total_observations * 100:.1f}%" if total_observations else "0%"
+        )
+        count_cols[2].metric(
+            "🔴 HIGH Risk", f"{int(category_counts['High']):,}",
+            f"{category_counts['High'] / total_observations * 100:.1f}%" if total_observations else "0%"
+        )
+
+        st.markdown("#### Observation Distribution")
+        chart_df = pd.DataFrame({
+            "Risk Category": category_order,
+            "Observations": [int(category_counts[label]) for label in category_order]
+        }).set_index("Risk Category")
+        st.bar_chart(chart_df, use_container_width=True)
+        coordinate_columns = {"latitude", "longitude"}
+        if coordinate_columns.issubset(risk_df.columns):
+            map_data = risk_df.copy()
+            map_data["latitude"] = pd.to_numeric(map_data["latitude"], errors="coerce")
+            map_data["longitude"] = pd.to_numeric(map_data["longitude"], errors="coerce")
+            map_data = map_data.dropna(subset=["latitude", "longitude", "risk_score"])
+            if not map_data.empty:
+                try:
+                    import pydeck as pdk
+                    color_lookup = {
+                        "Low": [34, 197, 94, 190],
+                        "Medium": [234, 179, 8, 210],
+                        "High": [239, 68, 68, 220],
+                    }
+                    map_data["marker_color"] = map_data["risk_category"].map(color_lookup)
+                    layer = pdk.Layer(
+                        "ScatterplotLayer", data=map_data,
+                        get_position="[longitude, latitude]",
+                        get_fill_color="marker_color", get_radius=45,
+                        pickable=True, auto_highlight=True,
+                    )
+                    view = pdk.ViewState(
+                        latitude=float(map_data["latitude"].mean()),
+                        longitude=float(map_data["longitude"].mean()),
+                        zoom=11, pitch=0,
+                    )
+                    st.pydeck_chart(pdk.Deck(
+                        layers=[layer], initial_view_state=view,
+                        tooltip={"text": "Risk: {risk_category}\\nScore: {risk_score}\\nEvidence coverage: {risk_evidence_coverage}%"},
+                    ), use_container_width=True)
+                    st.caption("Map points are coloured by relative evidence category, not validated hazard zones.")
+                except Exception as map_error:
+                    st.info(f"Spatial map could not be rendered; showing the location table instead. ({map_error})")
+            else:
+                st.info("Latitude/longitude columns exist, but no valid coordinate rows are available.")
+        # Coordinate warning, detailed spatial-risk table, and methodology footer
+        # are intentionally omitted from the dashboard display.
+
+
+    # ============================================================
+    # DIGITAL TWIN
+    # ============================================================
+    st.header(
+        "🗺️ Digital Twin"
     )
-else:
-    st.subheader("Spatial Risk Assessment")
-    st.markdown("### Risk Category Distribution")
 
-    category_order = ["Low", "Medium", "High"]
-    category_counts = (
-        risk_df["risk_category"]
-        .value_counts()
-        .reindex(category_order, fill_value=0)
-    )
-    total_observations = int(category_counts.sum())
-    count_cols = st.columns(3)
-
-    count_cols[0].metric(
-        "🟢 LOW Risk", f"{int(category_counts['Low']):,}",
-        f"{category_counts['Low'] / total_observations * 100:.1f}%" if total_observations else "0%"
-    )
-    count_cols[1].metric(
-        "🟡 MEDIUM Risk", f"{int(category_counts['Medium']):,}",
-        f"{category_counts['Medium'] / total_observations * 100:.1f}%" if total_observations else "0%"
-    )
-    count_cols[2].metric(
-        "🔴 HIGH Risk", f"{int(category_counts['High']):,}",
-        f"{category_counts['High'] / total_observations * 100:.1f}%" if total_observations else "0%"
+    st.write(
+        "Integrated spatial evidence, exploratory "
+        "InSAR pair-difference evidence, historical GSI locations, "
+        "and rainfall context."
     )
 
-    st.markdown("#### Observation Distribution")
-    chart_df = pd.DataFrame({
-        "Risk Category": category_order,
-        "Observations": [int(category_counts[label]) for label in category_order]
-    }).set_index("Risk Category")
-    st.bar_chart(chart_df, use_container_width=True)
-    coordinate_columns = {"latitude", "longitude"}
-    if coordinate_columns.issubset(risk_df.columns):
-        map_data = risk_df.copy()
-        map_data["latitude"] = pd.to_numeric(map_data["latitude"], errors="coerce")
-        map_data["longitude"] = pd.to_numeric(map_data["longitude"], errors="coerce")
-        map_data = map_data.dropna(subset=["latitude", "longitude", "risk_score"])
-        if not map_data.empty:
+    tab_2d, tab_3d = st.tabs(["🗺️ 2D Digital Twin (GIS Map)", "🏔️ 3D Digital Twin (Terrain Mesh)"])
+
+    with tab_2d:
+        if DIGITAL_TWIN_FILE.exists():
             try:
-                import pydeck as pdk
-                color_lookup = {
-                    "Low": [34, 197, 94, 190],
-                    "Medium": [234, 179, 8, 210],
-                    "High": [239, 68, 68, 220],
-                }
-                map_data["marker_color"] = map_data["risk_category"].map(color_lookup)
-                layer = pdk.Layer(
-                    "ScatterplotLayer", data=map_data,
-                    get_position="[longitude, latitude]",
-                    get_fill_color="marker_color", get_radius=45,
-                    pickable=True, auto_highlight=True,
+                html_content = (
+                    DIGITAL_TWIN_FILE
+                    .read_text(
+                        encoding="utf-8"
+                    )
                 )
-                view = pdk.ViewState(
-                    latitude=float(map_data["latitude"].mean()),
-                    longitude=float(map_data["longitude"].mean()),
-                    zoom=11, pitch=0,
+
+                components.html(
+                    html_content,
+                    height=650,
+                    scrolling=True
                 )
-                st.pydeck_chart(pdk.Deck(
-                    layers=[layer], initial_view_state=view,
-                    tooltip={"text": "Risk: {risk_category}\\nScore: {risk_score}\\nEvidence coverage: {risk_evidence_coverage}%"},
-                ), use_container_width=True)
-                st.caption("Map points are coloured by relative evidence category, not validated hazard zones.")
+
             except Exception as map_error:
-                st.info(f"Spatial map could not be rendered; showing the location table instead. ({map_error})")
-        else:
-            st.info("Latitude/longitude columns exist, but no valid coordinate rows are available.")
-    # Coordinate warning, detailed spatial-risk table, and methodology footer
-    # are intentionally omitted from the dashboard display.
-
-
-# ============================================================
-# DIGITAL TWIN
-# ============================================================
-st.header(
-    "🗺️ Digital Twin"
-)
-
-st.write(
-    "Integrated spatial evidence, exploratory "
-    "InSAR pair-difference evidence, historical GSI locations, "
-    "and rainfall context."
-)
-
-tab_2d, tab_3d = st.tabs(["🗺️ 2D Digital Twin (GIS Map)", "🏔️ 3D Digital Twin (Terrain Mesh)"])
-
-with tab_2d:
-    if DIGITAL_TWIN_FILE.exists():
-        try:
-            html_content = (
-                DIGITAL_TWIN_FILE
-                .read_text(
-                    encoding="utf-8"
+                st.error(
+                    f"Could not display the "
+                    f"Digital Twin: {map_error}"
                 )
+
+        else:
+            st.warning(
+                "Tirumala Digital Twin HTML file "
+                "was not found."
             )
 
-            components.html(
-                html_content,
-                height=650,
-                scrolling=True
+            st.code(
+                str(DIGITAL_TWIN_FILE),
+                language="text"
             )
 
-        except Exception as map_error:
-            st.error(
-                f"Could not display the "
-                f"Digital Twin: {map_error}"
+    with tab_3d:
+        st.caption(
+            "Interactive 3D Digital Twin using real Copernicus GLO-30 DEM elevation data (EPSG:32644). "
+            "Supports both high-resolution CesiumJS geospatial 3D globe visualization and Plotly surface mesh analysis."
+        )
+
+        twin_view_mode = st.radio(
+            "3D Digital Twin View Mode",
+            ["🏔️ Analytical 3D Surface (Plotly Mesh)", "🛰️ Geospatial 3D Globe (CesiumJS WebGL)"],
+            horizontal=True,
+            help="Switch between the analytical Plotly surface mesh and the CesiumJS 3D geospatial globe.",
+        )
+
+        if twin_view_mode == "🏔️ Analytical 3D Surface (Plotly Mesh)":
+            overlay_column, exaggeration_column = st.columns(2)
+            with overlay_column:
+                selected_terrain_overlay = st.selectbox(
+                    "Color terrain by",
+                    TERRAIN_OVERLAYS,
+                )
+            with exaggeration_column:
+                terrain_vertical_exaggeration = st.slider(
+                    "Vertical exaggeration",
+                    min_value=1.0,
+                    max_value=10.0,
+                    value=3.0,
+                    step=0.5,
+                )
+
+            try:
+                terrain_figure = create_terrain_figure(
+                    BASE_DIR,
+                    selected_terrain_overlay,
+                    terrain_vertical_exaggeration,
+                )
+                st.plotly_chart(
+                    terrain_figure,
+                    width="stretch",
+                    config={"displaylogo": False, "responsive": True},
+                )
+            except TerrainViewError as terrain_error:
+                st.error(f"Could not display the 3D terrain: {terrain_error}")
+
+        else:
+            st.info(
+                "🛰️ **CesiumJS 3D Geospatial Digital Twin:** Renders a realistic 3D WebGL terrain mesh with "
+                "satellite basemap, camera fly-tos, 15 historical GSI landslide hazard pins, and on-click raycasting inspection."
             )
+            try:
+                with CESIUM_LAYER_MANIFEST.open(encoding="utf-8") as manifest_file:
+                    cesium_manifest = json.load(manifest_file)
+            except (OSError, json.JSONDecodeError) as manifest_error:
+                st.error(f"Could not load InSAR observation periods: {manifest_error}")
+            else:
+                insar_pairs = cesium_manifest.get("temporal", {}).get("insar_pairs", [])
+                if not insar_pairs:
+                    st.error("The Cesium manifest contains no processed InSAR observation pairs.")
+                else:
+                    pair_labels = [pair["label"] for pair in insar_pairs]
+                    selected_label = st.select_slider(
+                        "Select processed InSAR observation period",
+                        options=pair_labels,
+                        value=pair_labels[-1],
+                    )
+                    selected_pair = next(pair for pair in insar_pairs if pair["label"] == selected_label)
+                    st.warning(
+                        cesium_manifest["temporal"]["scope_note"]
+                        + " "
+                        + cesium_manifest["temporal"]["comparison_note"]
+                        + " Select a pair to view its own LOS layer; this control does not calculate a temporal difference."
+                    )
+
+                    viewer_url = (
+                        "http://localhost:8088/index.html?pair_id="
+                        + quote(selected_pair["pair_id"], safe="")
+                    )
+                    col_c1, col_c2 = st.columns([1, 3])
+                    with col_c1:
+                        st.link_button("🚀 Open Full-Screen 3D Viewer", viewer_url, type="primary")
+                    with col_c2:
+                        st.caption("Active local 3D server: `http://localhost:8088`. To start if offline: `python scripts/serve_3d_viewer.py`.")
+
+                    components.iframe(viewer_url, height=680, scrolling=True)
+
+
+    # Intelligent Agent evidence table removed from dashboard display.
+
+    # ============================================================
+    # INTELLIGENT AGENT - QUESTION ANSWERING INTERFACE
+    # ============================================================
+
+    st.header("💬 Ask the Intelligent Agent")
+
+    st.write(
+        "Ask questions about the Tirumala Hills Digital Twin, "
+        "remote-sensing evidence, U-Net results, rainfall, InSAR "
+        "and project observations."
+    )
+
+    question = st.text_input(
+        "Enter your question:",
+        placeholder="Example: How many spatial observations are available?"
+    )
+
+    if st.button("Ask Agent"):
+        if question.strip():
+
+            answer = answer_project_question(
+                question,
+                df,
+                rainfall_df,
+                gsi_df,
+                temporal_features,
+            )
+
+            st.success("🤖 Agent Answer")
+            st.write(answer)
+
+        else:
+            st.warning("Please enter a question.")
+
+    # ============================================================
+    # U-NET MODEL INFORMATION
+    # ============================================================
+    st.header(
+        "🧠 U-Net Model Information"
+    )
+
+    if model_loaded:
+
+        st.success(
+            "Checkpoint loaded successfully"
+        )
+
+        m1, m2, m3 = st.columns(
+            3
+        )
+
+        with m1:
+
+            st.metric(
+                "Checkpoint Epoch",
+                model_epoch
+            )
+
+        with m2:
+
+            if validation_dice is not None:
+
+                st.metric(
+                    "Validation Dice",
+                    f"{safe_float(validation_dice):.4f}"
+                )
+
+            else:
+
+                st.metric(
+                    "Validation Dice",
+                    "N/A"
+                )
+
+        with m3:
+
+            if validation_iou is not None:
+
+                st.metric(
+                    "Validation IoU",
+                    f"{safe_float(validation_iou):.4f}"
+                )
+
+            else:
+
+                st.metric(
+                    "Validation IoU",
+                    "N/A"
+                )
 
     else:
-        st.warning(
-            "Tirumala Digital Twin HTML file "
-            "was not found."
+
+        st.error(
+            "The U-Net checkpoint could not be loaded."
         )
 
         st.code(
-            str(DIGITAL_TWIN_FILE),
+            model_error,
             language="text"
         )
 
-with tab_3d:
+
+    # ============================================================
+    # U-NET PREDICTION HISTORY AND LATEST REPORT
+    # ============================================================
+    st.header(
+        "🧩 U-Net Prediction History & Latest Report"
+    )
     st.caption(
-        "Interactive 3D Digital Twin using real Copernicus GLO-30 DEM elevation data (EPSG:32644). "
-        "Supports both high-resolution CesiumJS geospatial 3D globe visualization and Plotly surface mesh analysis."
+        "Saved upload results are shown here as history. This section may contain "
+        "previous uploads even when no file is currently selected above."
     )
 
-    twin_view_mode = st.radio(
-        "3D Digital Twin View Mode",
-        ["🏔️ Analytical 3D Surface (Plotly Mesh)", "🛰️ Geospatial 3D Globe (CesiumJS WebGL)"],
-        horizontal=True,
-        help="Switch between the analytical Plotly surface mesh and the CesiumJS 3D geospatial globe.",
-    )
-
-    if twin_view_mode == "🏔️ Analytical 3D Surface (Plotly Mesh)":
-        overlay_column, exaggeration_column = st.columns(2)
-        with overlay_column:
-            selected_terrain_overlay = st.selectbox(
-                "Color terrain by",
-                TERRAIN_OVERLAYS,
-            )
-        with exaggeration_column:
-            terrain_vertical_exaggeration = st.slider(
-                "Vertical exaggeration",
-                min_value=1.0,
-                max_value=10.0,
-                value=3.0,
-                step=0.5,
-            )
-
-        try:
-            terrain_figure = create_terrain_figure(
-                BASE_DIR,
-                selected_terrain_overlay,
-                terrain_vertical_exaggeration,
-            )
-            st.plotly_chart(
-                terrain_figure,
-                width="stretch",
-                config={"displaylogo": False, "responsive": True},
-            )
-        except TerrainViewError as terrain_error:
-            st.error(f"Could not display the 3D terrain: {terrain_error}")
-
-    else:
-        st.info(
-            "🛰️ **CesiumJS 3D Geospatial Digital Twin:** Renders a realistic 3D WebGL terrain mesh with "
-            "satellite basemap, camera fly-tos, 15 historical GSI landslide hazard pins, and on-click raycasting inspection."
+    segmentation_report_files = list(
+        SEGMENTATION_AGENT_FILE.parent.glob(
+            f"{SEGMENTATION_REPORT_PREFIX}*.csv"
         )
-        col_c1, col_c2 = st.columns([1, 3])
-        with col_c1:
-            st.link_button("🚀 Open Full-Screen 3D Viewer", "http://localhost:8088", type="primary")
-        with col_c2:
-            st.caption("Active local 3D server: `http://localhost:8088`. To start if offline: `python scripts/serve_3d_viewer.py`.")
-
-        components.iframe("http://localhost:8088/index.html", height=680, scrolling=True)
-
-
-# Intelligent Agent evidence table removed from dashboard display.
-
-# ============================================================
-# INTELLIGENT AGENT - QUESTION ANSWERING INTERFACE
-# ============================================================
-
-st.header("💬 Ask the Intelligent Agent")
-
-st.write(
-    "Ask questions about the Tirumala Hills Digital Twin, "
-    "remote-sensing evidence, U-Net results, rainfall, InSAR "
-    "and project observations."
-)
-
-question = st.text_input(
-    "Enter your question:",
-    placeholder="Example: How many spatial observations are available?"
-)
-
-if st.button("Ask Agent"):
-    if question.strip():
-
-        answer = answer_project_question(
-            question,
-            df,
-            rainfall_df,
-            gsi_df,
-            temporal_features,
-        )
-
-        st.success("🤖 Agent Answer")
-        st.write(answer)
-
-    else:
-        st.warning("Please enter a question.")
-
-# ============================================================
-# U-NET MODEL INFORMATION
-# ============================================================
-st.header(
-    "🧠 U-Net Model Information"
-)
-
-if model_loaded:
-
-    st.success(
-        "Checkpoint loaded successfully"
     )
+    if SEGMENTATION_AGENT_FILE.exists():
+        segmentation_report_files.append(SEGMENTATION_AGENT_FILE)
 
-    m1, m2, m3 = st.columns(
-        3
-    )
+    # Build a comparison table from all individually saved prediction reports.
+    if segmentation_report_files:
+        history_frames = []
+        for report_file in segmentation_report_files:
+            try:
+                report_part = pd.read_csv(report_file)
+                if not report_part.empty:
+                    history_frames.append(report_part)
+            except (OSError, ValueError, pd.errors.ParserError):
+                continue
 
-    with m1:
+        if history_frames:
+            history_df = pd.concat(history_frames, ignore_index=True)
+            if "timestamp" in history_df.columns:
+                history_df["timestamp"] = pd.to_datetime(
+                    history_df["timestamp"], errors="coerce"
+                )
+                history_df = history_df.sort_values(
+                    "timestamp", ascending=False, na_position="last"
+                )
 
-        st.metric(
-            "Checkpoint Epoch",
-            model_epoch
-        )
+            if "predicted_landslide_percentage" in history_df.columns:
+                history_df["screening_level"] = history_df[
+                    "predicted_landslide_percentage"
+                ].apply(
+                    lambda value: classify_uploaded_image_coverage(
+                        safe_float(value)
+                    )[0]
+                )
 
-    with m2:
+            history_columns = {
+                "timestamp": "Assessment time",
+                "source_file": "Uploaded image",
+                "predicted_landslide_pixels": "Predicted pixels",
+                "predicted_landslide_percentage": "Segmented coverage (%)",
+                "average_confidence": "Mean predicted-positive score",
+                "screening_level": "Coverage band",
+                "agent_action": "Agent action",
+            }
+            visible_columns = [
+                column for column in history_columns if column in history_df.columns
+            ]
+            comparison_df = history_df[visible_columns].rename(
+                columns=history_columns
+            ).copy()
+            if "Assessment time" in comparison_df.columns:
+                comparison_df["Assessment time"] = comparison_df[
+                    "Assessment time"
+                ].dt.strftime("%Y-%m-%d %H:%M:%S")
+            if "Mean predicted-positive score" in comparison_df.columns:
+                comparison_df["Mean predicted-positive score"] = (
+                    pd.to_numeric(
+                        comparison_df["Mean predicted-positive score"],
+                        errors="coerce"
+                    ) * 100
+                ).round(2)
+            if "Segmented coverage (%)" in comparison_df.columns:
+                comparison_df["Segmented coverage (%)"] = pd.to_numeric(
+                    comparison_df["Segmented coverage (%)"], errors="coerce"
+                ).round(2)
 
-        if validation_dice is not None:
-
-            st.metric(
-                "Validation Dice",
-                f"{safe_float(validation_dice):.4f}"
+            st.subheader("Uploaded Image Comparison")
+            st.caption(
+                f"{len(comparison_df):,} saved assessment(s). New uploads are "
+                "compared using their own U-Net segmentation outputs."
             )
-
+            st.dataframe(
+                comparison_df,
+                hide_index=True,
+                use_container_width=True
+            )
         else:
-
-            st.metric(
-                "Validation Dice",
-                "N/A"
-            )
-
-    with m3:
-
-        if validation_iou is not None:
-
-            st.metric(
-                "Validation IoU",
-                f"{safe_float(validation_iou):.4f}"
-            )
-
-        else:
-
-            st.metric(
-                "Validation IoU",
-                "N/A"
-            )
-
-else:
-
-    st.error(
-        "The U-Net checkpoint could not be loaded."
-    )
-
-    st.code(
-        model_error,
-        language="text"
-    )
-
-
-# ============================================================
-# U-NET PREDICTION HISTORY AND LATEST REPORT
-# ============================================================
-st.header(
-    "🧩 U-Net Prediction History & Latest Report"
-)
-st.caption(
-    "Saved upload results are shown here as history. This section may contain "
-    "previous uploads even when no file is currently selected above."
-)
-
-segmentation_report_files = list(
-    SEGMENTATION_AGENT_FILE.parent.glob(
-        f"{SEGMENTATION_REPORT_PREFIX}*.csv"
-    )
-)
-if SEGMENTATION_AGENT_FILE.exists():
-    segmentation_report_files.append(SEGMENTATION_AGENT_FILE)
-
-# Build a comparison table from all individually saved prediction reports.
-if segmentation_report_files:
-    history_frames = []
-    for report_file in segmentation_report_files:
-        try:
-            report_part = pd.read_csv(report_file)
-            if not report_part.empty:
-                history_frames.append(report_part)
-        except (OSError, ValueError, pd.errors.ParserError):
-            continue
-
-    if history_frames:
-        history_df = pd.concat(history_frames, ignore_index=True)
-        if "timestamp" in history_df.columns:
-            history_df["timestamp"] = pd.to_datetime(
-                history_df["timestamp"], errors="coerce"
-            )
-            history_df = history_df.sort_values(
-                "timestamp", ascending=False, na_position="last"
-            )
-
-        if "predicted_landslide_percentage" in history_df.columns:
-            history_df["screening_level"] = history_df[
-                "predicted_landslide_percentage"
-            ].apply(
-                lambda value: classify_uploaded_image_coverage(
-                    safe_float(value)
-                )[0]
-            )
-
-        history_columns = {
-            "timestamp": "Assessment time",
-            "source_file": "Uploaded image",
-            "predicted_landslide_pixels": "Predicted pixels",
-            "predicted_landslide_percentage": "Segmented coverage (%)",
-            "average_confidence": "Mean predicted-positive score",
-            "screening_level": "Coverage band",
-            "agent_action": "Agent action",
-        }
-        visible_columns = [
-            column for column in history_columns if column in history_df.columns
-        ]
-        comparison_df = history_df[visible_columns].rename(
-            columns=history_columns
-        ).copy()
-        if "Assessment time" in comparison_df.columns:
-            comparison_df["Assessment time"] = comparison_df[
-                "Assessment time"
-            ].dt.strftime("%Y-%m-%d %H:%M:%S")
-        if "Mean predicted-positive score" in comparison_df.columns:
-            comparison_df["Mean predicted-positive score"] = (
-                pd.to_numeric(
-                    comparison_df["Mean predicted-positive score"],
-                    errors="coerce"
-                ) * 100
-            ).round(2)
-        if "Segmented coverage (%)" in comparison_df.columns:
-            comparison_df["Segmented coverage (%)"] = pd.to_numeric(
-                comparison_df["Segmented coverage (%)"], errors="coerce"
-            ).round(2)
-
-        st.subheader("Uploaded Image Comparison")
-        st.caption(
-            f"{len(comparison_df):,} saved assessment(s). New uploads are "
-            "compared using their own U-Net segmentation outputs."
-        )
-        st.dataframe(
-            comparison_df,
-            hide_index=True,
-            use_container_width=True
-        )
-    else:
-        st.info("No readable prediction history is available yet.")
+            st.info("No readable prediction history is available yet.")

@@ -139,6 +139,13 @@ def build_terrain_glb(
     if not dem_path.exists():
         raise TerrainBuilderError(f"DEM raster file not found: {dem_path}")
 
+    try:
+        vertical_exaggeration = float(vertical_exaggeration)
+    except (TypeError, ValueError) as exc:
+        raise TerrainBuilderError("Vertical exaggeration must be a finite positive number.") from exc
+    if not np.isfinite(vertical_exaggeration) or vertical_exaggeration <= 0:
+        raise TerrainBuilderError("Vertical exaggeration must be a finite positive number.")
+
     with rasterio.open(dem_path) as ds:
         dem = ds.read(1).astype(np.float32)
         transform = ds.transform
@@ -147,8 +154,30 @@ def build_terrain_glb(
 
     if crs is None:
         raise TerrainBuilderError(f"{dem_path.name} is missing a Coordinate Reference System.")
+    projected_crs = pyproj.CRS.from_user_input(crs)
+    if not projected_crs.is_projected:
+        raise TerrainBuilderError(f"{dem_path.name} must use a projected Coordinate Reference System.")
+    if not all(
+        np.isclose(axis.unit_conversion_factor, 1.0)
+        for axis in projected_crs.axis_info[:2]
+    ):
+        raise TerrainBuilderError(f"{dem_path.name} must use projected coordinates in meters.")
+
+    res_x = float(transform.a)
+    res_y = float(-transform.e)
+    if (
+        not np.isfinite([res_x, res_y, transform.b, transform.d]).all()
+        or res_x <= 0
+        or res_y <= 0
+        or not np.isclose(transform.b, 0.0, atol=1e-9)
+        or not np.isclose(transform.d, 0.0, atol=1e-9)
+    ):
+        raise TerrainBuilderError(f"{dem_path.name} must be a north-up raster with positive pixel sizes.")
 
     height, width = dem.shape
+    if height < 2 or width < 2:
+        raise TerrainBuilderError(f"{dem_path.name} must be at least 2 × 2 pixels.")
+
     valid_mask = np.isfinite(dem)
     if nodata is not None:
         valid_mask &= dem != nodata
@@ -159,9 +188,6 @@ def build_terrain_glb(
     min_elev = float(np.min(dem[valid_mask]))
     max_elev = float(np.max(dem[valid_mask]))
     dem_filled = np.where(valid_mask, dem, min_elev)
-
-    res_x = float(transform.a)
-    res_y = float(-transform.e)
 
     center_col = width / 2.0
     center_row = height / 2.0
@@ -180,18 +206,10 @@ def build_terrain_glb(
     # Local ENU coordinates in meters
     x_coords = (col_grid - center_col) * res_x
     y_coords = (center_row - row_grid) * res_y
-    z_coords = (dem_filled - base_elevation) * float(vertical_exaggeration)
+    z_coords = (dem_filled - base_elevation) * vertical_exaggeration
 
     num_vertices = height * width
     positions = np.stack([x_coords, y_coords, z_coords], axis=-1).reshape(-1, 3).astype(np.float32)
-
-    # Calculate analytical surface normals
-    dz_dy, dz_dx = np.gradient(z_coords, res_y, res_x)
-    nx = -dz_dx
-    ny = -dz_dy
-    nz = np.ones_like(z_coords)
-    n_len = np.sqrt(nx * nx + ny * ny + nz * nz)
-    normals = np.stack([nx / n_len, ny / n_len, nz / n_len], axis=-1).reshape(-1, 3).astype(np.float32)
 
     # Texture UV mapping (U: 0->1 West->East; V: 0->1 North->South)
     u = col_grid / (width - 1.0)
@@ -210,7 +228,26 @@ def build_terrain_glb(
 
     tri1 = np.stack([v0, v1, v2], axis=1)
     tri2 = np.stack([v2, v1, v3], axis=1)
-    indices = np.concatenate([tri1, tri2], axis=0).ravel().astype(np.uint32)
+    triangles = np.concatenate([tri1, tri2], axis=0)
+    valid_vertices = valid_mask.ravel()
+    triangles = triangles[np.all(valid_vertices[triangles], axis=1)]
+    if not len(triangles):
+        raise TerrainBuilderError(f"{dem_path.name} has no valid adjacent elevation cells to form terrain.")
+    indices = triangles.ravel().astype(np.uint32)
+
+    # Accumulate valid triangle face normals so NoData boundaries do not distort shading.
+    face_normals = np.cross(
+        positions[triangles[:, 1]] - positions[triangles[:, 0]],
+        positions[triangles[:, 2]] - positions[triangles[:, 0]],
+    )
+    normal_sums = np.zeros_like(positions)
+    for corner in range(3):
+        np.add.at(normal_sums, triangles[:, corner], face_normals)
+    normal_lengths = np.linalg.norm(normal_sums, axis=1)
+    normals = np.zeros_like(normal_sums)
+    normals[:, 2] = 1.0
+    has_normal = normal_lengths > 0
+    normals[has_normal] = normal_sums[has_normal] / normal_lengths[has_normal, np.newaxis]
 
     # Read or synthesize texture image
     if texture_path and Path(texture_path).exists():
@@ -311,8 +348,8 @@ def build_terrain_glb(
                 "componentType": 5125,  # UNSIGNED_INT
                 "count": len(indices),
                 "type": "SCALAR",
-                "min": [0],
-                "max": [num_vertices - 1],
+                "min": [int(indices.min())],
+                "max": [int(indices.max())],
             },
         ],
         "bufferViews": buffer_views,
@@ -383,7 +420,7 @@ def export_cesium_package(base_dir: str | Path, output_dir: str | Path) -> Dict[
     relief_texture = textures_dir / "tirumala_shaded_relief.png"
     generate_terrain_texture(dem_path, relief_texture, colormap_name="gist_earth")
     results["shaded_relief"] = build_terrain_glb(
-        dem_path, models_dir / "tirumala_terrain_relief.glb", relief_texture, vertical_exaggeration=2.0
+        dem_path, models_dir / "tirumala_terrain_relief.glb", relief_texture, vertical_exaggeration=1.0
     )
 
     # 2. Slope Overlay
@@ -394,7 +431,7 @@ def export_cesium_package(base_dir: str | Path, output_dir: str | Path) -> Dict[
             dem_for_hillshade=dem_path, value_range=(0.0, 50.0)
         )
         results["slope"] = build_terrain_glb(
-            dem_path, models_dir / "tirumala_terrain_slope.glb", slope_texture, vertical_exaggeration=2.0
+            dem_path, models_dir / "tirumala_terrain_slope.glb", slope_texture, vertical_exaggeration=1.0
         )
 
     # 3. Sentinel-1 LOS Displacement
@@ -405,7 +442,7 @@ def export_cesium_package(base_dir: str | Path, output_dir: str | Path) -> Dict[
             dem_for_hillshade=dem_path, symmetric_range=True
         )
         results["los_displacement"] = build_terrain_glb(
-            dem_path, models_dir / "tirumala_terrain_los.glb", los_texture, vertical_exaggeration=2.0
+            dem_path, models_dir / "tirumala_terrain_los.glb", los_texture, vertical_exaggeration=1.0
         )
 
     # 4. InSAR Coherence
@@ -416,7 +453,7 @@ def export_cesium_package(base_dir: str | Path, output_dir: str | Path) -> Dict[
             dem_for_hillshade=dem_path, value_range=(0.0, 1.0)
         )
         results["coherence"] = build_terrain_glb(
-            dem_path, models_dir / "tirumala_terrain_corr.glb", corr_texture, vertical_exaggeration=2.0
+            dem_path, models_dir / "tirumala_terrain_corr.glb", corr_texture, vertical_exaggeration=1.0
         )
 
     # Also make the primary default model link

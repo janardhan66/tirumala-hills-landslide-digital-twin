@@ -1,0 +1,2 @@
+timestamp,source_file,predicted_landslide_pixels,predicted_landslide_percentage,average_confidence,prediction_threshold,agent_action,agent_recommendation
+2026-11-12T08:42:31,image_12.h5,188,1.1474609375,0.7467364072799683,0.5,Priority review,"The U-Net identified a segmented region, but the mean predicted-positive model score is below 0.75. This score is not calibrated confidence. Cross-check the prediction with independent remote-sensing and field evidence before drawing conclusions."

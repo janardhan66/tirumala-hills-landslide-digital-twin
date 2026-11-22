@@ -1,4 +1,10 @@
 streamlit
+requests
+python-dotenv
+pytest
+apscheduler
+psutil
+hyp3_sdk
 pandas
 numpy
 h5py
@@ -14,3 +20,4 @@ scikit-learn
 joblib
 Pillow
 plotly
+google-genai

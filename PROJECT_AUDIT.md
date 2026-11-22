@@ -1,11 +1,98 @@
 # PROJECT AUDIT: TIRUMALA HILLS LANDSLIDE DIGITAL TWIN
 
-**Audit Timestamp:** 2026-11-20  
+**Audit Timestamp:** 2026-11-21 (fresh re-audit)
 **Project Workspace:** `C:\Users\yarra\OneDrive\Desktop\landslide_digital_twin`  
-**Git Branch:** `experiment/3d-digital-twin` (Checkpoint branch: `backup/pre-master-implementation-phase1`)  
+**Git Branch:** `experiment/3d-digital-twin`
 **Lead Roles:** Senior Remote Sensing Engineer, GIS Developer, AI/ML Engineer, 3D Digital Twin Developer, Full-Stack Python Developer  
 
 ---
+
+> **Current-state update (2026-11-21; reverified after implementation):** This re-audit supersedes older readiness
+> statements and component statuses below where they conflict. The older sections
+> describe an earlier repository snapshot.
+>
+> - HEAD is `0f85208` (`feat: complete Phase 2 realistic 3D terrain CesiumJS digital twin`).
+>   The working tree is **not clean** and includes user changes, local data, and
+>   generated artifacts. No changes were stashed, reset, or overwritten. Do not
+>   use `git add .` or treat the Phase 1 checkpoint as a backup of these files.
+> - The source DEM is 69 × 110 at 80 m in EPSG:32644, with 4,083 valid cells and
+>   3,507 NoData cells. Phase 2 masks faces touching NoData and computes normals
+>   from valid faces. Phase 3 exports six aligned evidence textures as terrain
+>   GLBs (elevation, slope, aspect, LOS, coherence, risk zones); each mesh has
+>   7,821 valid triangles and 1× mesh exaggeration. The Cesium viewer loads these
+>   meshes on the DEM surface, with Esri imagery as the globe basemap.
+> - The WGS84 AOI boundary and 15 approximate GSI points are positioned using
+>   nearest valid DEM elevations; the UI exposes the sample offset. Some GSI
+>   points are more than 500 m from valid DEM cells because of NoData coverage,
+>   so their displayed terrain heights are approximate.
+> - Ingestion, pipeline, scheduler, SQLite, risk-history, and alert modules are
+>   present. APScheduler, `hyp3_sdk`, pytest, and related dependencies are
+>   declared in `requirements.txt` and installed in the project `venv`. A root
+>   `.env` exists; its secret values were not inspected. CDSE/Earthdata variables
+>   were absent, the Gemini key variable was present, notification credentials
+>   were absent, Sentinel-2 source/processed data was absent, and no authenticated
+>   external API download was attempted.
+> - The local SQLite database has 29 rainfall dates (2026-08-01 through
+>   2026-08-29), 3 Sentinel-1 catalog rows, and 2 processed InSAR pairs (latest
+>   secondary date 2026-08-29). It also contains observations labeled
+>   2026-11-21, which are not evidence of a new acquisition, and duplicate
+>   aggregate risk-history rows from earlier runs. These pre-existing records
+>   were not deleted. Feature extraction, risk, and alert code now use a
+>   processed-pair date instead of the run date, and ignore later snapshots for
+>   historical comparison. The database and generated assets remain local data.
+> - The saved U-Net checkpoint is a 14-channel model (checkpoint epoch 3,
+>   Landslide4Sense validation Dice 0.6561 / IoU 0.5101). The Tirumala patch
+>   builder now rejects absent or misaligned 12-band Sentinel-2 inputs instead
+>   of zero-filling optical channels. No Tirumala-specific model validation or
+>   complete aligned optical dataset is available; predictions remain
+>   unverified and must not drive alerts.
+> - Phase 3 verification: all 16 focused terrain/layer tests passed, changed
+>   Python modules compiled, and `node --check viewer/cesium/app.js` passed.
+>   Each of the six generated GLBs was checked against the DEM NoData mask.
+>   Browser validation loaded all six models, exercised layer visibility and
+>   opacity controls, and confirmed vector heights update with exaggeration.
+>   The full test suite now passes offline (66 tests plus 6 subtests). Live
+>   ingestion, complete InSAR processing, scheduled
+>   operation, alert dispatch, and a live end-to-end run remain unverified.
+> - Phase 4 verification: the registry has 35 chronological epochs and the
+>   viewer/dashboard expose the two available InSAR pairs. Browser checks
+>   confirmed pair selection, exclusive model visibility, URL state, and
+>   pair-specific LOS/coherence inspection. Focused exporter/registry tests
+>   pass. Pair-to-pair subtraction is intentionally withheld because the pairs
+>   have independent phase references; rainfall/risk epochs have no historical
+>   map layers.
+> - Phase 5 code verification: CDSE searches follow OData pagination and surface
+>   request failures; downloads use temporary files and retry catalogued
+>   failures. IMERG extraction now masks fill values, applies the documented
+>   0.1 scale, and requires complete calendar windows for rolling totals.
+>   Targeted ingestion, exporter, and temporal tests pass. No authenticated
+>   live download was attempted, so ingestion is not operationally verified.
+> - Phase 8 verification: same-date per-cell snapshots and aggregate risk
+>   writes are idempotent; transition, consecutive-hotspot, key-duplication,
+>   and strict-date behavior have regression tests. Risk/alert stages are tied
+>   to processed acquisition dates, not execution dates.
+> - Phase 9 verification: dry-run stages skip work and database access; database
+>   connections are isolated per `DatabaseManager`. Full test discovery passes.
+>   The live scheduler/pipeline remains unsafe to certify without credentials,
+>   complete InSAR outputs, and valid Sentinel-2 inputs.
+>
+> **Additional verification update (2026-11-22):** The root `.env` exists;
+> only credential-presence flags were checked (CDSE/Earthdata absent, Gemini
+> key variable present, notification credentials absent). Current read-only
+> database counts are 20 acquisitions, 29 rainfall records, 2 InSAR pairs,
+> 11 risk-history rows, 33 alerts, 117 pipeline logs, and 0 scheduler-state
+> rows. The most recent stored run found 11 satellite products and downloaded
+> none; it contains warning stages despite its old `Success=True` result. The
+> latest viewer observation remains 2026-08-29, and the scheduler is not
+> running. The selected offline suite passed 60 tests (plus six subtests);
+> live CDSE/NASA access, live InSAR, notification delivery, and the full
+> dataset-to-viewer workflow were not run. See the two new verification
+> reports for current setup steps and blockers.
+>
+> **Phase 1 result:** The audit is complete; preservation is not yet checkpointed.
+> Selective checkpointing remains pending before the next phase. Exclude local
+> datasets, virtual environments, the SQLite database, and large model artifacts;
+> no commit or cleanup was performed.
 
 ## 1. Executive Summary
 
@@ -80,10 +167,10 @@ Each component is classified into one of four states:
 
 | Component | Status | Existing File(s) | Assessment & Action Required |
 | :--- | :---: | :--- | :--- |
-| **Sentinel-1 CDSE Search & Download** | **[NOT_IMPLEMENTED]** | None | Raw SLCs were manually staged in `data/raw/sentinel1/`. Need automated Copernicus Data Space API crawler with spatial/temporal/orbit filters and duplicate detection. |
+| **Sentinel-1 CDSE Search & Download** | **[PARTIAL]** | `scripts/download_sentinel1.py`, `src/data/catalog.py` | OData search/pagination, duplicate tracking, and atomic downloads are implemented; live authenticated retrieval and the complete operational workflow are not verified. |
 | **InSAR Phase Processing Workflow** | **[PARTIAL]** | `scripts/clip_insar_to_gsi_aoi.py`, `scripts/clip_second_insar_to_gsi_aoi.py` | Relies on pre-generated ASF HyP3 output products. Local differential interferometry engine (SNAP/MintPy wrapper or HyP3 API client) is missing. |
 | **InSAR Reference Point Assessment** | **[WORKING]** | `scripts/verify_second_insar_pair.py`, `outputs/final_reference_region_assessment_v2/` | Robust screening for Region 1 reference stability, Moran's I spatial autocorrelation tests, and phase unwrapping error checks. |
-| **NASA GPM IMERG Rainfall Ingestion** | **[PARTIAL]** | `scripts/calculate_rainfall_features.py`, `data/processed/rainfall/` | Static retrieval of August 2026 IMERG V07C daily data. Lacks automated REST API polling from NASA GES DISC / Earthdata. |
+| **NASA GPM IMERG Rainfall Ingestion** | **[PARTIAL]** | `scripts/download_rainfall.py`, `data/processed/rainfall/` | Downloader now handles Final/Late products, fill-value masking, V07 scaling, and calendar-correct rollups. Live authenticated retrieval remains unverified; available source data is static. |
 | **Rainfall Accumulation Engine** | **[WORKING]** | `src/features/create_rainfall_features.py` | Correctly calculates 1-day, 3-day, 7-day, and 14-day rolling precipitation accumulations. |
 | **DEM & Slope Extraction** | **[WORKING]** | `src/features/calculate_slope.py`, `scripts/calculate_gsi_aoi_slope.py` | Accurate Horn algorithm slope generation in degrees from 80 m DEM in EPSG:32644. |
 | **Historical Landslide Inventory** | **[WORKING]** | `data/raw/inventory/tirumala_gsi_fig32_map_derived_inventory.csv` | 15 digitized GSI landslide hazard points digitized from published reports with coordinate uncertainty caveats. |
@@ -106,7 +193,7 @@ Each component is classified into one of four states:
 | **2D Leaflet GIS Map** | **[WORKING]** | `results/digital_twin/tirumala_final_digital_twin.html` | High-quality Folium map with Esri satellite basemap, AOI boundary polygon, InSAR raster overlays, and GSI marker tooltips. |
 | **3D Terrain Surface (Plotly)** | **[WORKING]** | `src/digital_twin/terrain_3d.py` | Georeferenced UTM surface mesh with 4 colormap overlays and vertical exaggeration slider. Fully tested and operational. |
 | **CesiumJS Realistic 3D Globe Viewer** | **[NOT_IMPLEMENTED]** | None | Requires CesiumJS integration with quantized-mesh terrain, 3D tiles, satellite imagery streaming, and time-dynamic entity layers. |
-| **Multi-temporal 3D Observation Slider** | **[PARTIAL]** | `dashboard/app.py` | Temporal difference is displayed statically between the two August 2026 pairs; continuous timeline scrubbing is missing. |
+| **Multi-temporal Observation Selection** | **[WORKING, LIMITED DATA]** | `src/features/temporal_registry.py`, `viewer/cesium/app.js`, `dashboard/app.py` | 35 epochs are indexed; the two processed InSAR pairs can be selected in the viewer/dashboard. No cross-pair displacement difference is shown because the pairs use independent phase references. Rainfall and assessment epochs are registry-only, not historical map layers. |
 
 ### 3.4 Automation, Backend & Database
 
@@ -136,15 +223,15 @@ Each component is classified into one of four states:
 
 | Objective Area | Current State | Target Future State | Complexity |
 | :--- | :---: | :---: | :---: |
-| **Phase 1: Audit & Checkpoint** | **100% COMPLETE** | Baseline preserved & documented | Low |
-| **Phase 2: 3D Terrain Construction** | **80% COMPLETE** | Plotly 3D working; migrate to CesiumJS 3D | Medium |
-| **Phase 3: Satellite & GIS Layers in 3D** | **70% COMPLETE** | 4 layers aligned; add CZML / 3D tiles | Medium |
-| **Phase 4: Multi-temporal Observation** | **40% COMPLETE** | Add multi-date time series database | Medium |
-| **Phase 5: Automated Ingestion (CDSE/IMERG)**| **0% COMPLETE** | Implement automated Python API clients | High |
-| **Phase 6: Automated Preprocessing & InSAR** | **30% COMPLETE** | Build modular pipeline & quality checks | High |
-| **Phase 7: AI/ML Inference Integration** | **75% COMPLETE** | U-Net operational; build Tirumala adapter | High |
-| **Phase 8: Evidence Risk Engine** | **85% COMPLETE** | Formula active; link to live updates | Low |
-| **Phase 9: Scheduler & Automation Pipeline** | **0% COMPLETE** | Build APScheduler automation daemon | Medium |
-| **Phase 10: Unified Backend, DB & Dashboard**| **50% COMPLETE** | SQLite spatial schema + multi-tab UI | High |
-| **Phase 11: Automated Alerting & Reports** | **25% COMPLETE** | Build structured alert logging & notifier | Medium |
-| **Phase 12: End-to-End Validation** | **60% COMPLETE** | Full regression test suite | Medium |
+| **Phase 1: Audit & Checkpoint** | **AUDIT COMPLETE; CHECKPOINT PENDING** | Selectively preserve reviewed project changes | Low |
+| **Phase 2: 3D Terrain Construction** | **COMPLETE** | NoData-safe Cesium GLBs; evidence alignment is Phase 3 | Medium |
+| **Phase 3: Satellite & GIS Layers in 3D** | **COMPLETE** | Six DEM-aligned textured layers; preserve temporal work for Phase 4 | Medium |
+| **Phase 4: Multi-temporal Observation** | **COMPLETE FOR AVAILABLE DATA** | Select between the two processed pairs; historical raster layers and scientifically compatible cross-pair deltas remain unavailable | Medium |
+| **Phase 5: Automated Ingestion (CDSE/IMERG)**| **PARTIAL; LIVE RETRIEVAL UNVERIFIED** | Validate authenticated CDSE/NASA retrieval and downstream ingestion | High |
+| **Phase 6: Automated Preprocessing & InSAR** | **PARTIAL; OFFLINE TESTED** | Verify authenticated processing and aligned products | High |
+| **Phase 7: AI/ML Inference Integration** | **PARTIAL; INPUT SAFEGUARDS TESTED** | Acquire aligned Sentinel-2 inputs and validate Tirumala outputs | High |
+| **Phase 8: Evidence Risk Engine** | **OFFLINE-VERIFIED** | Establish trustworthy multi-epoch observations | Medium |
+| **Phase 9: Scheduler & Automation Pipeline** | **PARTIAL; DRY RUN TESTED** | Validate live scheduled ingestion/orchestration | High |
+| **Phase 10: Unified Backend, DB & Dashboard**| **PARTIAL; DB TESTED** | Verify live synchronization through the dashboard | High |
+| **Phase 11: Automated Alerting & Reports** | **PARTIAL; RULES TESTED** | Configure and verify notifications and field-review workflow | Medium |
+| **Phase 12: End-to-End Validation** | **OFFLINE TEST SUITE PASSES** | Run credentialed end-to-end validation on real observations | High |

@@ -10,31 +10,50 @@
 
 To build an automated, scientifically valid, laptop-friendly landslide monitoring system and realistic 3D Digital Twin, the implementation follows a 12-phase engineering plan:
 
+The execution order below follows the user's current master prompt and
+supersedes the phase order in the older technical notes that follow. Work stops
+at the end of each phase for verification and documentation.
+
 ```text
-Phase 1: Repository Audit & Checkpoint (Completed)
+Phase 1: Audit and preserve the existing project
    │
-Phase 2: Full Geospatial 3D Terrain Construction (CesiumJS / 3D Tiles)
+Phase 2: Validate and complete accurate Tirumala 3D terrain
    │
-Phase 3: Multi-Layer Satellite & GIS Evidence Integration in 3D
+Phase 3: Integrate existing GIS evidence layers in 3D
    │
-Phase 4: Multi-Temporal Historical Timeline & Observation Scrubbing
+Phase 4: Index available observations and select processed InSAR pairs
    │
-Phase 5: Automated Satellite (CDSE) & Rainfall (GPM/IMERG) Ingestion
+Phase 5: Discover and ingest Sentinel-1, Sentinel-2, and GPM data
    │
-Phase 6: Automated Preprocessing & Valid InSAR Processing Workflow
+Phase 6: Automate preprocessing and validate InSAR processing
    │
-Phase 7: U-Net Model Input Synthesis, Validation & Inference Automation
+Phase 7: Integrate scientifically compatible model analysis
    │
-Phase 8: Automated Evidence-Based Risk Scoring & History Comparison
+Phase 8: Add evidence-based risk scoring and history comparison
    │
-Phase 9: Background Scheduler Daemon (APScheduler) & Pipeline Orchestration
+Phase 9: Add background scheduling and pipeline orchestration
    │
-Phase 10: Local Spatial Database (SQLite/SpatiaLite) & Multi-Tab Dashboard
+Phase 10: Unify the database and dashboard
    │
-Phase 11: Intelligent Decision-Support Alert System & Verification Logs
+Phase 11: Add human-verified alerts and optional notifications
    │
-Phase 12: End-to-End System Testing, Validation & Final Documentation
+Phase 12: Validate and document the end-to-end workflow
 ```
+
+### Current execution status (2026-11-21; reverified after implementation)
+
+- **Phase 1 (Audit & Preservation):** Audit complete; selective checkpoint pending. The current tree remains dirty; do not stage it broadly.
+- **Phase 2 (3D Terrain & CesiumJS):** COMPLETE. NoData-safe DEM mesh, validated projected grid and exaggeration, and working Cesium rendering.
+- **Phase 3 (GIS Evidence Layers):** COMPLETE. Six aligned raster layers are embedded in DEM terrain meshes; AOI/GSI vectors are placed using DEM elevations, with nearest-sample distances disclosed.
+- **Phase 4 (Temporal Observation Registry):** COMPLETE FOR AVAILABLE DATA. The registry indexes 35 epochs and the Cesium/Streamlit controls select the two processed InSAR pairs. No cross-pair subtraction is shown because their phase references are independent; other observation dates are not historical map layers.
+- **Phase 5 (Automated Data Ingestion):** PARTIAL; LIVE RETRIEVAL UNVERIFIED. CDSE clients now paginate, surface API failures, retry undownloaded catalog entries, and write downloads atomically. IMERG extraction applies the V07 scale and fill mask, preserves Final/Late quality, and computes calendar-complete windows. No authenticated live retrieval was attempted; available source data remains static.
+- **Phase 6 (InSAR Processing & Preprocessing):** PARTIAL. Grid preprocessing and HyP3 status handling are tested, but complete automated InSAR product generation and alignment are not verified.
+- **Phase 7 (PyTorch 14-Channel U-Net):** PARTIAL. Benchmark inference and patch-building code exist, but Tirumala-specific inputs and predictions are not validated.
+- **Phase 8 (Evidence-Based Risk Scoring):** OFFLINE-VERIFIED. Risk results and history writes are idempotent; cell transitions and consecutive hotspots are tested. Pipeline/CLI observations use processed InSAR dates instead of the run date. There are not enough trustworthy acquisition epochs to establish a live temporal trend.
+- **Phase 9 (Automation Daemon & Pipeline):** PARTIAL. APScheduler is declared and installed, and pipeline dry-run behavior is tested as non-mutating. Live scheduled ingestion and full preprocessing/InSAR orchestration are not verified.
+- **Phase 10 (SQLite Database & Multi-Tab Dashboard):** PARTIAL. Database CRUD and per-instance connection isolation are tested; dashboard operation against live, continually ingested data is not verified.
+- **Phase 11 (Intelligent Decision-Support Alerts):** PARTIAL. Rule evaluation, persisted logging, and missing-rainfall handling are tested. External notification delivery and field verification remain unconfigured/unverified.
+- **Phase 12 (End-to-End Validation & Documentation):** OFFLINE-VERIFIED. The full test suite passes (66 tests plus 6 subtests); authenticated ingestion, operational InSAR output generation, and a live end-to-end run remain unverified.
 
 ---
 
@@ -44,18 +63,32 @@ Phase 12: End-to-End System Testing, Validation & Final Documentation
 
 ### Phase 1: Existing Repository Audit & Checkpoint
 * **Objective:** Audit every component, catalog files, classify working vs incomplete code, and preserve working baseline.
-* **Status:** **COMPLETED**
+* **Status:** **Audit completed 2026-11-21; selective checkpoint pending.**
 * **Artifacts Created:**
   - `backup/pre-master-implementation-phase1` Git branch
   - `PROJECT_AUDIT.md`
   - `EXISTING_IMPLEMENTATION.md`
   - `FUTURE_IMPLEMENTATION_PLAN.md`
   - `TECHNOLOGY_ARCHITECTURE.md`
-* **Verification:** Repository clean, tests pass, baseline committed.
+* **Verification at audit time:** All 10 tests then present passed in the project `venv`;
+  targeted Python compilation and Cesium JavaScript syntax checks pass. The
+  current worktree is not clean, so the existing branch checkpoint does not
+  preserve its untracked files. No live API or pipeline run was performed.
 
 ---
 
 ### Phase 2: Full Geospatial 3D Terrain Construction (CesiumJS)
+* **Current status:** **COMPLETE for terrain construction.** The DEM builder
+  validates projected, north-up, meter-based rasters and positive finite
+  exaggeration; it omits faces touching NoData and derives normals from valid
+  faces. The four layer meshes and default model were regenerated. The source
+  DEM has 4,083 valid cells and 3,507 NoData cells; each layer mesh has 7,821
+  valid triangles.
+* **Verification:** 13 focused terrain/layer tests pass. Generated GLB indices
+  were checked against the DEM validity mask. Browser validation confirmed all
+  four terrain models load. The GLBs use 1× mesh exaggeration; the existing
+  Cesium slider supplies the display exaggeration, preventing the former 2× × 2×
+  double scaling. Layer draping/alignment is tracked under Phase 3.
 * **Objective:** Construct a realistic, geospatially accurate 3D geographical digital twin of the entire Tirumala study area using real DEM data, replacing decorative representations with real terrain geometry.
 * **Technical Details:**
   1. Load `tirumala_dem_80m_gsi_aoi.tif` (or higher-resolution Copernicus 30 m DEM if available).
@@ -68,11 +101,20 @@ Phase 12: End-to-End System Testing, Validation & Final Documentation
   - `viewer/cesium/index.html`: CesiumJS viewer frontend with layer control and telemetry HUD.
   - `viewer/cesium/app.js`: Interactive camera, layer management, and click inspection logic.
   - `tests/test_cesium_builder.py`: Unit tests for DEM-to-mesh conversion.
-* **Verification:** CesiumJS renders 3D elevation surface with genuine mountain relief matching known heights ($192\text{ m}–884\text{ m}$).
+* **Verification:** The browser loads all four DEM-derived meshes. The source
+  raster is 80 m, EPSG:32644, and its measured valid elevation span is
+  180.03–899.16 m. Layer-to-terrain alignment is verified in Phase 3.
 
 ---
 
 ### Phase 3: Multi-Layer Satellite & GIS Evidence Integration in 3D
+* **Current status:** **COMPLETE for the available static evidence layers.**
+  Exported elevation, slope, aspect, LOS displacement, coherence, and risk-zone
+  textures are embedded in six DEM-aligned GLB meshes. The AOI boundary and GSI
+  markers are positioned at sampled terrain heights; GSI popups expose distance
+  to the nearest valid DEM sample. Some map-derived GSI markers are more than
+  500 m from a valid cell because of DEM NoData coverage, so those heights are
+  approximate.
 * **Objective:** Geographically register and overlay all existing and future project layers onto the 3D terrain model.
 * **Layers to Support:**
   1. High-resolution satellite basemap (Esri World Imagery / Sentinel-2 RGB composite).
@@ -88,28 +130,52 @@ Phase 12: End-to-End System Testing, Validation & Final Documentation
   - Export vector layers as clean GeoJSON / CZML entities.
   - Create layer visibility control checkboxes and transparency sliders in CesiumJS.
 * **Files to Create / Modify:**
-  - `src/digital_twin/layer_exporter.py`: Automates GeoTIFF $\to$ georeferenced RGBA PNG and GeoJSON conversion.
-  - `viewer/cesium/layers.json`: Layer metadata registry.
-  - `tests/test_layer_alignment.py`: Validates layer CRS and bounding-box alignment.
-* **Verification:** When layers are toggled in 3D, InSAR fringes and GSI points align perfectly with hill topography and road contours.
+  - `src/digital_twin/layer_exporter.py`: Validates raster grids and exports RGBA textures and terrain GLBs.
+  - `viewer/cesium/layers_manifest.json`: Layer and terrain-model metadata.
+  - `viewer/cesium/app.js`: Loads textured terrain layers and DEM-positioned vectors.
+  - `tests/test_layer_exporter.py`: Validates alignment, nodata masking, units, and model export.
+* **Verification:** 16 focused terrain/layer tests pass. All six generated GLBs
+  have 7,821 faces referencing valid DEM cells. Browser checks confirmed all
+  models load, the layer checkbox/opacity controls work, and vector heights
+  track vertical exaggeration. The base Esri imagery and evidence layers use
+  separate globe/mesh surfaces; no Sentinel-2 RGB terrain texture is available.
 
 ---
 
 ### Phase 4: Multi-Temporal Historical Timeline & Observation Scrubbing
+* **Current status:** **COMPLETE FOR AVAILABLE DATA, WITH SCIENTIFIC LIMITATIONS.**
+  The registry contains 35 chronological epochs, and the Cesium viewer and
+  Streamlit dashboard select between the two available processed InSAR pairs.
+  Each pair uses an independent phase reference, so an unqualified
+  pair-to-pair displacement difference is not calculated. Rainfall and risk
+  dates are indexed but do not have historical map layers.
 * **Objective:** Enable time-based observation selection and historical change analysis in the 3D Digital Twin and dashboard.
 * **Technical Details:**
   1. Build an observation registry indexing each Sentinel-1 pair, IMERG rainfall period, and model evaluation date.
   2. Implement a CesiumJS Timeline and Streamlit date scrubber.
-  3. Implement temporal differential comparison ($t_2 - t_1$) to highlight newly developing deformation or persistent displacement anomalies.
+  3. Implement a temporal differential comparison only when the observations
+     share a compatible reference and processing basis. The available pairs do
+     not meet that condition, so the cross-pair difference is intentionally
+     withheld.
 * **Files to Create / Modify:**
   - `src/features/temporal_registry.py`: Indexes temporal acquisition epochs.
-  - `viewer/cesium/timeline.js`: Cesium animation and clock integration.
-  - `tests/test_temporal_registry.py`: Validates chronological sorting and difference calculations.
-* **Verification:** Moving the timeline slider dynamically updates the 3D overlays from Pair 1 to Pair 2, highlighting spatial change.
+  - `viewer/cesium/app.js`, `viewer/cesium/index.html`, `viewer/cesium/cesium.css`: Pair selection, layer visibility, and inspection controls.
+  - `dashboard/app.py`: Streamlit pair selector synchronized with the viewer.
+  - `tests/test_temporal_registry.py`: Validates chronological sorting, registry export, coordinate conversion, and pair-raster quality masks/alignment.
+* **Verification:** Focused temporal/exporter tests pass; browser checks confirm
+  slider and previous/next controls switch the selected pair, only that pair's
+  model is visible, the URL is synchronized, and the inspector uses that pair's
+  LOS/coherence values. No unsupported cross-pair change is presented.
 
 ---
 
 ### Phase 5: Automated Satellite (CDSE) & Rainfall (GPM/IMERG) Ingestion
+* **Current status:** **PARTIAL; LIVE RETRIEVAL UNVERIFIED.** CDSE OData
+  pagination, explicit request errors, retryable catalog states, atomic archive
+  downloads, and IMERG Final/Late handling are implemented. IMERG values use
+  the documented 0.1 scale and fill-value mask; rolling totals require complete
+  calendar windows. Focused offline tests pass. No authenticated live download
+  was attempted.
 * **Objective:** Develop an automated data crawler that searches for new Sentinel-1, Sentinel-2, and NASA IMERG observations without manual downloads or duplicate files.
 * **Technical Details:**
   1. **Copernicus Data Space Ecosystem (CDSE) Client:**
@@ -126,7 +192,10 @@ Phase 12: End-to-End System Testing, Validation & Final Documentation
   - `scripts/download_rainfall.py`: NASA Earthdata IMERG daily harvester.
   - `src/data/catalog.py`: SQLite-backed catalog tracking product ID, acquisition timestamp, processing status, and local file paths.
   - `tests/test_data_ingestion.py`: Unit tests for API query parsing, bbox formatting, and duplicate rejection.
-* **Verification:** Crawler identifies newly available passes, skips existing August 2026 products, and logs metadata.
+* **Verification:** Mocked tests cover OData pagination and propagated API
+  failures; raster tests cover IMERG scaling and NoData handling; database tests
+  cover download retries. Live authentication, retrieval, and downstream
+  processing still require user-provided credentials and verification.
 
 ---
 

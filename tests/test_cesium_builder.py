@@ -6,6 +6,7 @@ from pathlib import Path
 
 import numpy as np
 import rasterio
+from affine import Affine
 from rasterio.transform import from_origin
 
 from src.digital_twin.terrain_glb_builder import (
@@ -46,6 +47,30 @@ class CesiumTerrainBuilderTests(unittest.TestCase):
             nodata=0,
         ) as dst:
             dst.write(self.dem_values, 1)
+
+    def _write_dem(self, values, transform=None, crs="EPSG:32644"):
+        with rasterio.open(
+            self.dem_path,
+            "w",
+            driver="GTiff",
+            height=values.shape[0],
+            width=values.shape[1],
+            count=1,
+            dtype=np.float32,
+            crs=crs,
+            transform=transform or self.transform,
+            nodata=0,
+        ) as dst:
+            dst.write(values.astype(np.float32), 1)
+
+    def _read_glb(self):
+        data = self.output_glb.read_bytes()
+        json_len, _ = struct.unpack("<I4s", data[12:20])
+        gltf_json = json.loads(data[20:20 + json_len].decode("utf-8").strip())
+        bin_offset = 20 + json_len
+        bin_len, _ = struct.unpack("<I4s", data[bin_offset:bin_offset + 8])
+        binary = data[bin_offset + 8:bin_offset + 8 + bin_len]
+        return gltf_json, binary
 
     def tearDown(self):
         self.temp_dir.cleanup()
@@ -106,6 +131,66 @@ class CesiumTerrainBuilderTests(unittest.TestCase):
     def test_rejects_missing_raster_file(self):
         with self.assertRaises(TerrainBuilderError):
             build_terrain_glb(self.base_dir / "non_existent.tif", self.output_glb)
+
+    def test_masks_nodata_vertices_and_computes_valid_normals(self):
+        dem = self.dem_values.copy()
+        dem[2, 2] = 0
+        self._write_dem(dem)
+
+        metadata = build_terrain_glb(self.dem_path, self.output_glb)
+        gltf_json, binary = self._read_glb()
+
+        index_accessor = gltf_json["accessors"][3]
+        index_view = gltf_json["bufferViews"][index_accessor["bufferView"]]
+        indices = np.frombuffer(
+            binary,
+            dtype="<u4",
+            count=index_accessor["count"],
+            offset=index_view["byteOffset"] + index_accessor["byteOffset"],
+        ).reshape(-1, 3)
+        valid = dem.ravel() != 0
+        self.assertEqual(metadata["total_triangles"], 26)
+        self.assertTrue(np.all(valid[indices]))
+
+        normal_accessor = gltf_json["accessors"][1]
+        normal_view = gltf_json["bufferViews"][normal_accessor["bufferView"]]
+        normals = np.frombuffer(
+            binary,
+            dtype="<f4",
+            count=normal_accessor["count"] * 3,
+            offset=normal_view["byteOffset"] + normal_accessor["byteOffset"],
+        ).reshape(-1, 3)
+        self.assertTrue(np.all(np.isfinite(normals)))
+        np.testing.assert_allclose(np.linalg.norm(normals, axis=1), 1.0, atol=1e-6)
+        np.testing.assert_allclose(normals[12], [0.0, 0.0, 1.0], atol=1e-6)
+
+    def test_rejects_invalid_vertical_exaggeration(self):
+        for exaggeration in (0.0, -1.0, np.nan, np.inf):
+            with self.subTest(exaggeration=exaggeration):
+                with self.assertRaises(TerrainBuilderError):
+                    build_terrain_glb(
+                        self.dem_path,
+                        self.output_glb,
+                        vertical_exaggeration=exaggeration,
+                    )
+
+    def test_rejects_nonprojected_or_rotated_raster(self):
+        with self.subTest(crs="EPSG:4326"):
+            self._write_dem(
+                self.dem_values,
+                transform=from_origin(79.0, 14.0, 0.01, 0.01),
+                crs="EPSG:4326",
+            )
+            with self.assertRaises(TerrainBuilderError):
+                build_terrain_glb(self.dem_path, self.output_glb)
+
+        with self.subTest(transform="rotated"):
+            self._write_dem(
+                self.dem_values,
+                transform=Affine(80, 1, 320000, 0, -80, 1512000),
+            )
+            with self.assertRaises(TerrainBuilderError):
+                build_terrain_glb(self.dem_path, self.output_glb)
 
 
 if __name__ == "__main__":

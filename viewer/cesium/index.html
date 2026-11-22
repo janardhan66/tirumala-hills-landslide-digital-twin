@@ -10,57 +10,80 @@
     <link rel="stylesheet" href="./cesium.css">
 </head>
 <body>
-    <!-- Top Telemetry Header -->
+    <!-- Application header -->
     <header class="hud-header">
         <div class="hud-title">
-            <span>🏔️ Tirumala Hills 3D Digital Twin</span>
-            <span class="badge">CesiumJS Engine</span>
+            <span class="brand-mark" aria-hidden="true">⛰</span>
+            <span class="brand-copy">
+                <strong>Tirumala Hills</strong>
+                <small>3D evidence viewer</small>
+            </span>
         </div>
         <div class="hud-telemetry">
-            <div class="telemetry-item">
-                <div class="status-dot"></div>
-                <span id="statusText">Active 3D Telemetry</span>
-            </div>
-            <div class="telemetry-item">
-                <span>📍 UTM 44N (EPSG:32644)</span>
-            </div>
-            <div class="telemetry-item">
-                <span>🛰️ Copernicus 80m DEM</span>
-            </div>
+            <span class="snapshot-status"><span class="status-dot"></span><span id="statusText">Snapshot data</span></span>
+            <span class="telemetry-item live-sync-badge"><span class="sync-icon">🔄</span> Auto-Sync: <b style="color: #38bdf8; margin-left: 3px;">Active</b></span>
+            <span class="telemetry-item">UTM 44N <span class="muted">(EPSG:32644)</span></span>
+            <span class="telemetry-item">Copernicus DEM <span class="muted">· 80 m</span></span>
         </div>
+        <button class="panel-toggle" id="btnTogglePanel" type="button" aria-controls="layerPanel" aria-expanded="true">
+            <span class="toggle-icon" aria-hidden="true">☷</span>
+            <span id="panelToggleLabel">Controls</span>
+        </button>
     </header>
 
     <!-- Cesium 3D Globe Canvas -->
     <div id="cesiumContainer"></div>
 
     <!-- Right Side Layer Control Panel -->
-    <aside class="hud-panel">
-        <!-- 3D Overlays -->
+    <aside class="hud-panel" id="layerPanel" aria-label="Map controls">
+        <div class="panel-heading">
+            <div>
+                <strong>Map controls</strong>
+                <span>Layers, time and navigation</span>
+            </div>
+            <button class="icon-button panel-close" id="btnClosePanel" type="button" aria-label="Close map controls">×</button>
+        </div>
+        <!-- Basemap Controls -->
         <div class="panel-section">
-            <div class="panel-title">🗺️ 3D Terrain Overlays</div>
+            <div class="panel-title">Basemap</div>
             <div class="control-group">
                 <label class="control-label">
-                    <input type="radio" name="overlay" value="relief" checked>
-                    <span>Elevation Shaded Relief</span>
-                </label>
-                <label class="control-label">
-                    <input type="radio" name="overlay" value="slope">
-                    <span>Slope Distribution (0°–50°)</span>
-                </label>
-                <label class="control-label">
-                    <input type="radio" name="overlay" value="los">
-                    <span>InSAR LOS Displacement (Pair 2)</span>
-                </label>
-                <label class="control-label">
-                    <input type="radio" name="overlay" value="corr">
-                    <span>InSAR Coherence (γ ≥ 0.50)</span>
+                    <input type="checkbox" id="chkSatelliteBase" checked>
+                    <span>Esri World Imagery (Satellite)</span>
                 </label>
             </div>
         </div>
 
-        <!-- Vertical Exaggeration Slider -->
+        <!-- Dynamic Multi-Layer GIS Evidence -->
         <div class="panel-section">
-            <div class="panel-title">⛰️ Topographic Relief Scale</div>
+            <div class="panel-title">Evidence layers <span class="section-hint">Toggle visibility and opacity</span></div>
+            <div id="dynamicLayersContainer" class="dynamic-layers-list">
+                <!-- Injected dynamically by app.js from layers_manifest.json -->
+                <div style="font-size: 11px; color: #94a3b8;">Loading layers manifest...</div>
+            </div>
+        </div>
+
+        <div class="panel-section" id="temporalControlPanel" hidden>
+            <div class="panel-title">InSAR observations</div>
+            <div class="timeline-header">
+                <div class="timeline-title">
+                    <span id="insarPairLabel" class="epoch-badge">Loading...</span>
+                    <span id="insarPairDates" class="epoch-source"></span>
+                </div>
+                <div class="timeline-playback">
+                    <button class="btn-time" id="btnPrevInSARPair" type="button" aria-label="Previous InSAR pair" title="Previous pair">←</button>
+                    <button class="btn-time" id="btnNextInSARPair" type="button" aria-label="Next InSAR pair" title="Next pair">→</button>
+                </div>
+            </div>
+            <div class="timeline-slider-row">
+                <input type="range" id="insarPairSlider" min="0" max="0" value="0" step="1" aria-label="Select processed InSAR pair">
+            </div>
+            <div id="insarReferenceNote" class="temporal-note"></div>
+        </div>
+
+        <!-- Topographic Relief Exaggeration -->
+        <div class="panel-section">
+            <div class="panel-title">Terrain appearance</div>
             <div class="slider-container">
                 <label>
                     <span>Exaggeration</span>
@@ -72,11 +95,11 @@
 
         <!-- Vector Layers -->
         <div class="panel-section">
-            <div class="panel-title">📍 GIS Evidence Layers</div>
+            <div class="panel-title">Reference features</div>
             <div class="control-group">
                 <label class="control-label">
                     <input type="checkbox" id="chkGsi" checked>
-                    <span>Historical GSI Landslide Points</span>
+                    <span>Historical GSI Landslide Points (15)</span>
                 </label>
                 <label class="control-label">
                     <input type="checkbox" id="chkAoi" checked>
@@ -87,7 +110,7 @@
 
         <!-- Camera Viewpoints -->
         <div class="panel-section">
-            <div class="panel-title">🔭 Camera Navigation</div>
+            <div class="panel-title">Camera views</div>
             <div class="view-buttons">
                 <button class="btn-view" data-view="overview">Overview</button>
                 <button class="btn-view" data-view="ghat1">1st Ghat Rd</button>
@@ -98,41 +121,47 @@
         </div>
     </aside>
 
-    <!-- Bottom Left Raycasting Inspector Card -->
+    <!-- Terrain click inspector -->
     <div class="hud-inspector" id="inspectorCard">
         <div class="inspector-header">
-            <span class="inspector-title">🎯 3D Terrain Raycast Inspector</span>
-            <span class="risk-pill risk-Low" id="cardRisk">Normal</span>
+            <div class="inspector-heading">
+                <span class="inspector-title">Terrain inspector</span>
+                <span class="inspector-prompt" id="inspectorPrompt">Click the terrain to inspect a cell</span>
+            </div>
+            <div class="inspector-actions">
+                <span class="risk-pill risk-Unknown" id="cardRisk">No selection</span>
+                <button class="icon-button inspector-toggle" id="btnToggleInspector" type="button" aria-controls="inspectorData" aria-expanded="false" aria-label="Expand terrain inspector">⌃</button>
+            </div>
         </div>
-        <div class="inspector-grid">
+        <div class="inspector-grid" id="inspectorData" hidden>
             <div class="data-cell">
                 <div class="data-label">Coordinates</div>
-                <div class="data-value" id="cardCoord">13.6680°N, 79.3738°E</div>
+                <div class="data-value" id="cardCoord">Click terrain</div>
             </div>
             <div class="data-cell">
                 <div class="data-label">Elevation</div>
-                <div class="data-value" id="cardElevation">580.4 m</div>
+                <div class="data-value" id="cardElevation">N/A</div>
             </div>
             <div class="data-cell">
                 <div class="data-label">Slope</div>
-                <div class="data-value" id="cardSlope">24.1°</div>
+                <div class="data-value" id="cardSlope">N/A</div>
             </div>
             <div class="data-cell">
-                <div class="data-label">InSAR LOS Disp</div>
-                <div class="data-value" id="cardLos">-22.5 mm</div>
+                <div class="data-label" id="cardLosLabel">InSAR LOS Disp</div>
+                <div class="data-value" id="cardLos">N/A</div>
             </div>
             <div class="data-cell">
                 <div class="data-label">Coherence (γ)</div>
-                <div class="data-value" id="cardCorr">0.76</div>
+                <div class="data-value" id="cardCorr">N/A</div>
             </div>
             <div class="data-cell">
                 <div class="data-label">3-Day Rain</div>
-                <div class="data-value" id="cardRain">44.8 mm</div>
+                <div class="data-value" id="cardRain">N/A</div>
             </div>
         </div>
     </div>
 
-    <!-- Bottom Right Dynamic Legend -->
+    <!-- Active layer legend -->
     <div class="hud-legend" id="hudLegend">
         <div id="legendTitle" style="font-weight: 700; color: #f1f5f9; margin-bottom: 2px;">Elevation (GLO-30 DEM)</div>
         <div class="legend-bar" id="legendBar" style="background: linear-gradient(to right, #2b83ba, #abdda4, #ffffbf, #fdae61, #d7191c);"></div>
@@ -140,6 +169,17 @@
             <span id="legendMin">192 m</span>
             <span id="legendMax">884 m</span>
         </div>
+    </div>
+
+    <!-- Snapshot alert summary; not a live warning -->
+    <div class="hud-alert-banner" id="hudAlertBanner" hidden role="status" aria-live="polite">
+        <div class="alert-icon" aria-hidden="true">!</div>
+        <div class="alert-content">
+            <div class="alert-title" id="alertBannerTitle">Unverified snapshot</div>
+            <div class="alert-desc" id="alertBannerDesc"></div>
+        </div>
+        <button class="btn-alert-zoom" id="btnZoomAlert" type="button">Inspect</button>
+        <button class="icon-button alert-close" id="btnCloseAlert" type="button" aria-label="Dismiss alert summary">×</button>
     </div>
 
     <!-- Application Script -->

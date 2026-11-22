@@ -1,0 +1,73 @@
+CORRECTED FINAL REFERENCE-REGION ASSESSMENT
+======================================================================
+
+Purpose
+Compare Region 1 and Region 3 as provisional candidate reference areas using terrain, InSAR quality, GSI distance, spatial residuals, autocorrelation, boundary sensitivity and available leave-one-out tests.
+
+
+REGION 1
+--------------------------------------------------
+baseline_pixel_count: 143
+baseline_area_hectares: 91.52
+mean_slope_degrees: 2.524066963708484
+mean_pair1_correlation: 0.888102122536906
+mean_pair2_correlation: 0.8569401944433892
+minimum_distance_all_15_gsi_m: 374.71353102155234
+median_distance_all_15_gsi_m: 1075.5781895418932
+pixels_at_least_400m_from_gsi: 140
+pixels_at_least_500m_from_gsi: 137
+pair1_plane_residual_sd_mm: 0.5582600804990138
+pair2_plane_residual_sd_mm: 1.4511031276007267
+pair1_morans_i: 0.29515705312854473
+pair1_morans_holm_p: 0.0004
+pair1_morans_significant_holm: Yes
+pair2_morans_i: 0.8001159341719949
+pair2_morans_holm_p: 0.0004
+pair2_morans_significant_holm: Yes
+interior_1layer_pixel_count: 52
+interior_1layer_area_hectares: 33.28
+
+Leave-one-out sensitivity:
+Available: 390 tests covering the original 143-pixel region and its 52-pixel one-layer interior.
+original_pair1_loo_max_sd_change_mm: 0.01631217636029836
+original_pair2_loo_max_sd_change_mm: 0.03170959412784513
+interior_pair1_loo_max_sd_change_mm: 0.030484222924256288
+interior_pair2_loo_max_sd_change_mm: 0.05501904916738032
+
+REGION 3
+--------------------------------------------------
+baseline_pixel_count: 31
+baseline_area_hectares: 19.84
+mean_slope_degrees: 3.386374100562065
+mean_pair1_correlation: 0.8597173460068241
+mean_pair2_correlation: 0.8594207879035703
+minimum_distance_all_15_gsi_m: 249.7763377095291
+median_distance_all_15_gsi_m: 519.079622966376
+pixels_at_least_400m_from_gsi: 22
+pixels_at_least_500m_from_gsi: 17
+pair1_plane_residual_sd_mm: 0.38220719184153656
+pair2_plane_residual_sd_mm: 0.4744567161794278
+pair1_morans_i: -0.11755739170971592
+pair1_morans_holm_p: 0.3905
+pair1_morans_significant_holm: No
+pair2_morans_i: 0.1842826862853886
+pair2_morans_holm_p: 0.0604
+pair2_morans_significant_holm: No
+interior_1layer_pixel_count: 5
+interior_1layer_area_hectares: 3.2
+
+Leave-one-out sensitivity:
+NOT TESTED for Region 3. Region 1 leave-one-out results must not be transferred to Region 3.
+
+
+OVERALL INTERPRETATION
+======================================================================
+Region 1 is the stronger provisional candidate based on its larger connected area, gentler mean slope, better separation from mapped GSI inventory points and retention under stricter distance thresholds.
+
+Important concern: Region 1 has significant positive residual spatial autocorrelation in both InSAR pairs after plane removal, particularly Pair 2. This remains unresolved.
+
+Region 3 has only 31 original pixels. Its one-layer interior contains five pixels, so interior statistics are weakly supported. Leave-one-out sensitivity was not tested for Region 3 in the available analysis.
+
+Neither region is confirmed stable ground. The two InSAR pairs have different reference points, and raw LOS differences must not be interpreted as direct temporal displacement. Plane removal can also remove real broad deformation.
+
+Recommendation: retain Region 1 as the primary provisional candidate and Region 3 as a secondary comparison region. Independent validation and additional temporally consistent observations are still required.

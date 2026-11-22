@@ -9,7 +9,7 @@
   "min_elevation_m": 180.02676391601562,
   "max_elevation_m": 899.16064453125,
   "elevation_span_m": 719.1338806152344,
-  "vertical_exaggeration": 2.0,
+  "vertical_exaggeration": 1.0,
   "width_pixels": 110,
   "height_pixels": 69,
   "cell_size_m": [
@@ -17,7 +17,7 @@
     80.0
   ],
   "total_vertices": 7590,
-  "total_triangles": 14824,
-  "file_size_bytes": 915644,
+  "total_triangles": 7821,
+  "file_size_bytes": 993444,
   "output_glb": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\viewer\\cesium\\models\\tirumala_terrain_los.glb"
 }

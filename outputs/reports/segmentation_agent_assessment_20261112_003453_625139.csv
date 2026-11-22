@@ -1,0 +1,2 @@
+timestamp,source_file,predicted_landslide_pixels,predicted_landslide_percentage,average_confidence,prediction_threshold,agent_action,agent_recommendation
+2026-11-12T00:34:53,image_3.h5,0,0.0,0.0,0.5,No segmentation evidence,The U-Net did not identify pixels above the 0.50 prediction threshold. Continue monitoring with independent remote-sensing evidence.
