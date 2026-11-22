@@ -31,6 +31,29 @@
         </button>
     </header>
 
+    <!-- Floating Cyber Quick Toolstrip -->
+    <div class="hud-quick-tools" id="hudQuickTools" role="toolbar" aria-label="3D Quick Tools">
+        <button class="tool-btn" id="btnDroneTour" type="button" title="Cinematic 360° Drone Orbit Flyover">
+            <span class="tool-icon">🚁</span>
+            <span class="tool-text">360° Drone Tour</span>
+        </button>
+        <button class="tool-btn" id="btnLightingToggle" type="button" title="Toggle Lighting: Daylight / Golden Sunset / Cyber Night">
+            <span class="tool-icon" id="lightingIcon">☀️</span>
+            <span class="tool-text" id="lightingModeText">Daylight</span>
+        </button>
+        <button class="tool-btn" id="btnLandmarks" type="button" title="Toggle Ghat Roads & Landmark Beacons">
+            <span class="tool-icon">📍</span>
+            <span class="tool-text">Landmarks</span>
+        </button>
+        <button class="tool-btn" id="btnResetView" type="button" title="Reset View to North-Up Centered">
+            <span class="tool-icon">🧭</span>
+            <span class="tool-text">Reset View</span>
+        </button>
+        <button class="tool-btn" id="btnFullscreen3D" type="button" title="Toggle Fullscreen 3D View">
+            <span class="tool-icon">⛶</span>
+        </button>
+    </div>
+
     <!-- Cesium 3D Globe Canvas -->
     <div id="cesiumContainer"></div>
 
@@ -141,10 +164,12 @@
             <div class="data-cell">
                 <div class="data-label">Elevation</div>
                 <div class="data-value" id="cardElevation">N/A</div>
+                <div class="meter-bar"><div class="meter-fill" id="meterElevation" style="width: 0%;"></div></div>
             </div>
             <div class="data-cell">
-                <div class="data-label">Slope</div>
+                <div class="data-label">Slope Angle</div>
                 <div class="data-value" id="cardSlope">N/A</div>
+                <div class="meter-bar"><div class="meter-fill slope-fill" id="meterSlope" style="width: 0%;"></div></div>
             </div>
             <div class="data-cell">
                 <div class="data-label" id="cardLosLabel">InSAR LOS Disp</div>

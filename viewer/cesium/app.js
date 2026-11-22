@@ -60,13 +60,15 @@ async function initCesiumTwin() {
         viewer.imageryLayers.addImageryProvider(imageryProvider);
 
         // Visual Beauty & Atmospheric Realism
+        viewer.scene.highDynamicRange = true;
         viewer.scene.globe.enableLighting = true;
         viewer.scene.globe.depthTestAgainstTerrain = true;
         viewer.scene.fog.enabled = true;
-        viewer.scene.fog.density = 0.00014;
-        viewer.scene.globe.atmosphereBrightnessShift = 0.10;
-        viewer.scene.globe.atmosphereHueShift = -0.02;
-        viewer.scene.globe.atmosphereSaturationShift = 0.15;
+        viewer.scene.fog.density = 0.00012;
+        viewer.scene.globe.atmosphereBrightnessShift = 0.12;
+        viewer.scene.globe.atmosphereHueShift = -0.01;
+        viewer.scene.globe.atmosphereSaturationShift = 0.22;
+        viewer.clock.currentTime = Cesium.JulianDate.fromIso8601("2026-08-20T06:30:00Z");
 
         flyToViewpoint("overview");
 
@@ -553,8 +555,20 @@ function updateInspectorHUD(lat, lon, elev, cellData) {
     document.getElementById("cardCoord").innerText = `${lat.toFixed(4)}°N, ${lon.toFixed(4)}°E`;
     document.getElementById("cardElevation").innerText = `${elev.toFixed(1)} m`;
 
+    const meterElevation = document.getElementById("meterElevation");
+    if (meterElevation) {
+        const elevPct = Math.min(100, Math.max(0, ((elev - 180.0) / 720.0) * 100));
+        meterElevation.style.width = `${elevPct.toFixed(0)}%`;
+    }
+
     if (cellData) {
         document.getElementById("cardSlope").innerText = `${cellData.slope.toFixed(1)}°`;
+        const meterSlope = document.getElementById("meterSlope");
+        if (meterSlope) {
+            const slopePct = Math.min(100, Math.max(0, (cellData.slope / 45.0) * 100));
+            meterSlope.style.width = `${slopePct.toFixed(0)}%`;
+        }
+
         const losField = activeInsarPair ? activeInsarPair.lookup_los_field : null;
         const coherenceField = activeInsarPair ? activeInsarPair.lookup_coherence_field : null;
         let losMeters = losField ? cellData[losField] : null;
@@ -582,14 +596,158 @@ function updateInspectorHUD(lat, lon, elev, cellData) {
         document.getElementById("cardLos").innerText = "N/A";
         document.getElementById("cardCorr").innerText = "N/A";
         document.getElementById("cardRain").innerText = "N/A";
+        const meterSlope = document.getElementById("meterSlope");
+        if (meterSlope) meterSlope.style.width = "0%";
         const riskPill = document.getElementById("cardRisk");
         riskPill.innerText = "Study Area";
         riskPill.className = "risk-pill risk-Low";
     }
 }
 
+// Cinematic 360° Drone Tour
+let isDroneTourActive = false;
+let droneAngle = 0;
+const DRONE_RADIUS = 0.042;
+const DRONE_ALTITUDE = 3800.0;
+
+function toggleDroneOrbit() {
+    isDroneTourActive = !isDroneTourActive;
+    const btn = document.getElementById("btnDroneTour");
+    if (btn) btn.classList.toggle("active", isDroneTourActive);
+    if (isDroneTourActive) {
+        viewer.clock.onTick.addEventListener(updateDroneOrbit);
+    } else {
+        viewer.clock.onTick.removeEventListener(updateDroneOrbit);
+    }
+}
+
+function updateDroneOrbit() {
+    if (!isDroneTourActive || !viewer) return;
+    droneAngle += 0.0035;
+    viewer.camera.lookAt(
+        Cesium.Cartesian3.fromDegrees(TIRUMALA_CENTER.lon, TIRUMALA_CENTER.lat, TIRUMALA_CENTER.baseElev + 320.0),
+        new Cesium.HeadingPitchRange(droneAngle, Cesium.Math.toRadians(-28.0), 4600.0)
+    );
+}
+
+// Lighting Presets (Daylight / Sunset / Cyber Night)
+let currentLightingMode = "day";
+function cycleLightingMode() {
+    if (!viewer) return;
+    const icon = document.getElementById("lightingIcon");
+    const text = document.getElementById("lightingModeText");
+
+    if (currentLightingMode === "day") {
+        currentLightingMode = "sunset";
+        if (icon) icon.innerText = "🌅";
+        if (text) text.innerText = "Sunset";
+        viewer.scene.globe.enableLighting = true;
+        viewer.scene.globe.atmosphereBrightnessShift = -0.05;
+        viewer.scene.globe.atmosphereHueShift = -0.08;
+        viewer.scene.globe.atmosphereSaturationShift = 0.35;
+        viewer.clock.currentTime = Cesium.JulianDate.fromIso8601("2026-08-20T12:45:00Z");
+    } else if (currentLightingMode === "sunset") {
+        currentLightingMode = "night";
+        if (icon) icon.innerText = "🌌";
+        if (text) text.innerText = "Night";
+        viewer.scene.globe.enableLighting = true;
+        viewer.scene.globe.atmosphereBrightnessShift = -0.3;
+        viewer.scene.globe.atmosphereSaturationShift = 0.1;
+        viewer.clock.currentTime = Cesium.JulianDate.fromIso8601("2026-08-20T15:30:00Z");
+    } else {
+        currentLightingMode = "day";
+        if (icon) icon.innerText = "☀️";
+        if (text) text.innerText = "Daylight";
+        viewer.scene.globe.enableLighting = true;
+        viewer.scene.globe.atmosphereBrightnessShift = 0.10;
+        viewer.scene.globe.atmosphereHueShift = -0.02;
+        viewer.scene.globe.atmosphereSaturationShift = 0.15;
+        viewer.clock.currentTime = Cesium.JulianDate.fromIso8601("2026-08-20T06:30:00Z");
+    }
+}
+
+// 3D Landmark Beacons
+let landmarkEntities = [];
+let landmarksVisible = false;
+
+function toggleLandmarks() {
+    if (landmarkEntities.length === 0) {
+        createLandmarkBeacons();
+    } else {
+        landmarksVisible = !landmarksVisible;
+        landmarkEntities.forEach(e => e.show = landmarksVisible);
+    }
+    const btn = document.getElementById("btnLandmarks");
+    if (btn) btn.classList.toggle("active", landmarksVisible);
+}
+
+function createLandmarkBeacons() {
+    if (!viewer) return;
+    const landmarks = [
+        { name: "🚗 1st Ghat Road (Ascending)", lon: 79.388, lat: 13.655, height: 420.0, color: "#38bdf8" },
+        { name: "🛣️ 2nd Ghat Road (Descending)", lon: 79.355, lat: 13.658, height: 480.0, color: "#818cf8" },
+        { name: "🏛️ Tirumala Temple Township", lon: 79.348, lat: 13.678, height: 860.0, color: "#f59e0b" },
+        { name: "⚠️ Critical Slope Hazard Flank", lon: 79.373, lat: 13.668, height: 680.0, color: "#ef4444" }
+    ];
+    landmarks.forEach(lm => {
+        const entity = viewer.entities.add({
+            position: Cesium.Cartesian3.fromDegrees(lm.lon, lm.lat, lm.height),
+            point: {
+                pixelSize: 12,
+                color: Cesium.Color.fromCssColorString(lm.color),
+                outlineColor: Cesium.Color.WHITE,
+                outlineWidth: 2
+            },
+            label: {
+                text: lm.name,
+                font: "12px -apple-system, sans-serif",
+                style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+                fillColor: Cesium.Color.WHITE,
+                outlineColor: Cesium.Color.BLACK,
+                outlineWidth: 2,
+                verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+                pixelOffset: new Cesium.Cartesian2(0, -12),
+                distanceDisplayCondition: new Cesium.DistanceDisplayCondition(100.0, 18000.0)
+            }
+        });
+        landmarkEntities.push(entity);
+    });
+    landmarksVisible = true;
+    const btn = document.getElementById("btnLandmarks");
+    if (btn) btn.classList.add("active");
+}
+
 // Setup Camera Presets and Sliders
 function setupControls() {
+    // Floating Quick Tools
+    const btnDrone = document.getElementById("btnDroneTour");
+    if (btnDrone) btnDrone.addEventListener("click", toggleDroneOrbit);
+
+    const btnLight = document.getElementById("btnLightingToggle");
+    if (btnLight) btnLight.addEventListener("click", cycleLightingMode);
+
+    const btnLandmarks = document.getElementById("btnLandmarks");
+    if (btnLandmarks) btnLandmarks.addEventListener("click", toggleLandmarks);
+
+    const btnReset = document.getElementById("btnResetView");
+    if (btnReset) {
+        btnReset.addEventListener("click", () => {
+            if (isDroneTourActive) toggleDroneOrbit();
+            flyToViewpoint("overview");
+        });
+    }
+
+    const btnFullscreen = document.getElementById("btnFullscreen3D");
+    if (btnFullscreen) {
+        btnFullscreen.addEventListener("click", () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => console.warn(err));
+            } else {
+                document.exitFullscreen().catch(err => console.warn(err));
+            }
+        });
+    }
+
     // Vector layer checkboxes
     document.getElementById("chkGsi").addEventListener("change", (e) => {
         if (gsiPointsDataSource) gsiPointsDataSource.show = e.target.checked;
@@ -626,6 +784,7 @@ function setupControls() {
     // Viewpoint buttons
     document.querySelectorAll(".btn-view").forEach(btn => {
         btn.addEventListener("click", () => {
+            if (isDroneTourActive) toggleDroneOrbit();
             flyToViewpoint(btn.dataset.view);
         });
     });

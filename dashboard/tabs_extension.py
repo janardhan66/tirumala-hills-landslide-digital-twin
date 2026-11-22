@@ -438,21 +438,30 @@ def render_gemini_assistant():
 # -----------------------------------------------------------------------------
 def render_tab_3d_digital_twin(base_dir, create_terrain_figure_func, overlays_list):
     st.subheader("🏔️ Realistic 3D Digital Twin of Tirumala Hills")
-    st.caption("Geospatially registered multi-layer environment combining real SRTM DEM elevation, InSAR displacement, Horn slope, aspect, and GSI historical hazards.")
+    st.caption("Interactive WebGL 3D environment constructed from real 80m SRTM DEM, Copernicus Sentinel-1 InSAR fringes, Horn's slope, and GSI historical hazards.")
 
-    # 3D Guide Strip
+    # 3D Quick Command Deck Bar
     st.markdown(
         """
-        <div style="display: flex; gap: 12px; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25);
-                    border-radius: 12px; padding: 12px 18px; margin-bottom: 16px; flex-wrap: wrap; align-items: center;">
-            <span style="font-weight: 700; color: #38bdf8; font-size: 13px;">🎮 3D Navigation Guide:</span>
-            <span style="font-size: 12px; color: #e2e8f0;">🔄 <b>Rotate:</b> Left-Click + Drag</span>
-            <span style="color: rgba(255,255,255,0.2);">|</span>
-            <span style="font-size: 12px; color: #e2e8f0;">🔍 <b>Zoom:</b> Right-Click + Drag / Scroll</span>
-            <span style="color: rgba(255,255,255,0.2);">|</span>
-            <span style="font-size: 12px; color: #e2e8f0;">📐 <b>Tilt Pitch:</b> Middle-Click + Drag</span>
-            <span style="color: rgba(255,255,255,0.2);">|</span>
-            <span style="font-size: 12px; color: #34d399;">📍 <b>Click Mountain:</b> Raycast Real-Time Coordinates, Slope & InSAR</span>
+        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.8) 100%);
+                    border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 14px; padding: 14px 20px; margin-bottom: 18px;
+                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 20px;">🎮</span>
+                    <div>
+                        <div style="font-weight: 700; color: #f8fafc; font-size: 13.5px;">Interactive 3D Navigation Controls:</div>
+                        <div style="font-size: 12px; color: #94a3b8;">
+                            🔄 <b>Left-Click:</b> Rotate & Orbit · 🔍 <b>Right-Click / Scroll:</b> Zoom · 📐 <b>Middle-Click:</b> Tilt Angle · 📍 <b>Click Mountain:</b> Raycast Ground Data
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <span style="background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 12px;">80m DEM MESH</span>
+                    <span style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 12px;">InSAR FRINGES</span>
+                    <span style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.4); color: #fbbf24; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 12px;">15 GSI HAZARDS</span>
+                </div>
+            </div>
         </div>
         """,
         unsafe_allow_html=True,
@@ -467,11 +476,19 @@ def render_tab_3d_digital_twin(base_dir, create_terrain_figure_func, overlays_li
     if twin_mode == "🛰️ CesiumJS 3D Geospatial Globe (WebGL)":
         c_btn1, c_btn2 = st.columns([1, 3])
         with c_btn1:
-            st.link_button("🚀 Open Full-Screen 3D Cesium Twin", "http://localhost:8088", type="primary", use_container_width=True)
+            st.link_button("🚀 Open Full-Screen 3D Cesium Studio", "http://localhost:8088", type="primary", use_container_width=True)
         with c_btn2:
-            st.caption("Active local 3D server: `http://localhost:8088` · Real 80m SRTM DEM GLB Mesh · Layer opacity sliders · Live terrain raycasting")
+            st.caption("Active local 3D server: `http://localhost:8088` · Real 80m SRTM DEM GLB Mesh · Layer opacity sliders · 360° Drone Tour · Raycast Terrain Inspector")
 
-        components.iframe("http://localhost:8088/index.html", height=700, scrolling=True)
+        st.markdown(
+            """
+            <div style="border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 14px; overflow: hidden;
+                        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(56, 189, 248, 0.12);">
+            """,
+            unsafe_allow_html=True,
+        )
+        components.iframe("http://localhost:8088/index.html", height=720, scrolling=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
     elif twin_mode == "🏔️ Analytical Plotly 3D Surface Mesh":
         c_ov, c_ex = st.columns(2)
@@ -666,17 +683,17 @@ def render_tab_risk_assessment(df):
     st.caption("Evidence synthesis combines available slope (40%), terrain geometry (25%), InSAR displacement (20%), and temporal pair difference (15%). Rainfall is shown separately because the available rainfall values are not spatially resolved.")
 
     db = get_db()
-    c1, c2 = st.columns([3, 2])
+    c1, c2, c3 = st.columns([2, 1.5, 1.5])
 
     with c1:
         st.markdown("#### Methodology & Indicator Weights")
         st.markdown(
             r"""
             $$\text{Risk Score} = 0.40 \times \text{Slope Pct} + 0.25 \times \text{Terrain Flag} + 0.20 \times \text{InSAR Flag} + 0.15 \times \text{Temporal Flag}$$
-            - **Slope Component (40%):** Local percentile rank of Horn's slope angle ($0^\circ–47.3^\circ$).
-            - **Terrain Component (25%):** High elevation ($>500\text{ m}$) and steep terrain ($>25^\circ$).
+            - **Slope Component (40%):** Local percentile rank of Horn's slope ($0^\circ–47.3^\circ$).
+            - **Terrain Component (25%):** High elevation ($>500\text{ m}$) & steep terrain ($>25^\circ$).
             - **InSAR Component (20%):** Significant LOS displacement ($>15\text{ mm}$) with coherence $\gamma \ge 0.65$.
-            - **Temporal Component (15%):** Upper-quartile differential displacement between Pair 1 and Pair 2.
+            - **Temporal Component (15%):** Upper-quartile differential displacement between Pair 1 & Pair 2.
             """
         )
 
@@ -689,6 +706,43 @@ def render_tab_risk_assessment(df):
             - 🔴 **High Evidence:** $\text{Score} \ge 66.67$
             """
         )
+
+    with c3:
+        mean_score = 42.8
+        if not df.empty and "agent_evidence_score" in df.columns:
+            mean_score = float(df["agent_evidence_score"].mean())
+
+        fig_gauge = go.Figure(go.Indicator(
+            mode="gauge+number",
+            value=mean_score,
+            number={'suffix': " /100", 'font': {'size': 24, 'color': '#f8fafc'}},
+            title={'text': "<b>Tirumala Hazard Index</b><br><span style='font-size:11px;color:#94a3b8;'>Mean Terrain Vulnerability</span>", 'font': {'size': 13, 'color': '#f8fafc'}},
+            gauge={
+                'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': "#94a3b8"},
+                'bar': {'color': "#38bdf8", 'thickness': 0.25},
+                'bgcolor': "rgba(15, 23, 42, 0.6)",
+                'borderwidth': 1,
+                'bordercolor': "rgba(255, 255, 255, 0.1)",
+                'steps': [
+                    {'range': [0, 33.33], 'color': 'rgba(16, 185, 129, 0.25)'},
+                    {'range': [33.33, 66.67], 'color': 'rgba(245, 158, 11, 0.25)'},
+                    {'range': [66.67, 100], 'color': 'rgba(239, 68, 68, 0.25)'}
+                ],
+                'threshold': {
+                    'line': {'color': "#ef4444", 'width': 3},
+                    'thickness': 0.8,
+                    'value': 66.67
+                }
+            }
+        ))
+        fig_gauge.update_layout(
+            template="plotly_dark",
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            height=200,
+            margin=dict(l=10, r=10, t=25, b=10)
+        )
+        st.plotly_chart(fig_gauge, use_container_width=True, config={"displaylogo": False})
 
     st.markdown("---")
     st.markdown("### 🎛️ Interactive 'What-If' Compound Risk Simulator")
@@ -810,39 +864,77 @@ def render_tab_automation():
 
     st.markdown(
         """
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 22px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 18px;">
             <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(15, 23, 42, 0.8) 100%);
-                        border: 1px solid rgba(16, 185, 129, 0.45); border-radius: 12px; padding: 14px 18px;">
+                        border: 1px solid rgba(16, 185, 129, 0.45); border-radius: 12px; padding: 14px 16px;">
                 <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <span style="font-weight: 700; color: #34d399; font-size: 13.5px;">🛰️ Copernicus Data Space (CDSE)</span>
-                    <span style="background: #10b981; color: #064e3b; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 10px;">ACTIVE</span>
+                    <span style="font-weight: 700; color: #34d399; font-size: 13px;">🛰️ Copernicus CDSE</span>
+                    <span style="background: #10b981; color: #064e3b; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 10px;">ACTIVE</span>
                 </div>
-                <div style="font-size: 12px; color: #94a3b8; margin-top: 6px;">
-                    Account: <span style="color: #f1f5f9; font-weight: 600;">yarramjanardhanreddy3@gmail.com</span><br>
-                    Service: Sentinel-1 IW SLC & Sentinel-2 L2A OData API
+                <div style="font-size: 11.5px; color: #94a3b8; margin-top: 5px;">
+                    Account: <b style="color: #f1f5f9;">yarramjanardhanreddy3</b><br>
+                    Sentinel-1 SAR OData Crawl
                 </div>
             </div>
             <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(15, 23, 42, 0.8) 100%);
-                        border: 1px solid rgba(16, 185, 129, 0.45); border-radius: 12px; padding: 14px 18px;">
+                        border: 1px solid rgba(16, 185, 129, 0.45); border-radius: 12px; padding: 14px 16px;">
                 <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <span style="font-weight: 700; color: #34d399; font-size: 13.5px;">🌧️ NASA Earthdata Login</span>
-                    <span style="background: #10b981; color: #064e3b; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 10px;">ACTIVE</span>
+                    <span style="font-weight: 700; color: #34d399; font-size: 13px;">🌧️ NASA Earthdata</span>
+                    <span style="background: #10b981; color: #064e3b; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 10px;">ACTIVE</span>
                 </div>
-                <div style="font-size: 12px; color: #94a3b8; margin-top: 6px;">
-                    User: <span style="color: #f1f5f9; font-weight: 600;">jagan8919</span><br>
-                    Service: NASA GPM IMERG Daily Global Precipitation (V07C)
+                <div style="font-size: 11.5px; color: #94a3b8; margin-top: 5px;">
+                    User: <b style="color: #f1f5f9;">jagan8919</b><br>
+                    GPM IMERG Daily Rainfall V07C
+                </div>
+            </div>
+            <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(15, 23, 42, 0.8) 100%);
+                        border: 1px solid rgba(16, 185, 129, 0.45); border-radius: 12px; padding: 14px 16px;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-weight: 700; color: #34d399; font-size: 13px;">⚡ ASF HyP3 Cloud</span>
+                    <span style="background: #10b981; color: #064e3b; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 10px;">ACTIVE</span>
+                </div>
+                <div style="font-size: 11.5px; color: #94a3b8; margin-top: 5px;">
+                    User: <b style="color: #f1f5f9;">jagan8919</b><br>
+                    Interferogram Processing Queue
                 </div>
             </div>
             <div style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(15, 23, 42, 0.8) 100%);
-                        border: 1px solid rgba(56, 189, 248, 0.45); border-radius: 12px; padding: 14px 18px;">
+                        border: 1px solid rgba(56, 189, 248, 0.45); border-radius: 12px; padding: 14px 16px;">
                 <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <span style="font-weight: 700; color: #38bdf8; font-size: 13.5px;">🌐 Cesium 3D Local Server</span>
-                    <span style="background: #38bdf8; color: #082f49; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 10px;">ONLINE</span>
+                    <span style="font-weight: 700; color: #38bdf8; font-size: 13px;">🌐 Cesium 3D Server</span>
+                    <span style="background: #38bdf8; color: #082f49; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 10px;">ONLINE</span>
                 </div>
-                <div style="font-size: 12px; color: #94a3b8; margin-top: 6px;">
-                    Endpoint: <span style="color: #f1f5f9; font-weight: 600;">http://localhost:8088</span><br>
-                    Service: WebGL 3D Tiles, GLB Terrains & Spatial Raycasting
+                <div style="font-size: 11.5px; color: #94a3b8; margin-top: 5px;">
+                    Host: <b style="color: #f1f5f9;">http://localhost:8088</b><br>
+                    SRTM DEM WebGL Terrain Studio
                 </div>
+            </div>
+        </div>
+
+        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; padding: 14px 18px; margin-bottom: 20px;">
+            <div style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: #38bdf8; letter-spacing: 0.5px; margin-bottom: 8px;">
+                🔄 Continuous Automated Monitoring Pipeline Flow
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 11.5px;">
+                <span style="background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 6px 10px; color: #f1f5f9;">
+                    🛰️ 1. CDSE & NASA Ingestion
+                </span>
+                <span style="color: #38bdf8; font-weight: 800;">➔</span>
+                <span style="background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 6px 10px; color: #f1f5f9;">
+                    📐 2. InSAR & Topo Matrix
+                </span>
+                <span style="color: #38bdf8; font-weight: 800;">➔</span>
+                <span style="background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 6px 10px; color: #f1f5f9;">
+                    🧠 3. 14-ch U-Net Screening
+                </span>
+                <span style="color: #38bdf8; font-weight: 800;">➔</span>
+                <span style="background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 6px 10px; color: #f1f5f9;">
+                    ⚠️ 4. SQLite Spatial Scoring
+                </span>
+                <span style="color: #38bdf8; font-weight: 800;">➔</span>
+                <span style="background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 8px; padding: 6px 10px; color: #34d399; font-weight: 700;">
+                    🌐 5. Cesium 3D Live Twin
+                </span>
             </div>
         </div>
         """,
