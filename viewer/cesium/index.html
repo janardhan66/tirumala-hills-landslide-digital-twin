@@ -20,7 +20,7 @@
             </span>
         </div>
         <div class="hud-telemetry">
-            <span class="snapshot-status"><span class="status-dot"></span><span id="statusText">Snapshot data</span></span>
+            <span class="snapshot-status"><span class="status-dot"></span><span id="statusText">Tirumala 3D · 80m Grid</span></span>
             <span class="telemetry-item live-sync-badge"><span class="sync-icon">🔄</span> Auto-Sync: <b style="color: #38bdf8; margin-left: 3px;">Active</b></span>
             <span class="telemetry-item">UTM 44N <span class="muted">(EPSG:32644)</span></span>
             <span class="telemetry-item">Copernicus DEM <span class="muted">· 80 m</span></span>
@@ -80,6 +80,14 @@
         <!-- Dynamic Multi-Layer GIS Evidence -->
         <div class="panel-section">
             <div class="panel-title">Evidence layers <span class="section-hint">Toggle visibility and opacity</span></div>
+            <div class="layer-preset-bar" id="layerPresetBar">
+                <button class="btn-layer-preset active" data-layer="elevation" type="button" title="View Topographic Elevation">Elevation</button>
+                <button class="btn-layer-preset" data-layer="slope" type="button" title="View Horn's Slope Gradient">Slope</button>
+                <button class="btn-layer-preset" data-layer="aspect" type="button" title="View Topographic Aspect">Aspect</button>
+                <button class="btn-layer-preset" data-layer="los" type="button" title="View Sentinel-1 InSAR LOS Displacement">InSAR LOS</button>
+                <button class="btn-layer-preset" data-layer="coherence" type="button" title="View Quality Coherence (γ ≥ 0.50)">Coherence</button>
+                <button class="btn-layer-preset" data-layer="risk_zones" type="button" title="View Relative Landslide Risk Zones">Risk Zones</button>
+            </div>
             <div id="dynamicLayersContainer" class="dynamic-layers-list">
                 <!-- Injected dynamically by app.js from layers_manifest.json -->
                 <div style="font-size: 11px; color: #94a3b8;">Loading layers manifest...</div>
@@ -87,7 +95,7 @@
         </div>
 
         <div class="panel-section" id="temporalControlPanel" hidden>
-            <div class="panel-title">InSAR observations</div>
+            <div class="panel-title">InSAR observation epochs <span class="section-hint">Select observation pair</span></div>
             <div class="timeline-header">
                 <div class="timeline-title">
                     <span id="insarPairLabel" class="epoch-badge">Loading...</span>
@@ -97,6 +105,9 @@
                     <button class="btn-time" id="btnPrevInSARPair" type="button" aria-label="Previous InSAR pair" title="Previous pair">←</button>
                     <button class="btn-time" id="btnNextInSARPair" type="button" aria-label="Next InSAR pair" title="Next pair">→</button>
                 </div>
+            </div>
+            <div class="pair-pills-row" id="pairPillsContainer">
+                <!-- Populated dynamically: [05–17 Aug] [17–29 Aug] [09–21 Nov] -->
             </div>
             <div class="timeline-slider-row">
                 <input type="range" id="insarPairSlider" min="0" max="0" value="0" step="1" aria-label="Select processed InSAR pair">
