@@ -1,0 +1,80 @@
+﻿{
+  "generated_at": "2026-11-23T10:36:10.696449+00:00",
+  "phase": 5,
+  "overall_status": "WAITING_FOR_NEW_DATA",
+  "cdse": {
+    "status": "PASS",
+    "configured": true,
+    "result": "CDSE OAuth token acquired; token value was not logged."
+  },
+  "discovery": {
+    "status": "WAITING_FOR_NEW_DATA",
+    "search_start": "2026-10-30",
+    "search_end": "2026-11-23",
+    "products_found": 2,
+    "duplicate_products": 2,
+    "new_acquisitions": 0,
+    "selected_products": [],
+    "products": []
+  },
+  "download": {
+    "status": "WAITING_FOR_NEW_DATA",
+    "automatic_download": "DISABLED",
+    "explicit_download_approval": "REQUIRED",
+    "download_states": {},
+    "latest_download": {
+      "acquisition_id": "b69aeace-3306-4e9b-94f3-a6d643296386",
+      "acquisition_date": "2026-11-21",
+      "file_path": "data\\raw\\sentinel1\\S1D_IW_SLC__1SDV_20261121T003100_20261121T003127_005558_00AA46_2C8C.SAFE.zip",
+      "download_status": "DOWNLOADED"
+    }
+  },
+  "preprocessing": {
+    "status": "NOT_TESTED",
+    "ready_product_count": 0,
+    "interferogram_created": false,
+    "los_raster_created": false,
+    "coherence_raster_created": false,
+    "tools": {
+      "gdalinfo": null,
+      "snappy": null,
+      "isce2": null,
+      "isce3": null,
+      "snap": null,
+      "rasterio": "1.5.2",
+      "pyproj": "3.8.0",
+      "numpy": "2.5.4"
+    }
+  },
+  "preservation": {
+    "acquisitions": 20,
+    "insar_pairs": 3,
+    "rainfall_records": 29,
+    "spatial_evidence_grid": 7590,
+    "observation_snapshots": 45554,
+    "risk_history": 2,
+    "alerts": 33,
+    "pipeline_logs": 144,
+    "scheduler_state": 4,
+    "cesium_layers": 0,
+    "vegetation_indices": 0,
+    "monitoring_discovery_events": 14,
+    "monitoring_events": 47,
+    "temporal_insar_observations": 7590,
+    "hyp3_job_status_history": 1,
+    "sentinel_download_jobs": 0,
+    "sentinel_download_attempts": 0,
+    "sentinel_archive_validation": 0,
+    "sentinel_preprocessing_readiness": 0,
+    "sentinel_product_inventory": 0,
+    "insar_processing_runs": 7,
+    "insar_raster_validation": 14,
+    "insar_temporal_network": 1,
+    "insar_inversion_runs": 1
+  },
+  "hyp3": {
+    "new_jobs_submitted": 0,
+    "credits_consumed_in_phase": 0,
+    "existing_job_id": "3889d809-88a3-4a93-89a5-258821932737"
+  }
+}

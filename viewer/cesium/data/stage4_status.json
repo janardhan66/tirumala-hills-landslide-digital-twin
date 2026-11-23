@@ -1,0 +1,37 @@
+{
+  "generated_at": "2026-11-23T09:25:04.802929+00:00",
+  "stage": "4",
+  "overall_status": "WAITING_FOR_NEW_DATA",
+  "discovery": {
+    "start_date": "2026-10-29",
+    "end_date": "2026-11-22",
+    "discovered_count": 2,
+    "new_acquisition_count": 0,
+    "duplicate_acquisition_count": 2,
+    "candidate_pair_count": 0
+  },
+  "latest_discovered_acquisition": "2026-11-21",
+  "latest_processed_acquisition": "2026-11-21",
+  "new_stage4_pair_count": 0,
+  "completed_hyp3_jobs": 1,
+  "failed_hyp3_jobs": 0,
+  "network": {
+    "node_count": 5,
+    "edge_count": 3,
+    "valid_edge_count": 1,
+    "connected_components": 4,
+    "component_sizes": [
+      1,
+      1,
+      1,
+      2
+    ]
+  },
+  "temporal_observations": 7590,
+  "valid_temporal_observations": 5034,
+  "real_sbas_ready": false,
+  "reference_consistency": "NOT_ESTABLISHED_ACROSS_PAIRS",
+  "cumulative_displacement_status": "INSUFFICIENT_DATA",
+  "velocity_status": "NOT_RELIABLE_WITH_SINGLE_VALID_PAIR",
+  "new_job_submitted": false
+}

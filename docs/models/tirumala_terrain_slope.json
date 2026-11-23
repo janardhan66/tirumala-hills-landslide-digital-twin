@@ -1,0 +1,23 @@
+﻿{
+  "dem_file": "tirumala_dem_80m_gsi_aoi.tif",
+  "crs": "EPSG:32644",
+  "center_easting": 324120.0,
+  "center_northing": 1511600.0,
+  "center_longitude": 79.37384529023056,
+  "center_latitude": 13.66800780237739,
+  "base_elevation_m": 180.02676391601562,
+  "min_elevation_m": 180.02676391601562,
+  "max_elevation_m": 899.16064453125,
+  "elevation_span_m": 719.1338806152344,
+  "vertical_exaggeration": 1.0,
+  "width_pixels": 110,
+  "height_pixels": 69,
+  "cell_size_m": [
+    80.0,
+    80.0
+  ],
+  "total_vertices": 7590,
+  "total_triangles": 7821,
+  "file_size_bytes": 952176,
+  "output_glb": "viewer\\cesium\\models\\tirumala_terrain_slope.glb"
+}

@@ -1,0 +1,679 @@
+{
+  "type": "FeatureCollection",
+  "generated_at": "2026-11-23T08:28:35.747801",
+  "total_alerts": 32,
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "4771272e-2bdf-44cf-af35-0a417b50747d",
+        "timestamp": "2026-11-21T18:20:44.235558",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "warning_level": "Watch",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "bf53ec4f-86bf-424a-bbcc-4f8ca034525b",
+        "timestamp": "2026-11-21T18:20:44.227896",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "warning_level": "High concern",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "f84fb9e6-9eaf-4cac-a9a3-fa79cf9b05d3",
+        "timestamp": "2026-11-21T18:19:19.390118",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "warning_level": "Watch",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "fbcbb2f9-4b02-491d-8854-c33eab4c24e8",
+        "timestamp": "2026-11-21T18:19:19.386901",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "warning_level": "High concern",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "6ef82ceb-fc02-400d-b605-d71978471862",
+        "timestamp": "2026-11-21T18:17:29.484522",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "warning_level": "Watch",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "ed23a295-98db-4915-ba40-645d61e517ba",
+        "timestamp": "2026-11-21T18:17:29.471689",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "warning_level": "High concern",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "11d1bbf7-e60a-46f4-b8c6-d2e21d360824",
+        "timestamp": "2026-11-21T18:07:40.775012",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "warning_level": "Watch",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "d92ad199-0a61-4789-a3e2-845350c793fa",
+        "timestamp": "2026-11-21T18:07:40.770885",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "warning_level": "High concern",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "bf433826-b73c-4c49-9376-93d1b7681e55",
+        "timestamp": "2026-11-21T18:05:27.935301",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "warning_level": "Watch",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "613a90bc-6bb9-4b77-96d8-111747a83a9b",
+        "timestamp": "2026-11-21T18:05:27.932451",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "warning_level": "High concern",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "b2ee60e4-be32-4e59-b9b9-8c9a61b18b8d",
+        "timestamp": "2026-11-21T10:39:43.011792",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "warning_level": "High concern",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "571473dc-3248-42db-991c-4064aa783007",
+        "timestamp": "2026-11-21T10:17:54.027846",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "warning_level": "Watch",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "f8d6ebc3-b7bc-441f-91bd-7822a0c5a83a",
+        "timestamp": "2026-11-21T10:17:54.003705",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "warning_level": "High concern",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "4660f3c5-bb2d-447f-8528-6e4b326892d5",
+        "timestamp": "2026-11-21T08:48:48.782988",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "warning_level": "Watch",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "f8bccfe6-75e9-4bb1-8f22-ef195b7ec809",
+        "timestamp": "2026-11-21T08:48:48.780162",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "warning_level": "High concern",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "a618ec5d-9751-4f2c-9bf8-3e364e300f5a",
+        "timestamp": "2026-11-21T08:48:46.876301",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "warning_level": "Watch",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "c5318c62-7aea-4998-a51c-1258ef94db6c",
+        "timestamp": "2026-11-21T08:48:46.870368",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "warning_level": "High concern",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "c1801a0a-387c-40da-b1d2-64458edfd96c",
+        "timestamp": "2026-11-21T08:42:27.174719",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "warning_level": "Watch",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "641a6991-c91f-4473-83ad-b9350df6e17d",
+        "timestamp": "2026-11-21T08:42:27.167831",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "warning_level": "High concern",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "35660e59-06a4-4155-8571-d3c1a1d7279e",
+        "timestamp": "2026-11-21T08:08:33.715119",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "warning_level": "Watch",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "3ffeae23-e219-4705-9f40-d73e296fe685",
+        "timestamp": "2026-11-21T08:08:33.700068",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "warning_level": "High concern",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "0beb3cc6-c317-42ee-917e-960d8bee8ece",
+        "timestamp": "2026-11-21T07:58:44.047786",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "warning_level": "Watch",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "9b4eea0e-89f5-4745-a73b-5df394d5ab46",
+        "timestamp": "2026-11-21T07:58:44.042812",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "warning_level": "High concern",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "c9eb0c4e-d69a-4ec3-b39a-c16b29dc3429",
+        "timestamp": "2026-11-21T07:55:37.136044",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "warning_level": "Watch",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "5918b50a-b4ff-407f-8fc8-7036966f347f",
+        "timestamp": "2026-11-21T07:55:37.131514",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "warning_level": "High concern",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "014cc9c7-66f4-4dba-b42a-e6d7e338a862",
+        "timestamp": "2026-11-21T07:55:37.129408",
+        "trigger_rule": "RULE_1_RAINFALL_SLOPE",
+        "severity": "CRITICAL",
+        "warning_level": "High concern",
+        "affected_cells_count": 518,
+        "max_risk_score": 99.9,
+        "summary": "Elevated rainfall (120 mm in 3 days) combined with 518 steep-slope cells (\u226525.0\u00b0).",
+        "recommended_action": "Review rainfall trend. If sustained, consider field inspection of steep slope areas along Ghat roads."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "3ccad706-aee7-43b2-88de-a9088f52966e",
+        "timestamp": "2026-11-21T05:42:03.101453",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "warning_level": "Watch",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "ee72208a-150f-4655-9ede-095ed2cd8c95",
+        "timestamp": "2026-11-21T05:42:03.096939",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "warning_level": "High concern",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "c17f4174-4425-4948-9b38-e9edfb4f15b8",
+        "timestamp": "2026-11-21T05:17:41.834075",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "warning_level": "Watch",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "db6e75c6-078f-4335-a186-0f8adaa789e6",
+        "timestamp": "2026-11-21T05:17:41.833090",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "warning_level": "High concern",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "4b3d326d-9d8e-43e5-89e0-5f0c87deba27",
+        "timestamp": "2026-11-21T05:13:18.150749",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "warning_level": "High concern",
+        "affected_cells_count": 414,
+        "max_risk_score": 99.9,
+        "summary": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.374,
+          13.668
+        ]
+      },
+      "properties": {
+        "alert_id": "c3a4b98b-4e74-4796-a991-55cae9449006",
+        "timestamp": "2026-11-21T05:11:25.196504",
+        "trigger_rule": "RULE_1_RAINFALL_SLOPE",
+        "severity": "WARNING",
+        "warning_level": "Elevated concern",
+        "affected_cells_count": 518,
+        "max_risk_score": 0.0,
+        "summary": "Elevated rainfall (120 mm in 3 days) combined with 518 steep-slope cells (\u226525.0\u00b0).",
+        "recommended_action": "Review rainfall trend. If sustained, consider field inspection of steep slope areas along Ghat roads."
+      }
+    }
+  ]
+}
