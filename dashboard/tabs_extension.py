@@ -208,16 +208,6 @@ def render_tab_overview(df, temporal_df, rainfall_df, gsi_df):
             help="Decision-support alerts requiring review and verification"
         )
 
-    with st.expander("⚡ System Architecture & Monitoring Protocol", expanded=False):
-        st.markdown(
-            r"""
-            **Continuous Monitoring Operating Boundaries:**
-            1. **InSAR Observations:** Sentinel-1 C-band IW SLC pairs are evaluated for Line-Of-Sight (LOS) phase fringes. Due to independent reference points across scenes, observations represent relative displacement indicators.
-            2. **Rainfall Ingestion:** NASA GPM IMERG Final Run V07C daily records provide 1-day, 3-day, and 7-day rolling precipitation.
-            3. **3D Digital Twin Integration:** Analytical layers are dynamically exported and served to CesiumJS WebGL for real-time raycasting inspection.
-            """
-        )
-
     st.markdown("---")
 
     col_left, col_right = st.columns([3, 2])
@@ -354,6 +344,26 @@ def render_gemini_assistant():
                         "ORDER BY acquisition_date DESC LIMIT 1"
                     ).fetchone()
                 latest_rain = db.get_latest_rainfall_date()
+
+                with db.cursor() as cur:
+                    temporal_observations = cur.execute(
+                        "SELECT COUNT(*), "
+                        "SUM(CASE WHEN quality_status='VALID' AND los_displacement_m IS NOT NULL THEN 1 ELSE 0 END) "
+                        "FROM temporal_insar_observations"
+                    ).fetchone()
+                temporal_total = temporal_observations[0] if temporal_observations else 0
+                temporal_valid = temporal_observations[1] or 0 if temporal_observations else 0
+                processed_pairs = db.get_insar_pairs(status="PROCESSED")
+                valid_pairs = sum(
+                    1 for pair in processed_pairs
+                    if pair.get("quality_status") in {"VALID", "PROCESSED"}
+                )
+                st.warning(
+                    "Stage 3 time-series status: INSUFFICIENT DATA — "
+                    f"{temporal_total} traceable temporal rows, {temporal_valid} valid LOS rows, "
+                    f"and {valid_pairs} processed pair(s). "
+                    "A cumulative LOS series or reliable LOS velocity is not reported with one pair."
+                )
                 rain_rec = db.get_rainfall_range(latest_rain, latest_rain) if latest_rain else []
                 rain_3d = rain_rec[0].get("rolling_3day_mm") if rain_rec else None
                 rain_7d = rain_rec[0].get("rolling_7day_mm") if rain_rec else None
@@ -566,6 +576,164 @@ def render_tab_monitoring():
     m5.metric("Latest Rainfall Observation", latest_rain or "None", delta=_freshness_age(latest_rain), delta_color="off")
     m6.metric("Latest Successful InSAR", latest_successful_insar or "None")
 
+    try:
+        stage5_status_path = PATHS.viewer_data / "stage5_monitoring_status.json"
+        stage5_status = json.loads(stage5_status_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        stage5_status = {}
+
+    s1, s2, s3, s4 = st.columns(4)
+    s1.metric(
+        "Stage 5 Status",
+        stage5_status.get("overall_status", "NOT_TESTED"),
+    )
+    s2.metric(
+        "New Discovery",
+        stage5_status.get("discovery", {}).get("new_acquisitions", 0),
+    )
+    s3.metric(
+        "Candidate Pairs",
+        stage5_status.get("processing", {}).get("candidate_pairs", 0),
+    )
+    s4.metric(
+        "Valid SBAS Edges",
+        stage5_status.get("network", {}).get("valid_edge_count", 0),
+    )
+    st.caption(
+        "Discovery status: "
+        f"{stage5_status.get('discovery', {}).get('status', 'NOT_TESTED')} · "
+        "Real SBAS: "
+        f"{'READY' if stage5_status.get('sbas', {}).get('real_ready') else 'INSUFFICIENT_DATA'} · "
+        "Velocity: "
+        f"{stage5_status.get('sbas', {}).get('velocity', 'VELOCITY_NOT_AVAILABLE')} · "
+        "Latest processed: "
+        f"{stage5_status.get('processing', {}).get('latest_processed_acquisition') or 'None'}"
+    )
+
+    try:
+        phase6_status_path = PATHS.viewer_data / "master_phase6_status.json"
+        phase6_status = json.loads(phase6_status_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        phase6_status = {}
+
+    q1, q2, q3, q4 = st.columns(4)
+    q1.metric("Phase 6 Status", phase6_status.get("overall_status", "NOT_TESTED"))
+    q2.metric(
+        "Quality-Valid LOS Cells",
+        phase6_status.get("live_pair", {}).get("quality_valid_pixel_count", 0),
+    )
+    q3.metric(
+        "Valid Temporal Edges",
+        phase6_status.get("network", {}).get("valid_edge_count", 0),
+    )
+    q4.metric(
+        "Connected Components",
+        phase6_status.get("network", {}).get("connected_components", 0),
+    )
+    st.caption(
+        "Temporal inversion: "
+        f"{phase6_status.get('temporal_inversion', {}).get('status', 'NOT_TESTED')} · "
+        "Cumulative LOS: "
+        f"{phase6_status.get('temporal_inversion', {}).get('cumulative_displacement_status', 'NOT_RELIABLE_WITH_SINGLE_PAIR')} · "
+        "Velocity: "
+        f"{phase6_status.get('temporal_inversion', {}).get('velocity_status', 'NOT_RELIABLE_WITH_SINGLE_PAIR')} · "
+        "No synthetic deformation is shown."
+    )
+
+    try:
+        final_status_path = PATHS.viewer_data / "master_final_status.json"
+        final_status = json.loads(final_status_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        final_status = {}
+
+    f1, f2, f3, f4 = st.columns(4)
+    f1.metric(
+        "Final Project Status",
+        final_status.get("overall_status", "DEMONSTRATION_READY_WITH_LIMITATIONS"),
+    )
+    f2.metric(
+        "Latest S1 Discovery",
+        (
+            final_status.get("monitoring_history", {})
+            .get("latest_discovered_acquisition")
+            or "None"
+        ),
+    )
+    f3.metric(
+        "Historical Alerts",
+        final_status.get("monitoring_history", {}).get("alert_count", 0),
+    )
+    f4.metric(
+        "Empirical Risk Cells",
+        final_status.get("risk", {}).get("count", 0),
+    )
+    st.caption(
+        "Risk is an empirical evidence index, not calibrated probability. "
+        "Rainfall is study-area aggregate context and is not used as per-cell missing-zero data."
+    )
+    factor_availability = final_status.get("factor_availability", {})
+    if factor_availability:
+        with st.expander("Environmental factor availability"):
+            st.json(factor_availability)
+
+    try:
+        phase5_status_path = PATHS.viewer_data / "master_phase5_status.json"
+        phase5_status = json.loads(phase5_status_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        phase5_status = {}
+
+    p1, p2, p3, p4 = st.columns(4)
+    p1.metric("Phase 5 Status", phase5_status.get("overall_status", "WAITING_FOR_NEW_DATA"))
+    p2.metric(
+        "Selected Product",
+        len(phase5_status.get("discovery", {}).get("selected_products", []))
+        and phase5_status["discovery"]["selected_products"][0].get("acquisition_id", "None")
+        or "None",
+    )
+    p3.metric(
+        "Preprocessing Ready",
+        phase5_status.get("preprocessing", {}).get("ready_product_count", 0),
+    )
+    p4.metric(
+        "Automatic Download",
+        phase5_status.get("download", {}).get("automatic_download", "DISABLED"),
+    )
+    st.caption(
+        "Phase 5 pipeline: "
+        f"CDSE={phase5_status.get('cdse', {}).get('status', 'NOT_TESTED')} · "
+        f"download={phase5_status.get('download', {}).get('status', 'WAITING_FOR_NEW_DATA')} · "
+        f"preprocessing={phase5_status.get('preprocessing', {}).get('status', 'NOT_TESTED')} · "
+        "No HyP3 submission or credits used."
+    )
+
+    try:
+        stage4_status_path = PATHS.viewer_data / "stage4_status.json"
+        stage4_status = json.loads(stage4_status_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        stage4_status = {}
+    st.info(
+        "Stage 4 acquisition/network status: "
+        f"{stage4_status.get('overall_status', 'NOT_TESTED')} — "
+        f"new acquisitions={stage4_status.get('discovery', {}).get('new_acquisition_count', 0)}, "
+        f"candidate pairs={stage4_status.get('discovery', {}).get('candidate_pair_count', 0)}, "
+        f"completed jobs={stage4_status.get('completed_hyp3_jobs', 0)}, "
+        f"valid network edges={stage4_status.get('network', {}).get('valid_edge_count', 0)}."
+    )
+    try:
+        phase3_status_path = PATHS.viewer_data / "phase3_gis_status.json"
+        phase3_status = json.loads(
+            phase3_status_path.read_text(encoding="utf-8")
+        )
+    except (OSError, json.JSONDecodeError):
+        phase3_status = {}
+    st.info(
+        "Phase 3 GIS evidence status: "
+        f"{phase3_status.get('status', 'NOT_TESTED')} — "
+        f"raster alignment={phase3_status.get('gis_alignment', {}).get('valid', False)}, "
+        f"GSI points={phase3_status.get('gsi_inventory', {}).get('record_count', 0)}, "
+        "LOS/Coherence/DEM/slope/aspect remain separate source layers."
+    )
+
     st.caption(
         f"Last discovery attempt: {latest_discovery_time[0] if latest_discovery_time else 'Never'} · "
         f"Last successful data discovery: {latest_successful_discovery[0] if latest_successful_discovery else 'Never'} · "
@@ -641,7 +809,10 @@ def render_tab_monitoring():
 
     with sub4:
         st.markdown("#### ⚠️ Ingestion Status & Manual Retry Queue")
-        st.caption("Inspect acquisitions requiring attention. If credentials were added to .env, click below to retry downloads.")
+        st.caption(
+            "Inspect acquisitions requiring attention. Downloads require explicit "
+            "`S1_DOWNLOAD_ENABLED=true` approval and are never started by scheduler discovery."
+        )
 
         with db.cursor() as cur:
             failed_pending = cur.execute(
@@ -651,16 +822,19 @@ def render_tab_monitoring():
 
         c_retry1, c_retry2 = st.columns([2, 4])
         with c_retry1:
-            if st.button("🔁 Retry Pending / Failed Downloads", type="primary", use_container_width=True):
-                with st.spinner("Retrying downloads from CDSE..."):
-                    from scripts.download_sentinel1 import Sentinel1Downloader
-                    from scripts.download_sentinel2 import Sentinel2Downloader
-                    s1 = Sentinel1Downloader()
-                    res1 = s1.retry_pending_and_failed()
-                    s2 = Sentinel2Downloader()
-                    res2 = s2.retry_pending_and_failed()
-                    st.info(f"Retry result — S1: {res1.get('downloaded',0)} downloaded, {res1.get('failed',0)} failed. S2: {res2.get('downloaded',0)} downloaded, {res2.get('failed',0)} failed.")
-                    st.rerun()
+            if st.button("🔎 Check Download Eligibility", type="primary", use_container_width=True):
+                import os
+                enabled = os.environ.get("S1_DOWNLOAD_ENABLED", "").strip().lower() in {"1", "true", "yes"}
+                if enabled:
+                    st.warning(
+                        "Explicit approval is set. Use the controlled download CLI "
+                        "for a selected product; the dashboard does not submit HyP3 jobs."
+                    )
+                else:
+                    st.info(
+                        "Automatic/manual dashboard downloads are blocked until "
+                        "S1_DOWNLOAD_ENABLED=true is configured."
+                    )
 
         with c_retry2:
             st.markdown(

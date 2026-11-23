@@ -3447,10 +3447,21 @@ st.sidebar.markdown(
                 <span>Resolution:</span>
                 <span style="color: #f1f5f9; font-weight: 600;">80 m spacing</span>
             </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(255, 255, 255, 0.08);">
+                <span>Demo Mode:</span>
+                <span style="color: #34d399; font-weight: 700;">● College Viva Ready</span>
+            </div>
         </div>
     </div>
     """,
     unsafe_allow_html=True,
+)
+
+st.sidebar.link_button(
+    "🚀 Open 3D Cesium Studio (8088)",
+    "http://localhost:8088",
+    type="secondary",
+    use_container_width=True,
 )
 
 # ============================================================
@@ -3547,6 +3558,34 @@ from dashboard.tabs_extension import (
     render_tab_risk_assessment,
     render_tab_automation,
     render_tab_alerts,
+)
+
+# College Viva Demonstration Header Banner
+st.markdown(
+    """
+    <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.92) 100%);
+                border: 1px solid rgba(99, 102, 241, 0.45); border-radius: 14px; padding: 16px 22px; margin-bottom: 20px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(99, 102, 241, 0.15);">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+            <div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="background: #4f46e5; color: white; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 20px; letter-spacing: 0.5px;">COLLEGE VIVA MODE</span>
+                    <span style="font-size: 16px; font-weight: 700; color: #f8fafc;">Tirumala Hills Landslide Digital Twin — Demonstration Guide</span>
+                </div>
+                <div style="font-size: 12.5px; color: #94a3b8; margin-top: 5px;">
+                    Suggested 5-minute examiner defense order: <b>1. Overview & AI Agent</b> ➔ <b>2. 3D Digital Twin</b> ➔ <b>3. Continuous Monitoring</b> ➔ <b>4. Risk Simulation</b> ➔ <b>5. Automation Status</b> ➔ <b>6. Evidence-Based Alerts</b>
+                </div>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <span style="background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 8px;">🛰️ Sentinel-1 IW InSAR</span>
+                <span style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 8px;">🌧️ NASA GPM IMERG</span>
+                <span style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.4); color: #fbbf24; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 8px;">🏔️ 80m Copernicus DEM</span>
+                <span style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 8px;">📍 15 GSI Hazards</span>
+            </div>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 tab_overview, tab_twin, tab_monitoring, tab_risk, tab_automation, tab_alerts = st.tabs([
