@@ -261,6 +261,9 @@ def export_all_gis_layers(
     pair1_dir = gsi_aoi_dir / "pair_05_17"
     pair1_los_path = pair1_dir / "tirumala_los_disp_80m_gsi_aoi_pair_05_17.tif"
     pair1_corr_path = pair1_dir / "tirumala_corr_80m_gsi_aoi_pair_05_17.tif"
+    live_pair_dir = gsi_aoi_dir / "PAIR_20261109_20261121"
+    live_los_path = live_pair_dir / "tirumala_live_los_disp_80m.tif"
+    live_corr_path = live_pair_dir / "tirumala_live_coherence_80m.tif"
 
     if not dem_path.exists():
         raise LayerExportError(f"Reference DEM not found: {dem_path}")
@@ -406,6 +409,7 @@ def export_all_gis_layers(
             "unit": "category",
             "default_opacity": 0.70,
             "default_visible": False,
+            "quality_status": "EMPIRICAL_EVIDENCE_NOT_CALIBRATED",
             "legend": {"title": "Risk Category", "min": "Low (Green)", "max": "High (Red)", "gradient": "linear-gradient(to right, #10b981, #f59e0b, #ef4444)"}
         })
     except Exception as e:
@@ -452,6 +456,16 @@ def export_all_gis_layers(
             "model_url": "./models/tirumala_terrain_los.glb",
             "texture_url": "./textures/layer_los.png",
         },
+        {
+            "pair_id": "PAIR_20261109_20261121",
+            "reference_date": "2026-11-09",
+            "secondary_date": "2026-11-21",
+            "label": "09–21 Nov 2026",
+            "los_path": live_los_path,
+            "coherence_path": live_corr_path,
+            "model_url": "./models/tirumala_terrain_los_pair_20261109_20261121.glb",
+            "texture_url": "./textures/layer_los_pair_20261109_20261121.png",
+        },
     ]
     for pair in pair_specs:
         los_source = pair["los_path"]
@@ -462,7 +476,10 @@ def export_all_gis_layers(
             raise LayerExportError(
                 f"Both LOS and coherence rasters are required for {pair['pair_id']}."
             )
-        if pair["pair_id"] == "PAIR_20260805_20260817":
+        if pair["pair_id"] in {
+            "PAIR_20260805_20260817",
+            "PAIR_20261109_20261121",
+        }:
             with rasterio.open(coherence_source) as coherence_src:
                 quality_mask = coherence_src.read(1) >= 0.5
             texture_path, _ = raster_to_rgba_overlay(
@@ -491,11 +508,15 @@ def export_all_gis_layers(
             "lookup_los_field": (
                 "los_pair_05_17_m"
                 if pair["pair_id"] == "PAIR_20260805_20260817"
+                else "los_pair_20261109_20261121_m"
+                if pair["pair_id"] == "PAIR_20261109_20261121"
                 else "los_pair_17_29_m"
             ),
             "lookup_coherence_field": (
                 "corr_pair_05_17"
                 if pair["pair_id"] == "PAIR_20260805_20260817"
+                else "corr_pair_20261109_20261121"
+                if pair["pair_id"] == "PAIR_20261109_20261121"
                 else "corr_pair_17_29"
             ),
             "reference_note": (
@@ -503,6 +524,16 @@ def export_all_gis_layers(
                 "Cross-pair subtraction is not shown."
             ),
         })
+
+    manifest_path = output_dir / "layers_manifest.json"
+    existing_manifest = {}
+    if manifest_path.is_file():
+        try:
+            existing_manifest = json.loads(
+                manifest_path.read_text(encoding="utf-8")
+            )
+        except (OSError, json.JSONDecodeError):
+            existing_manifest = {}
 
     manifest = {
         "study_area": "Tirumala Hills, Andhra Pradesh, India",
@@ -525,6 +556,9 @@ def export_all_gis_layers(
         },
         "layers": layers,
     }
+    for preserved_key in ("phase3_status", "reference_features"):
+        if preserved_key in existing_manifest:
+            manifest[preserved_key] = existing_manifest[preserved_key]
 
     manifest_path = output_dir / "layers_manifest.json"
     with open(manifest_path, "w", encoding="utf-8") as f:

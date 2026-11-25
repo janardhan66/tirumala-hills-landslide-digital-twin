@@ -1,0 +1,197 @@
+{
+  "generated_at": "2026-11-24T13:06:17.948523+00:00",
+  "phase": "3",
+  "status": "PASS",
+  "terrain": {
+    "dem": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\data\\processed\\dinsar\\tirumala\\gsi_aoi\\tirumala_dem_80m_gsi_aoi.tif",
+    "crs": "EPSG:32644",
+    "shape": [
+      69,
+      110
+    ],
+    "resolution_m": 80.0,
+    "source": "existing real DEM"
+  },
+  "gis_alignment": {
+    "valid": true,
+    "rasters": {
+      "dem": {
+        "path": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\data\\processed\\dinsar\\tirumala\\gsi_aoi\\tirumala_dem_80m_gsi_aoi.tif",
+        "crs": "EPSG:32644",
+        "shape": [
+          69,
+          110
+        ],
+        "resolution": [
+          80.0,
+          80.0
+        ],
+        "bounds": [
+          319720.0,
+          1508840.0,
+          328520.0,
+          1514360.0
+        ],
+        "nodata": 0.0,
+        "valid_pixels": 4083,
+        "invalid_pixels": 3507,
+        "missing_percent": 46.206,
+        "min": 180.02676391601562,
+        "max": 899.16064453125,
+        "aligned": true
+      },
+      "slope": {
+        "path": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\data\\processed\\dinsar\\tirumala\\gsi_aoi\\tirumala_slope_80m_gsi_aoi.tif",
+        "crs": "EPSG:32644",
+        "shape": [
+          69,
+          110
+        ],
+        "resolution": [
+          80.0,
+          80.0
+        ],
+        "bounds": [
+          319720.0,
+          1508840.0,
+          328520.0,
+          1514360.0
+        ],
+        "nodata": 0.0,
+        "valid_pixels": 3692,
+        "invalid_pixels": 3898,
+        "missing_percent": 51.357,
+        "min": 0.2192028909921646,
+        "max": 46.07533264160156,
+        "aligned": true
+      },
+      "aspect": {
+        "path": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\data\\processed\\dinsar\\tirumala\\gsi_aoi\\tirumala_aspect_80m_gsi_aoi.tif",
+        "crs": "EPSG:32644",
+        "shape": [
+          69,
+          110
+        ],
+        "resolution": [
+          80.0,
+          80.0
+        ],
+        "bounds": [
+          319720.0,
+          1508840.0,
+          328520.0,
+          1514360.0
+        ],
+        "nodata": -9999.0,
+        "valid_pixels": 4083,
+        "invalid_pixels": 3507,
+        "missing_percent": 46.206,
+        "min": -1.0,
+        "max": 359.986328125,
+        "aligned": true
+      },
+      "insar_los": {
+        "path": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\data\\processed\\dinsar\\tirumala\\gsi_aoi\\PAIR_20261109_20261121\\tirumala_live_los_disp_80m.tif",
+        "crs": "EPSG:32644",
+        "shape": [
+          69,
+          110
+        ],
+        "resolution": [
+          80.0,
+          80.0
+        ],
+        "bounds": [
+          319720.0,
+          1508840.0,
+          328520.0,
+          1514360.0
+        ],
+        "nodata": null,
+        "valid_pixels": 7240,
+        "invalid_pixels": 350,
+        "missing_percent": 4.611,
+        "min": -0.11191907525062561,
+        "max": -0.05371462553739548,
+        "aligned": true
+      },
+      "insar_coherence": {
+        "path": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\data\\processed\\dinsar\\tirumala\\gsi_aoi\\PAIR_20261109_20261121\\tirumala_live_coherence_80m.tif",
+        "crs": "EPSG:32644",
+        "shape": [
+          69,
+          110
+        ],
+        "resolution": [
+          80.0,
+          80.0
+        ],
+        "bounds": [
+          319720.0,
+          1508840.0,
+          328520.0,
+          1514360.0
+        ],
+        "nodata": null,
+        "valid_pixels": 7245,
+        "invalid_pixels": 345,
+        "missing_percent": 4.545,
+        "min": 0.02419879660010338,
+        "max": 0.961329460144043,
+        "aligned": true
+      }
+    },
+    "errors": []
+  },
+  "gsi_inventory": {
+    "valid": true,
+    "record_count": 15,
+    "exported_count": 15,
+    "output": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\viewer\\cesium\\data\\tirumala_gsi_points.geojson",
+    "coordinate_quality": "map-derived approximate"
+  },
+  "temporal": {
+    "registered_pair_count": 3,
+    "live_pair": {
+      "pair_id": "PAIR_20261109_20261121",
+      "reference_acq_id": "220f79ba-248d-4e02-81ad-1f9f10d202ed",
+      "secondary_acq_id": "b69aeace-3306-4e9b-94f3-a6d643296386",
+      "reference_date": "2026-11-09",
+      "secondary_date": "2026-11-21",
+      "temporal_baseline_days": 12,
+      "perpendicular_baseline_m": null,
+      "processing_mode": "hyp3",
+      "processing_status": "PROCESSED",
+      "hyp3_job_id": "3889d809-88a3-4a93-89a5-258821932737",
+      "los_disp_tif": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\data\\processed\\dinsar\\tirumala\\gsi_aoi\\PAIR_20261109_20261121\\tirumala_live_los_disp_80m.tif",
+      "coherence_tif": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\data\\processed\\dinsar\\tirumala\\gsi_aoi\\PAIR_20261109_20261121\\tirumala_live_coherence_80m.tif",
+      "phase_ref_lat": null,
+      "phase_ref_lon": null,
+      "valid_pixels": 7245,
+      "mean_coherence": 0.589436948299408,
+      "quality_notes": "LOS and coherence rasters aligned to the Tirumala 80 m grid; LOS is not a vertical displacement measurement.",
+      "error_message": null,
+      "created_at": "2026-11-22 06:07:14",
+      "updated_at": "2026-11-22 12:38:35",
+      "orbit_direction": "DESCENDING",
+      "relative_orbit": 92,
+      "orbit_compatibility": "VERIFIED",
+      "spatial_overlap_percent": 100.0,
+      "quality_status": "VALID",
+      "selection_method": "Existing verified live pair; preserve unchanged.",
+      "output_archive": "S1DD_20261109T003100_20261121T003100_VVR012_INT80_G_ueF_FD61.zip",
+      "submitted_at": "2026-11-22T06:06:42+00:00",
+      "last_status_check_at": "2026-11-22T09:46:30.053299+00:00",
+      "job_config_json": "{\"include_dem\": true, \"include_displacement_maps\": true, \"include_inc_map\": true, \"job_type\": \"INSAR_GAMMA\", \"looks\": \"20x4\", \"phase_filter_parameter\": 0.6}",
+      "expected_credit_cost": 10,
+      "output_validation_status": "VALID"
+    },
+    "cross_pair_difference": "NOT_SHOWN"
+  },
+  "scientific_limitations": [
+    "LOS is relative to a pair-specific phase reference.",
+    "Low coherence is insufficient-quality evidence, not zero movement.",
+    "GSI coordinates are approximate map-derived points.",
+    "No rainfall or land-cover raster is fabricated."
+  ]
+}

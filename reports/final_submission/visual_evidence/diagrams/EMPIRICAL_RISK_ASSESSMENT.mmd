@@ -1,0 +1,12 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Segoe UI, Arial","primaryTextColor":"#172033","lineColor":"#64748b","fontSize":"16px"}}}%%
+flowchart TD
+    S["Slope Percentile<br/>40%"] --> AV["Available-Factor<br/>Weight Renormalization"]
+    T["Terrain Evidence<br/>25%"] --> AV
+    I["InSAR Evidence<br/>20%"] --> AV
+    Q["Temporal Evidence<br/>15%"] --> AV
+    M["Missing factors excluded<br/>not replaced by zero"] --> AV
+    AV --> SC["Weighted Relative<br/>Evidence Score"]
+    SC --> LOW["Low<br/>Below 33.3333"]
+    SC --> MED["Medium<br/>33.3333 to below 66.6667"]
+    SC --> HIGH["High<br/>66.6667 and above"]
+    SC -. "Output" .-> NOTE["Relative Empirical Evidence Index<br/>NOT a calibrated landslide probability"]

@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="860" viewBox="0 0 1400 860">
+  <defs>
+    <style>
+      .title { font: 700 30px Arial, sans-serif; fill: #102a43; }
+      .group { font: 700 18px Arial, sans-serif; fill: #243b53; }
+      .node { fill: #ffffff; stroke: #2f80ed; stroke-width: 2; rx: 10; }
+      .node-dark { fill: #dbeafe; stroke: #2563eb; stroke-width: 2; rx: 10; }
+      .storage { fill: #ecfdf3; stroke: #15803d; stroke-width: 2; rx: 10; }
+      .risk { fill: #fff7ed; stroke: #ea580c; stroke-width: 2; rx: 10; }
+      .text { font: 16px Arial, sans-serif; fill: #102a43; text-anchor: middle; }
+      .small { font: 13px Arial, sans-serif; fill: #486581; text-anchor: middle; }
+      .arrow { fill: none; stroke: #627d98; stroke-width: 2.5; marker-end: url(#arrowhead); }
+      .dashed { fill: none; stroke: #829ab1; stroke-width: 2; stroke-dasharray: 8 6; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#627d98"/>
+    </marker>
+  </defs>
+
+  <rect width="1400" height="860" fill="#f8fafc"/>
+  <text x="700" y="48" class="title" text-anchor="middle">Tirumala Hills Landslide Digital Twin - Proposed Architecture</text>
+
+  <rect x="25" y="85" width="260" height="690" fill="#eef4ff" stroke="#9fb3c8" stroke-width="2" rx="16"/>
+  <text x="155" y="118" class="group" text-anchor="middle">Data Sources</text>
+
+  <rect x="325" y="85" width="300" height="690" fill="#f0f7ff" stroke="#9fb3c8" stroke-width="2" rx="16"/>
+  <text x="475" y="118" class="group" text-anchor="middle">Orchestration and Services</text>
+
+  <rect x="665" y="85" width="430" height="690" fill="#fffaf0" stroke="#9fb3c8" stroke-width="2" rx="16"/>
+  <text x="880" y="118" class="group" text-anchor="middle">Processing and Assessment</text>
+
+  <rect x="1135" y="85" width="240" height="690" fill="#f4fff8" stroke="#9fb3c8" stroke-width="2" rx="16"/>
+  <text x="1255" y="118" class="group" text-anchor="middle">Storage and Interfaces</text>
+
+  <rect x="55" y="150" width="200" height="68" class="node"/>
+  <text x="155" y="178" class="text">Sentinel-1 SLC</text><text x="155" y="201" class="small">CDSE / HyP3</text>
+  <rect x="55" y="250" width="200" height="68" class="node"/>
+  <text x="155" y="278" class="text">Sentinel-2 MSI</text><text x="155" y="301" class="small">Optical evidence</text>
+  <rect x="55" y="350" width="200" height="68" class="node"/>
+  <text x="155" y="378" class="text">Copernicus DEM</text><text x="155" y="401" class="small">Elevation / slope</text>
+  <rect x="55" y="450" width="200" height="68" class="node"/>
+  <text x="155" y="478" class="text">GPM / IMERG</text><text x="155" y="501" class="small">Rainfall context</text>
+  <rect x="55" y="550" width="200" height="68" class="node"/>
+  <text x="155" y="578" class="text">GSI / COOLR</text><text x="155" y="601" class="small">Approximate history</text>
+  <rect x="55" y="650" width="200" height="68" class="node"/>
+  <text x="155" y="678" class="text">Landslide4Sense</text><text x="155" y="701" class="small">Training patches / model</text>
+
+  <rect x="375" y="150" width="200" height="68" class="node-dark"/>
+  <text x="475" y="178" class="text">APScheduler</text><text x="475" y="201" class="small">Discovery and cycles</text>
+  <rect x="375" y="260" width="200" height="68" class="node-dark"/>
+  <text x="475" y="288" class="text">FastAPI Gateway</text><text x="475" y="311" class="small">Versioned REST API</text>
+  <rect x="375" y="370" width="200" height="68" class="node-dark"/>
+  <text x="475" y="398" class="text">Processing Worker</text><text x="475" y="421" class="small">Idempotent stages</text>
+  <rect x="375" y="480" width="200" height="68" class="node-dark"/>
+  <text x="475" y="508" class="text">Job State</text><text x="475" y="531" class="small">Run and stage checkpoints</text>
+
+  <rect x="715" y="150" width="330" height="68" class="node"/>
+  <text x="880" y="178" class="text">Acquisition and Source Catalog</text><text x="880" y="201" class="small">Deduplicate, resume, checksum</text>
+  <rect x="715" y="250" width="330" height="68" class="node"/>
+  <text x="880" y="278" class="text">Raster Alignment and Quality Control</text><text x="880" y="301" class="small">EPSG:32644 / 80 m canonical grid</text>
+  <rect x="715" y="350" width="330" height="68" class="node"/>
+  <text x="880" y="378" class="text">InSAR Processing</text><text x="880" y="401" class="small">HyP3 or SNAP / coherence masking</text>
+  <rect x="715" y="450" width="330" height="68" class="node"/>
+  <text x="880" y="478" class="text">Feature Engineering</text><text x="880" y="501" class="small">Terrain / rainfall / GSI / temporal</text>
+  <rect x="715" y="550" width="155" height="68" class="risk"/>
+  <text x="792" y="578" class="text">14-channel U-Net</text><text x="792" y="601" class="small">Screening only</text>
+  <rect x="890" y="550" width="155" height="68" class="risk"/>
+  <text x="967" y="578" class="text">Evidence Risk Engine</text><text x="967" y="601" class="small">Not calibrated</text>
+  <rect x="715" y="650" width="330" height="68" class="risk"/>
+  <text x="880" y="678" class="text">Alert Evaluation and Human Verification</text><text x="880" y="701" class="small">External delivery remains disabled</text>
+
+  <rect x="1165" y="150" width="180" height="68" class="storage"/>
+  <text x="1255" y="178" class="text">SQLite / WAL</text><text x="1255" y="201" class="small">State and history</text>
+  <rect x="1165" y="250" width="180" height="68" class="storage"/>
+  <text x="1255" y="278" class="text">Object / File Store</text><text x="1255" y="301" class="small">Rasters and exports</text>
+  <rect x="1165" y="350" width="180" height="68" class="node-dark"/>
+  <text x="1255" y="378" class="text">Streamlit</text><text x="1255" y="401" class="small">Monitoring dashboard</text>
+  <rect x="1165" y="450" width="180" height="68" class="node-dark"/>
+  <text x="1255" y="478" class="text">CesiumJS</text><text x="1255" y="501" class="small">3D digital twin</text>
+  <rect x="1165" y="550" width="180" height="68" class="node-dark"/>
+  <text x="1255" y="578" class="text">Pipeline Logs</text><text x="1255" y="601" class="small">Audit and provenance</text>
+
+  <path d="M255 184 H375" class="arrow"/>
+  <path d="M255 284 H375" class="arrow"/>
+  <path d="M255 384 H375" class="arrow"/>
+  <path d="M255 484 H375" class="arrow"/>
+  <path d="M255 584 H375" class="dashed"/>
+  <path d="M255 684 H375" class="dashed"/>
+
+  <path d="M575 184 H715" class="arrow"/>
+  <path d="M575 294 H715" class="arrow"/>
+  <path d="M575 404 H715" class="arrow"/>
+  <path d="M575 514 H715" class="arrow"/>
+
+  <path d="M1045 184 H1165" class="arrow"/>
+  <path d="M1045 284 H1165" class="arrow"/>
+  <path d="M1045 384 H1165" class="arrow"/>
+  <path d="M1045 484 H1165" class="arrow"/>
+  <path d="M1045 584 H1165" class="arrow"/>
+  <path d="M1045 684 H1165" class="arrow"/>
+
+  <path d="M880 218 V250" class="arrow"/>
+  <path d="M880 318 V350" class="arrow"/>
+  <path d="M880 418 V450" class="arrow"/>
+  <path d="M880 518 V550" class="arrow"/>
+  <path d="M792 618 V650" class="dashed"/>
+  <path d="M967 618 V650" class="dashed"/>
+
+  <text x="700" y="820" class="small">Scientific outputs carry CRS, quality, source, calibration status, model/pair provenance, and limitations.</text>
+</svg>

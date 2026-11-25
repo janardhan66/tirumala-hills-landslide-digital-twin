@@ -1,0 +1,21 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Segoe UI, Arial","primaryTextColor":"#172033","lineColor":"#64748b","fontSize":"16px"}}}%%
+flowchart LR
+    AC["1. Data Acquisition"] --> S1["Sentinel-1 SAR<br/>HyP3 LOS / Coherence"]
+    AC --> DEM["DEM / Terrain"]
+    AC --> GPM["GPM IMERG<br/>Rainfall Context"]
+    AC --> GSI["GSI Historical<br/>Landslide Locations"]
+
+    S1 --> PP["2. Preprocessing"]
+    DEM --> PP
+    PP --> CRS["3. Coordinate Alignment<br/>EPSG:32644"]
+    CRS --> GRID["69 x 110 Grid<br/>80 m Resolution"]
+    GRID --> QC["4. Quality Filtering<br/>NoData + Coherence"]
+
+    QC --> FE["5. Feature Extraction<br/>Slope / Terrain / InSAR"]
+    GPM -. "Temporal context" .-> FE
+    GSI -. "Approximate context" .-> FE
+    FE --> ES["6. Empirical Evidence Scoring"]
+    ES --> DB[("7. SQLite<br/>Snapshots and History")]
+    DB --> VIS["8. Visualization"]
+    VIS --> ST["Streamlit Dashboard"]
+    VIS --> CES["Cesium 3D Digital Twin"]

@@ -277,12 +277,23 @@ def preprocess_new_acquisitions(db=None) -> dict:
                                 (acq_id,),
                             )
                     else:
-                        extracted_dir = PATHS.raw_sentinel1 / "extracted" / acq_id
-                        extracted_dir.mkdir(parents=True, exist_ok=True)
-                        with zipfile.ZipFile(file_path) as archive:
+                        from tempfile import TemporaryDirectory
+
+                        with TemporaryDirectory(prefix="tirumala_s1_") as temporary:
+                            extracted_dir = Path(temporary)
+                            bad_member = archive.testzip()
+                            if bad_member:
+                                raise IOError(
+                                    f"Sentinel-1 ZIP integrity failure for {acq_id}: "
+                                    f"corrupt member {bad_member}"
+                                )
                             archive.extractall(extracted_dir)
-                        safe_dirs = list(extracted_dir.rglob("*.SAFE"))
-                        file_path_value = str(safe_dirs[0]) if safe_dirs else str(extracted_dir)
+                            safe_dirs = list(extracted_dir.rglob("*.SAFE"))
+                        if not safe_dirs:
+                            raise IOError(
+                                f"Sentinel-1 archive has no SAFE product directory: {file_path}"
+                            )
+                        file_path_value = str(file_path)
                         with db.cursor() as cur:
                             cur.execute(
                                 "UPDATE acquisitions SET processing_status = 'UNPROCESSED', "
@@ -308,7 +319,6 @@ def preprocess_new_acquisitions(db=None) -> dict:
                     "UPDATE acquisitions SET processing_status = 'FAILED', error_message = ? WHERE acquisition_id = ?",
                     (str(exc), acq_id)
                 )
-                db.conn.commit()
 
     # Validate baseline rasters readiness
     base_valid = PATHS.dem_tif.exists() and PATHS.slope_tif.exists()

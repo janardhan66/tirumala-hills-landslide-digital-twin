@@ -1,0 +1,4069 @@
+{
+  "generated_at": "2026-11-22T17:18:53.906737+00:00",
+  "status": "BACKEND_INTEGRATED_WITH_LIMITATIONS",
+  "calibration_status": "NOT_CALIBRATED",
+  "acquisitions": {
+    "history": [
+      {
+        "acquisition_id": "b69aeace-3306-4e9b-94f3-a6d643296386",
+        "satellite": "Sentinel-1",
+        "product_type": "IW_SLC__1S",
+        "sensor_mode": "IW",
+        "beam_mode": "IW",
+        "orbit_direction": "DESCENDING",
+        "relative_orbit": 92,
+        "acquisition_date": "2026-11-21",
+        "acquisition_timestamp": "2026-11-21T00:31:00.162092Z",
+        "download_status": "DOWNLOADED",
+        "processing_status": "UNPROCESSED",
+        "file_path": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\data\\raw\\sentinel1\\S1D_IW_SLC__1SDV_20261121T003100_20261121T003127_005558_00AA46_2C8C.SAFE.zip",
+        "error_message": "SAFE archive extracted and validated; pair registration is required before InSAR processing.",
+        "updated_at": "2026-11-22 17:16:17"
+      },
+      {
+        "acquisition_id": "220f79ba-248d-4e02-81ad-1f9f10d202ed",
+        "satellite": "Sentinel-1",
+        "product_type": "IW_SLC__1S",
+        "sensor_mode": "IW",
+        "beam_mode": "IW",
+        "orbit_direction": "DESCENDING",
+        "relative_orbit": 92,
+        "acquisition_date": "2026-11-09",
+        "acquisition_timestamp": "2026-11-09T00:31:00.473300Z",
+        "download_status": "FAILED",
+        "processing_status": "UNPROCESSED",
+        "file_path": null,
+        "error_message": "CDSE credentials not configured. Set CDSE_USERNAME and CDSE_PASSWORD in .env file.",
+        "updated_at": "2026-11-22 09:35:24"
+      },
+      {
+        "acquisition_id": "b888e7ea-9c4d-4bc3-8795-12a7e9e610a5",
+        "satellite": "Sentinel-1",
+        "product_type": "IW_SLC__1S",
+        "sensor_mode": "IW",
+        "beam_mode": null,
+        "orbit_direction": "DESCENDING",
+        "relative_orbit": 92,
+        "acquisition_date": "2026-10-28",
+        "acquisition_timestamp": null,
+        "download_status": "FAILED",
+        "processing_status": "UNPROCESSED",
+        "file_path": null,
+        "error_message": "CDSE credentials not configured. Set CDSE_USERNAME and CDSE_PASSWORD in .env file.",
+        "updated_at": "2026-11-22 04:53:08"
+      },
+      {
+        "acquisition_id": "d8eeeb7d-23de-4016-a8ff-dfe6d2ceb024",
+        "satellite": "Sentinel-1",
+        "product_type": "IW_SLC__1S",
+        "sensor_mode": "IW",
+        "beam_mode": null,
+        "orbit_direction": "DESCENDING",
+        "relative_orbit": 92,
+        "acquisition_date": "2026-10-16",
+        "acquisition_timestamp": null,
+        "download_status": "FAILED",
+        "processing_status": "UNPROCESSED",
+        "file_path": null,
+        "error_message": "CDSE credentials not configured. Set CDSE_USERNAME and CDSE_PASSWORD in .env file.",
+        "updated_at": "2026-11-22 04:53:08"
+      },
+      {
+        "acquisition_id": "54d17097-c3a1-41d4-94cb-d9bf0d766f73",
+        "satellite": "Sentinel-1",
+        "product_type": "IW_SLC__1S",
+        "sensor_mode": "IW",
+        "beam_mode": null,
+        "orbit_direction": "DESCENDING",
+        "relative_orbit": 92,
+        "acquisition_date": "2026-10-04",
+        "acquisition_timestamp": null,
+        "download_status": "FAILED",
+        "processing_status": "UNPROCESSED",
+        "file_path": null,
+        "error_message": "CDSE credentials not configured. Set CDSE_USERNAME and CDSE_PASSWORD in .env file.",
+        "updated_at": "2026-11-22 04:53:08"
+      },
+      {
+        "acquisition_id": "1aa7b818-10d9-4de4-9290-741dc2a92d34",
+        "satellite": "Sentinel-1",
+        "product_type": "IW_SLC__1S",
+        "sensor_mode": "IW",
+        "beam_mode": null,
+        "orbit_direction": "DESCENDING",
+        "relative_orbit": 92,
+        "acquisition_date": "2026-09-22",
+        "acquisition_timestamp": null,
+        "download_status": "FAILED",
+        "processing_status": "UNPROCESSED",
+        "file_path": null,
+        "error_message": "CDSE credentials not configured. Set CDSE_USERNAME and CDSE_PASSWORD in .env file.",
+        "updated_at": "2026-11-22 04:53:08"
+      },
+      {
+        "acquisition_id": "298b5529-6f35-40a2-a3e6-b779eee5c06d",
+        "satellite": "Sentinel-1",
+        "product_type": "IW_SLC__1S",
+        "sensor_mode": "IW",
+        "beam_mode": null,
+        "orbit_direction": "DESCENDING",
+        "relative_orbit": 92,
+        "acquisition_date": "2026-09-10",
+        "acquisition_timestamp": null,
+        "download_status": "FAILED",
+        "processing_status": "UNPROCESSED",
+        "file_path": null,
+        "error_message": "CDSE credentials not configured. Set CDSE_USERNAME and CDSE_PASSWORD in .env file.",
+        "updated_at": "2026-11-22 04:53:08"
+      },
+      {
+        "acquisition_id": "sec2",
+        "satellite": "Sentinel-1",
+        "product_type": "SLC",
+        "sensor_mode": null,
+        "beam_mode": null,
+        "orbit_direction": null,
+        "relative_orbit": null,
+        "acquisition_date": "2026-08-29",
+        "acquisition_timestamp": null,
+        "download_status": "PENDING",
+        "processing_status": "UNPROCESSED",
+        "file_path": null,
+        "error_message": null,
+        "updated_at": "2026-11-21 10:28:40"
+      },
+      {
+        "acquisition_id": "083f36e7-3f4c-4c6b-8d53-f6e76625730c",
+        "satellite": "Sentinel-1",
+        "product_type": "IW_SLC__1S",
+        "sensor_mode": "IW",
+        "beam_mode": null,
+        "orbit_direction": "DESCENDING",
+        "relative_orbit": 92,
+        "acquisition_date": "2026-08-29",
+        "acquisition_timestamp": null,
+        "download_status": "FAILED",
+        "processing_status": "UNPROCESSED",
+        "file_path": null,
+        "error_message": "CDSE credentials not configured. Set CDSE_USERNAME and CDSE_PASSWORD in .env file.",
+        "updated_at": "2026-11-22 04:53:08"
+      },
+      {
+        "acquisition_id": "S1D_IW_SLC__1SDV_20260829",
+        "satellite": "Sentinel-1",
+        "product_type": "SLC",
+        "sensor_mode": "IW",
+        "beam_mode": null,
+        "orbit_direction": "DESCENDING",
+        "relative_orbit": null,
+        "acquisition_date": "2026-08-29",
+        "acquisition_timestamp": null,
+        "download_status": "DOWNLOADED",
+        "processing_status": "PROCESSED",
+        "file_path": null,
+        "error_message": null,
+        "updated_at": "2026-11-21 05:10:11"
+      },
+      {
+        "acquisition_id": "ref2",
+        "satellite": "Sentinel-1",
+        "product_type": "SLC",
+        "sensor_mode": null,
+        "beam_mode": null,
+        "orbit_direction": null,
+        "relative_orbit": null,
+        "acquisition_date": "2026-08-17",
+        "acquisition_timestamp": null,
+        "download_status": "PENDING",
+        "processing_status": "UNPROCESSED",
+        "file_path": null,
+        "error_message": null,
+        "updated_at": "2026-11-21 10:28:40"
+      },
+      {
+        "acquisition_id": "sec1",
+        "satellite": "Sentinel-1",
+        "product_type": "SLC",
+        "sensor_mode": null,
+        "beam_mode": null,
+        "orbit_direction": null,
+        "relative_orbit": null,
+        "acquisition_date": "2026-08-17",
+        "acquisition_timestamp": null,
+        "download_status": "PENDING",
+        "processing_status": "UNPROCESSED",
+        "file_path": null,
+        "error_message": null,
+        "updated_at": "2026-11-21 10:28:40"
+      },
+      {
+        "acquisition_id": "2d89e082-4bb3-44b6-b2c5-ef990762c59d",
+        "satellite": "Sentinel-1",
+        "product_type": "IW_SLC__1S",
+        "sensor_mode": "IW",
+        "beam_mode": null,
+        "orbit_direction": "DESCENDING",
+        "relative_orbit": 92,
+        "acquisition_date": "2026-08-17",
+        "acquisition_timestamp": null,
+        "download_status": "PENDING",
+        "processing_status": "UNPROCESSED",
+        "file_path": null,
+        "error_message": null,
+        "updated_at": "2026-11-21 08:48:55"
+      },
+      {
+        "acquisition_id": "S1D_IW_SLC__1SDV_20260817",
+        "satellite": "Sentinel-1",
+        "product_type": "SLC",
+        "sensor_mode": "IW",
+        "beam_mode": null,
+        "orbit_direction": "DESCENDING",
+        "relative_orbit": null,
+        "acquisition_date": "2026-08-17",
+        "acquisition_timestamp": null,
+        "download_status": "DOWNLOADED",
+        "processing_status": "PROCESSED",
+        "file_path": null,
+        "error_message": null,
+        "updated_at": "2026-11-21 05:10:11"
+      },
+      {
+        "acquisition_id": "ref1",
+        "satellite": "Sentinel-1",
+        "product_type": "SLC",
+        "sensor_mode": null,
+        "beam_mode": null,
+        "orbit_direction": null,
+        "relative_orbit": null,
+        "acquisition_date": "2026-08-05",
+        "acquisition_timestamp": null,
+        "download_status": "PENDING",
+        "processing_status": "UNPROCESSED",
+        "file_path": null,
+        "error_message": null,
+        "updated_at": "2026-11-21 10:28:40"
+      },
+      {
+        "acquisition_id": "6398b905-7f2c-4551-af2e-ce2f987900e7",
+        "satellite": "Sentinel-1",
+        "product_type": "IW_SLC__1S",
+        "sensor_mode": "IW",
+        "beam_mode": null,
+        "orbit_direction": "DESCENDING",
+        "relative_orbit": 92,
+        "acquisition_date": "2026-08-05",
+        "acquisition_timestamp": null,
+        "download_status": "PENDING",
+        "processing_status": "UNPROCESSED",
+        "file_path": null,
+        "error_message": null,
+        "updated_at": "2026-11-21 08:48:55"
+      },
+      {
+        "acquisition_id": "S1D_IW_SLC__1SDV_20260805",
+        "satellite": "Sentinel-1",
+        "product_type": "SLC",
+        "sensor_mode": "IW",
+        "beam_mode": null,
+        "orbit_direction": "DESCENDING",
+        "relative_orbit": null,
+        "acquisition_date": "2026-08-05",
+        "acquisition_timestamp": null,
+        "download_status": "DOWNLOADED",
+        "processing_status": "PROCESSED",
+        "file_path": null,
+        "error_message": null,
+        "updated_at": "2026-11-21 05:10:11"
+      }
+    ],
+    "latest_acquisition_date": "2026-11-21"
+  },
+  "pairs": {
+    "history": [
+      {
+        "pair_id": "PAIR_20261109_20261121",
+        "reference_date": "2026-11-09",
+        "secondary_date": "2026-11-21",
+        "temporal_baseline_days": 12,
+        "relative_orbit": 92,
+        "orbit_direction": "DESCENDING",
+        "processing_status": "PROCESSED",
+        "quality_status": "VALID",
+        "valid_pixels": 7245,
+        "mean_coherence": 0.589436948299408,
+        "los_disp_tif": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\data\\processed\\dinsar\\tirumala\\gsi_aoi\\PAIR_20261109_20261121\\tirumala_live_los_disp_80m.tif",
+        "coherence_tif": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\data\\processed\\dinsar\\tirumala\\gsi_aoi\\PAIR_20261109_20261121\\tirumala_live_coherence_80m.tif",
+        "hyp3_job_id": "3889d809-88a3-4a93-89a5-258821932737",
+        "submitted_at": "2026-11-22T06:06:42+00:00",
+        "last_status_check_at": "2026-11-22T09:46:30.053299+00:00",
+        "output_validation_status": "VALID",
+        "scientific_status": "REAL_PAIR_WITH_PAIR_SPECIFIC_PHASE_REFERENCE"
+      },
+      {
+        "pair_id": "PAIR_20260817_20260829",
+        "reference_date": "2026-08-17",
+        "secondary_date": "2026-08-29",
+        "temporal_baseline_days": 12,
+        "relative_orbit": null,
+        "orbit_direction": null,
+        "processing_status": "PROCESSED",
+        "quality_status": "PENDING",
+        "valid_pixels": 2957,
+        "mean_coherence": 0.68,
+        "los_disp_tif": null,
+        "coherence_tif": null,
+        "hyp3_job_id": null,
+        "submitted_at": null,
+        "last_status_check_at": null,
+        "output_validation_status": "NOT_TESTED",
+        "scientific_status": "HISTORICAL_PAIR_NOT_RECALCULATED"
+      },
+      {
+        "pair_id": "PAIR_20260805_20260817",
+        "reference_date": "2026-08-05",
+        "secondary_date": "2026-08-17",
+        "temporal_baseline_days": 12,
+        "relative_orbit": null,
+        "orbit_direction": null,
+        "processing_status": "PROCESSED",
+        "quality_status": "PENDING",
+        "valid_pixels": 3085,
+        "mean_coherence": 0.62,
+        "los_disp_tif": null,
+        "coherence_tif": null,
+        "hyp3_job_id": null,
+        "submitted_at": null,
+        "last_status_check_at": null,
+        "output_validation_status": "NOT_TESTED",
+        "scientific_status": "HISTORICAL_PAIR_NOT_RECALCULATED"
+      }
+    ],
+    "latest_processed_acquisition_date": "2026-11-21",
+    "temporal_inversion_status": "NOT_RELIABLE_WITH_SINGLE_PAIR"
+  },
+  "data_freshness": {
+    "latest_sentinel1_acquisition": "2026-11-21",
+    "latest_rainfall_observation": "2026-08-29",
+    "latest_processed_insar": "2026-11-21",
+    "latest_discovery_event": {
+      "event_id": 4,
+      "discovery_started_at": "2026-11-22T16:13:43.818871+00:00",
+      "discovery_completed_at": "2026-11-22T16:13:43.818908+00:00",
+      "status": "WAITING_FOR_NEW_DATA",
+      "satellite": "Sentinel-1",
+      "search_start": "2026-10-29",
+      "search_end": "2026-11-22",
+      "products_found": 2,
+      "duplicate_products": 2,
+      "new_acquisitions": 0,
+      "latest_acquisition_date": "2026-11-21",
+      "error_message": null,
+      "payload_json": "{\"duplicate_products\": 2, \"new_acquisitions\": 0, \"products\": [], \"products_found\": 2, \"selected_products\": []}",
+      "created_at": "2026-11-22 16:13:43"
+    },
+    "latest_pipeline_run": {
+      "run_id": "RUN_20261122_165304_a84e0d",
+      "started": "2026-11-22T16:53:10.875008",
+      "completed": "2026-11-22T16:53:15.304573",
+      "stages": "satellite_check:SUCCESS; rainfall_ingest:WARNING; data_preprocessing:ERROR; insar_processing:SUCCESS; feature_extraction:SUCCESS; unet_inference:WARNING; risk_assessment:SUCCESS; refresh_viewer:SUCCESS; evaluate_alerts:SUCCESS"
+    }
+  },
+  "risk": {
+    "calibration_status": "NOT_CALIBRATED",
+    "formula": {
+      "slope_component": 0.4,
+      "terrain_component": 0.25,
+      "insar_component": 0.2,
+      "temporal_component": 0.15
+    },
+    "summary": {
+      "score": 0.0,
+      "category": "Low",
+      "count": 7590
+    },
+    "distribution": {
+      "Low": 4353,
+      "Medium": 3237
+    },
+    "rows": [
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 57.14,
+        "risk_category": "Medium",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      },
+      {
+        "risk_score": 0.0,
+        "risk_category": "Low",
+        "evidence_coverage_percent": 35.0,
+        "factor_availability": {
+          "slope_component": false,
+          "terrain_component": false,
+          "insar_component": false,
+          "temporal_component": false
+        },
+        "explanation": [
+          "slope_component: missing; excluded from score",
+          "terrain_component: missing; excluded from score",
+          "insar_component: missing; excluded from score",
+          "temporal_component: missing; excluded from score"
+        ],
+        "disclaimer": "This is a relative empirical evidence index, not a calibrated landslide probability or confirmed landslide warning."
+      }
+    ],
+    "limitations": [
+      "Missing factors are excluded, not replaced with zero.",
+      "Rainfall is study-area aggregate context, not per-cell evidence.",
+      "LOS is pair-specific relative line-of-sight displacement.",
+      "No cumulative displacement or velocity is calculated.",
+      "This is an empirical evidence index, not calibrated probability."
+    ]
+  },
+  "raster_validation": {
+    "valid": true,
+    "datasets": {
+      "dem": {
+        "crs": "EPSG:32644",
+        "shape": [
+          69,
+          110
+        ],
+        "resolution": [
+          80.0,
+          80.0
+        ],
+        "bounds": [
+          319720.0,
+          1508840.0,
+          328520.0,
+          1514360.0
+        ],
+        "nodata": 0.0,
+        "valid_cells": 4083,
+        "missing_cells": 3507,
+        "source_unchanged": true
+      },
+      "slope": {
+        "crs": "EPSG:32644",
+        "shape": [
+          69,
+          110
+        ],
+        "resolution": [
+          80.0,
+          80.0
+        ],
+        "bounds": [
+          319720.0,
+          1508840.0,
+          328520.0,
+          1514360.0
+        ],
+        "nodata": 0.0,
+        "valid_cells": 3692,
+        "missing_cells": 3898,
+        "source_unchanged": true
+      },
+      "aspect": {
+        "crs": "EPSG:32644",
+        "shape": [
+          69,
+          110
+        ],
+        "resolution": [
+          80.0,
+          80.0
+        ],
+        "bounds": [
+          319720.0,
+          1508840.0,
+          328520.0,
+          1514360.0
+        ],
+        "nodata": -9999.0,
+        "valid_cells": 4083,
+        "missing_cells": 3507,
+        "source_unchanged": true
+      },
+      "insar_los": {
+        "crs": "EPSG:32644",
+        "shape": [
+          69,
+          110
+        ],
+        "resolution": [
+          80.0,
+          80.0
+        ],
+        "bounds": [
+          319720.0,
+          1508840.0,
+          328520.0,
+          1514360.0
+        ],
+        "nodata": null,
+        "valid_cells": 7240,
+        "missing_cells": 350,
+        "source_unchanged": true
+      },
+      "insar_coherence": {
+        "crs": "EPSG:32644",
+        "shape": [
+          69,
+          110
+        ],
+        "resolution": [
+          80.0,
+          80.0
+        ],
+        "bounds": [
+          319720.0,
+          1508840.0,
+          328520.0,
+          1514360.0
+        ],
+        "nodata": null,
+        "valid_cells": 7245,
+        "missing_cells": 345,
+        "source_unchanged": true
+      }
+    },
+    "errors": []
+  },
+  "alerts": {
+    "observation_date": "2026-11-21",
+    "rainfall_status": "REQUIRES_RECONCILIATION",
+    "rainfall_3day_mm": null,
+    "actual_database_alert_records": [
+      {
+        "alert_id": "4771272e-2bdf-44cf-af35-0a417b50747d",
+        "alert_timestamp": "2026-11-21T18:20:44.235558",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{}",
+        "observation_date": "2026-08-29",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 18:20:44"
+      },
+      {
+        "alert_id": "bf53ec4f-86bf-424a-bbcc-4f8ca034525b",
+        "alert_timestamp": "2026-11-21T18:20:44.227896",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{\"high_risk_cells\": 414, \"max_score\": 99.91, \"mean_score\": 81.72159420289856}",
+        "observation_date": "2026-08-29",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 18:20:44"
+      },
+      {
+        "alert_id": "f84fb9e6-9eaf-4cac-a9a3-fa79cf9b05d3",
+        "alert_timestamp": "2026-11-21T18:19:19.390118",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{}",
+        "observation_date": "2026-08-29",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 18:19:19"
+      },
+      {
+        "alert_id": "fbcbb2f9-4b02-491d-8854-c33eab4c24e8",
+        "alert_timestamp": "2026-11-21T18:19:19.386901",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{\"high_risk_cells\": 414, \"max_score\": 99.91, \"mean_score\": 81.72159420289856}",
+        "observation_date": "2026-08-29",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 18:19:19"
+      },
+      {
+        "alert_id": "6ef82ceb-fc02-400d-b605-d71978471862",
+        "alert_timestamp": "2026-11-21T18:17:29.484522",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{}",
+        "observation_date": "2026-08-29",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 18:17:29"
+      },
+      {
+        "alert_id": "ed23a295-98db-4915-ba40-645d61e517ba",
+        "alert_timestamp": "2026-11-21T18:17:29.471689",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{\"high_risk_cells\": 414, \"max_score\": 99.91, \"mean_score\": 81.72159420289856}",
+        "observation_date": "2026-08-29",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 18:17:29"
+      },
+      {
+        "alert_id": "11d1bbf7-e60a-46f4-b8c6-d2e21d360824",
+        "alert_timestamp": "2026-11-21T18:07:40.775012",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{}",
+        "observation_date": "2026-08-29",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 18:07:40"
+      },
+      {
+        "alert_id": "d92ad199-0a61-4789-a3e2-845350c793fa",
+        "alert_timestamp": "2026-11-21T18:07:40.770885",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{\"high_risk_cells\": 414, \"max_score\": 99.91, \"mean_score\": 81.72159420289856}",
+        "observation_date": "2026-08-29",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 18:07:40"
+      },
+      {
+        "alert_id": "bf433826-b73c-4c49-9376-93d1b7681e55",
+        "alert_timestamp": "2026-11-21T18:05:27.935301",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{}",
+        "observation_date": "2026-08-29",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 18:05:27"
+      },
+      {
+        "alert_id": "613a90bc-6bb9-4b77-96d8-111747a83a9b",
+        "alert_timestamp": "2026-11-21T18:05:27.932451",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{\"high_risk_cells\": 414, \"max_score\": 99.91, \"mean_score\": 81.72159420289856}",
+        "observation_date": "2026-08-29",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 18:05:27"
+      },
+      {
+        "alert_id": "c8d5afa3-2e37-4300-a388-fe016b4a8a39",
+        "alert_timestamp": "2026-11-21T10:39:43.021570",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{}",
+        "observation_date": "2026-08-29",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas.",
+        "verification_status": "VERIFIED",
+        "verified_by": "Expert User",
+        "verified_at": "2026-11-21T11:01:59.696161",
+        "verification_notes": "Verified by operator",
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 10:39:43"
+      },
+      {
+        "alert_id": "b2ee60e4-be32-4e59-b9b9-8c9a61b18b8d",
+        "alert_timestamp": "2026-11-21T10:39:43.011792",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{\"high_risk_cells\": 414, \"max_score\": 99.91, \"mean_score\": 81.72159420289856}",
+        "observation_date": "2026-08-29",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 10:39:43"
+      },
+      {
+        "alert_id": "571473dc-3248-42db-991c-4064aa783007",
+        "alert_timestamp": "2026-11-21T10:17:54.027846",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{}",
+        "observation_date": "2026-11-21",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 10:17:54"
+      },
+      {
+        "alert_id": "f8d6ebc3-b7bc-441f-91bd-7822a0c5a83a",
+        "alert_timestamp": "2026-11-21T10:17:54.003705",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{\"high_risk_cells\": 414, \"max_score\": 99.91, \"mean_score\": 81.72159420289856}",
+        "observation_date": "2026-11-21",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 10:17:54"
+      },
+      {
+        "alert_id": "4660f3c5-bb2d-447f-8528-6e4b326892d5",
+        "alert_timestamp": "2026-11-21T08:48:48.782988",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{}",
+        "observation_date": "2026-11-21",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 08:48:48"
+      },
+      {
+        "alert_id": "f8bccfe6-75e9-4bb1-8f22-ef195b7ec809",
+        "alert_timestamp": "2026-11-21T08:48:48.780162",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{\"high_risk_cells\": 414, \"max_score\": 99.91, \"mean_score\": 81.72159420289856}",
+        "observation_date": "2026-11-21",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 08:48:48"
+      },
+      {
+        "alert_id": "a618ec5d-9751-4f2c-9bf8-3e364e300f5a",
+        "alert_timestamp": "2026-11-21T08:48:46.876301",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{}",
+        "observation_date": "2026-11-21",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 08:48:46"
+      },
+      {
+        "alert_id": "c5318c62-7aea-4998-a51c-1258ef94db6c",
+        "alert_timestamp": "2026-11-21T08:48:46.870368",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{\"high_risk_cells\": 414, \"max_score\": 99.91, \"mean_score\": 81.72159420289856}",
+        "observation_date": "2026-11-21",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 08:48:46"
+      },
+      {
+        "alert_id": "c1801a0a-387c-40da-b1d2-64458edfd96c",
+        "alert_timestamp": "2026-11-21T08:42:27.174719",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{}",
+        "observation_date": "2026-11-21",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 08:42:27"
+      },
+      {
+        "alert_id": "641a6991-c91f-4473-83ad-b9350df6e17d",
+        "alert_timestamp": "2026-11-21T08:42:27.167831",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{\"high_risk_cells\": 414, \"max_score\": 99.91, \"mean_score\": 81.72159420289856}",
+        "observation_date": "2026-11-21",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 08:42:27"
+      },
+      {
+        "alert_id": "35660e59-06a4-4155-8571-d3c1a1d7279e",
+        "alert_timestamp": "2026-11-21T08:08:33.715119",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{}",
+        "observation_date": "2026-11-21",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 08:08:33"
+      },
+      {
+        "alert_id": "3ffeae23-e219-4705-9f40-d73e296fe685",
+        "alert_timestamp": "2026-11-21T08:08:33.700068",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{\"high_risk_cells\": 414, \"max_score\": 99.91, \"mean_score\": 81.72159420289856}",
+        "observation_date": "2026-11-21",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 08:08:33"
+      },
+      {
+        "alert_id": "0beb3cc6-c317-42ee-917e-960d8bee8ece",
+        "alert_timestamp": "2026-11-21T07:58:44.047786",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{}",
+        "observation_date": "2026-11-21",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 07:58:44"
+      },
+      {
+        "alert_id": "9b4eea0e-89f5-4745-a73b-5df394d5ab46",
+        "alert_timestamp": "2026-11-21T07:58:44.042812",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{\"high_risk_cells\": 414, \"max_score\": 99.91, \"mean_score\": 81.72159420289856}",
+        "observation_date": "2026-11-21",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 07:58:44"
+      },
+      {
+        "alert_id": "c9eb0c4e-d69a-4ec3-b39a-c16b29dc3429",
+        "alert_timestamp": "2026-11-21T07:55:37.136044",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{}",
+        "observation_date": "2026-08-29",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 07:55:37"
+      },
+      {
+        "alert_id": "5918b50a-b4ff-407f-8fc8-7036966f347f",
+        "alert_timestamp": "2026-11-21T07:55:37.131514",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{\"high_risk_cells\": 414, \"max_score\": 99.91, \"mean_score\": 81.72159420289856}",
+        "observation_date": "2026-08-29",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 07:55:37"
+      },
+      {
+        "alert_id": "014cc9c7-66f4-4dba-b42a-e6d7e338a862",
+        "alert_timestamp": "2026-11-21T07:55:37.129408",
+        "trigger_rule": "RULE_1_RAINFALL_SLOPE",
+        "severity": "CRITICAL",
+        "affected_cells": "[]",
+        "affected_cells_count": 518,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{\"rainfall_3day_mm\": 120.0, \"high_slope_cells\": 518, \"threshold_rainfall_mm\": 100.0, \"threshold_slope_deg\": 25.0}",
+        "observation_date": "2026-08-29",
+        "data_quality": "GOOD",
+        "summary_text": "Elevated rainfall (120 mm in 3 days) combined with 518 steep-slope cells (\u226525.0\u00b0).",
+        "recommended_action": "Review rainfall trend. If sustained, consider field inspection of steep slope areas along Ghat roads.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 07:55:37"
+      },
+      {
+        "alert_id": "3ccad706-aee7-43b2-88de-a9088f52966e",
+        "alert_timestamp": "2026-11-21T05:42:03.101453",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{}",
+        "observation_date": "2026-11-21",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 05:42:03"
+      },
+      {
+        "alert_id": "ee72208a-150f-4655-9ede-095ed2cd8c95",
+        "alert_timestamp": "2026-11-21T05:42:03.096939",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{\"high_risk_cells\": 414, \"max_score\": 99.91, \"mean_score\": 81.72159420289856}",
+        "observation_date": "2026-11-21",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 05:42:03"
+      },
+      {
+        "alert_id": "c17f4174-4425-4948-9b38-e9edfb4f15b8",
+        "alert_timestamp": "2026-11-21T05:17:41.834075",
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{}",
+        "observation_date": "2026-11-21",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 05:17:41"
+      },
+      {
+        "alert_id": "db6e75c6-078f-4335-a186-0f8adaa789e6",
+        "alert_timestamp": "2026-11-21T05:17:41.833090",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{\"high_risk_cells\": 414, \"max_score\": 99.91, \"mean_score\": 81.72159420289856}",
+        "observation_date": "2026-11-21",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 05:17:41"
+      },
+      {
+        "alert_id": "4b3d326d-9d8e-43e5-89e0-5f0c87deba27",
+        "alert_timestamp": "2026-11-21T05:13:18.150749",
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "affected_cells": "[]",
+        "affected_cells_count": 414,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 99.91,
+        "triggering_indicators": "{\"high_risk_cells\": 414, \"max_score\": 99.91, \"mean_score\": 81.72159420289856}",
+        "observation_date": "2026-08-29",
+        "data_quality": "GOOD",
+        "summary_text": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 05:13:18"
+      },
+      {
+        "alert_id": "c3a4b98b-4e74-4796-a991-55cae9449006",
+        "alert_timestamp": "2026-11-21T05:11:25.196504",
+        "trigger_rule": "RULE_1_RAINFALL_SLOPE",
+        "severity": "WARNING",
+        "affected_cells": "[]",
+        "affected_cells_count": 518,
+        "center_latitude": 13.668,
+        "center_longitude": 79.374,
+        "max_risk_score": 0.0,
+        "triggering_indicators": "{\"rainfall_3day_mm\": 120.0, \"high_slope_cells\": 518, \"threshold_rainfall_mm\": 100.0, \"threshold_slope_deg\": 25.0}",
+        "observation_date": "2026-08-29",
+        "data_quality": "GOOD",
+        "summary_text": "Elevated rainfall (120 mm in 3 days) combined with 518 steep-slope cells (\u226525.0\u00b0).",
+        "recommended_action": "Review rainfall trend. If sustained, consider field inspection of steep slope areas along Ghat roads.",
+        "verification_status": "PENDING",
+        "verified_by": null,
+        "verified_at": null,
+        "verification_notes": null,
+        "notification_sent": 0,
+        "notification_channel": null,
+        "created_at": "2026-11-21 05:11:25"
+      }
+    ],
+    "evaluated_alerts": [
+      {
+        "trigger_rule": "RULE_3_HIGH_RISK_CLUSTER",
+        "severity": "CRITICAL",
+        "warning_level": "High concern",
+        "affected_cells_count": 414,
+        "observation_date": "2026-11-21",
+        "data_quality": "GOOD",
+        "summary": "414 cells exhibit high compound risk scores (\u226567).",
+        "recommended_action": "Review multi-criteria evidence for affected cells. Prioritize areas near infrastructure for field verification.",
+        "disclaimer": "This is a decision-support notification generated by an automated monitoring system. It does NOT constitute a confirmed landslide warning. All alerts require verification by relevant authorities and field inspection before any action is taken.",
+        "indicators": {
+          "high_risk_cells": 414,
+          "max_score": 99.91,
+          "mean_score": 81.72159420289854
+        }
+      },
+      {
+        "trigger_rule": "RULE_4_CATEGORY_ESCALATION",
+        "severity": "INFO",
+        "warning_level": "Watch",
+        "affected_cells_count": 414,
+        "observation_date": "2026-11-21",
+        "data_quality": "GOOD",
+        "summary": "414 cells classified as High risk in current assessment.",
+        "recommended_action": "Compare with previous observation to identify newly escalated areas.",
+        "disclaimer": "This is a decision-support notification generated by an automated monitoring system. It does NOT constitute a confirmed landslide warning. All alerts require verification by relevant authorities and field inspection before any action is taken.",
+        "indicators": {}
+      }
+    ],
+    "delivery_status": "NOT_TESTED_EXTERNAL_DELIVERY"
+  },
+  "environmental_datasets": [
+    {
+      "dataset_key": "gsi_inventory",
+      "dataset_name": "GSI Tirumala historical inventory",
+      "source": "GSI Figure 3.2",
+      "dataset_type": "historical_inventory",
+      "observation_date": null,
+      "processing_date": "2026-11-22T14:21:44.607760+00:00",
+      "crs": "EPSG:4326",
+      "resolution_m": null,
+      "coverage_type": "15 map-derived points",
+      "file_path": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\data\\features\\tirumala_gsi_validation_table.csv",
+      "quality_status": "READY_WITH_PROVENANCE_LIMITATION",
+      "missing_data_percent": null,
+      "metadata_json": "{\"coordinate_quality\": \"map-derived approximate\", \"record_count\": 15}",
+      "created_at": "2026-11-22 14:21:44",
+      "updated_at": "2026-11-22T14:21:44.611677+00:00"
+    },
+    {
+      "dataset_key": "insar_los",
+      "dataset_name": "Tirumala live LOS displacement",
+      "source": "ASF HyP3 GAMMA",
+      "dataset_type": "insar",
+      "observation_date": "2026-11-21",
+      "processing_date": "2026-11-22",
+      "crs": "EPSG:32644",
+      "resolution_m": 80.0,
+      "coverage_type": "69x110 AOI grid",
+      "file_path": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\data\\processed\\dinsar\\tirumala\\gsi_aoi\\PAIR_20261109_20261121\\tirumala_live_los_disp_80m.tif",
+      "quality_status": "VALID_WITH_REFERENCE_LIMITATION",
+      "missing_data_percent": 4.611,
+      "metadata_json": "{\"interpretation\": \"relative LOS\", \"pair_id\": \"PAIR_20261109_20261121\", \"unit\": \"metres\"}",
+      "created_at": "2026-11-22 14:21:44",
+      "updated_at": "2026-11-22T14:21:44.612365+00:00"
+    },
+    {
+      "dataset_key": "insar_coherence",
+      "dataset_name": "Tirumala live InSAR coherence",
+      "source": "ASF HyP3 GAMMA",
+      "dataset_type": "insar_quality",
+      "observation_date": "2026-11-21",
+      "processing_date": "2026-11-22",
+      "crs": "EPSG:32644",
+      "resolution_m": 80.0,
+      "coverage_type": "69x110 AOI grid",
+      "file_path": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\data\\processed\\dinsar\\tirumala\\gsi_aoi\\PAIR_20261109_20261121\\tirumala_live_coherence_80m.tif",
+      "quality_status": "VALID",
+      "missing_data_percent": 4.545,
+      "metadata_json": "{\"range\": \"0-1\"}",
+      "created_at": "2026-11-22 14:21:44",
+      "updated_at": "2026-11-22T14:21:44.613080+00:00"
+    },
+    {
+      "dataset_key": "unet_benchmark",
+      "dataset_name": "Landslide4Sense U-Net benchmark metadata",
+      "source": "Landslide4Sense H5 benchmark",
+      "dataset_type": "model_benchmark",
+      "observation_date": null,
+      "processing_date": "2026-11-22T14:21:44.607760+00:00",
+      "crs": null,
+      "resolution_m": null,
+      "coverage_type": "3799 H5 image/mask patches",
+      "file_path": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\models\\landslide_unet_14channel_best.pth",
+      "quality_status": "SOFTWARE_READY_LOCAL_VALIDATION_BLOCKED",
+      "missing_data_percent": null,
+      "metadata_json": "{\"channel_layout\": \"HWC source, CHW inference\", \"image_count\": 3799, \"image_shape\": [128, 128, 14], \"mask_count\": 3799, \"mask_shape\": [128, 128], \"prediction_not_georeferenced\": true}",
+      "created_at": "2026-11-22 14:21:44",
+      "updated_at": "2026-11-22T14:21:44.613671+00:00"
+    },
+    {
+      "dataset_key": "rainfall",
+      "dataset_name": "Tirumala GPM rainfall",
+      "source": "NASA GPM IMERG V07C-derived records",
+      "dataset_type": "rainfall",
+      "observation_date": "2026-08-01/2026-08-29",
+      "processing_date": "2026-11-22T14:21:44.607760+00:00",
+      "crs": "WGS84/study-area aggregate",
+      "resolution_m": null,
+      "coverage_type": "study-area aggregate",
+      "file_path": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\data\\processed\\rainfall\\tirumala\\tirumala_daily_rainfall_20260801_20260829.csv",
+      "quality_status": "REQUIRES_ROLLUP_RECONCILIATION",
+      "missing_data_percent": null,
+      "metadata_json": "{\"record_count\": 29, \"spatial_type\": \"aggregate\", \"unit\": \"mm\"}",
+      "created_at": "2026-11-22 14:21:44",
+      "updated_at": "2026-11-22T14:21:44.610500+00:00"
+    },
+    {
+      "dataset_key": "aspect",
+      "dataset_name": "Tirumala Aspect",
+      "source": "Local DEM-derived raster",
+      "dataset_type": "terrain",
+      "observation_date": null,
+      "processing_date": "2026-11-22T14:21:44.607760+00:00",
+      "crs": "EPSG:32644",
+      "resolution_m": 80.0,
+      "coverage_type": "69x110 AOI grid",
+      "file_path": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\data\\processed\\dinsar\\tirumala\\gsi_aoi\\tirumala_aspect_80m_gsi_aoi.tif",
+      "quality_status": "READY",
+      "missing_data_percent": null,
+      "metadata_json": "{\"nodata\": -9999.0}",
+      "created_at": "2026-11-22 14:21:44",
+      "updated_at": "2026-11-22T14:21:44.609768+00:00"
+    },
+    {
+      "dataset_key": "dem",
+      "dataset_name": "Tirumala DEM",
+      "source": "Local Copernicus-derived raster",
+      "dataset_type": "terrain",
+      "observation_date": null,
+      "processing_date": "2026-11-22T14:21:44.607760+00:00",
+      "crs": "EPSG:32644",
+      "resolution_m": 80.0,
+      "coverage_type": "69x110 AOI grid",
+      "file_path": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\data\\processed\\dinsar\\tirumala\\gsi_aoi\\tirumala_dem_80m_gsi_aoi.tif",
+      "quality_status": "READY",
+      "missing_data_percent": null,
+      "metadata_json": "{\"nodata\": 0.0}",
+      "created_at": "2026-11-22 14:21:44",
+      "updated_at": "2026-11-22T14:21:44.607995+00:00"
+    },
+    {
+      "dataset_key": "slope",
+      "dataset_name": "Tirumala Slope",
+      "source": "Local DEM-derived raster",
+      "dataset_type": "terrain",
+      "observation_date": null,
+      "processing_date": "2026-11-22T14:21:44.607760+00:00",
+      "crs": "EPSG:32644",
+      "resolution_m": 80.0,
+      "coverage_type": "69x110 AOI grid",
+      "file_path": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\data\\processed\\dinsar\\tirumala\\gsi_aoi\\tirumala_slope_80m_gsi_aoi.tif",
+      "quality_status": "READY",
+      "missing_data_percent": null,
+      "metadata_json": "{\"nodata\": 0.0}",
+      "created_at": "2026-11-22 14:21:44",
+      "updated_at": "2026-11-22T14:21:44.608802+00:00"
+    }
+  ],
+  "feature_definitions": [
+    {
+      "feature_key": "aspect_sin_cos",
+      "feature_name": "Aspect circular components",
+      "data_source": "Local aligned aspect raster",
+      "spatial_temporal_grain": "spatial pixel/cell",
+      "unit": "dimensionless sine/cosine",
+      "availability_state": "AVAILABLE_WITH_LIMITATION",
+      "normalization_method": "Circular sine/cosine; undefined -1 becomes missing",
+      "missing_data_rule": "-1 and NoData remain missing.",
+      "limitations": "Aspect circularity and slope interaction require local evaluation.",
+      "spec_json": "{\"availability_state\": \"AVAILABLE_WITH_LIMITATION\", \"data_source\": \"Local aligned aspect raster\", \"feature_key\": \"aspect_sin_cos\", \"feature_name\": \"Aspect circular components\", \"limitations\": \"Aspect circularity and slope interaction require local evaluation.\", \"missing_data_rule\": \"-1 and NoData remain missing.\", \"normalization_method\": \"Circular sine/cosine; undefined -1 becomes missing\", \"spatial_temporal_grain\": \"spatial pixel/cell\", \"unit\": \"dimensionless sine/cosine\"}",
+      "created_at": "2026-11-22 14:32:29",
+      "updated_at": "2026-11-22T14:32:29.520521+00:00"
+    },
+    {
+      "feature_key": "dem_elevation_m",
+      "feature_name": "Elevation",
+      "data_source": "Local aligned DEM",
+      "spatial_temporal_grain": "spatial pixel/cell",
+      "unit": "metres",
+      "availability_state": "AVAILABLE",
+      "normalization_method": "No new formula in this checkpoint; exploratory range reporting",
+      "missing_data_rule": "Missing remains unavailable; DEM NoData 0.0 is screened.",
+      "limitations": "Elevation is a terrain descriptor, not a direct landslide outcome.",
+      "spec_json": "{\"availability_state\": \"AVAILABLE\", \"data_source\": \"Local aligned DEM\", \"feature_key\": \"dem_elevation_m\", \"feature_name\": \"Elevation\", \"limitations\": \"Elevation is a terrain descriptor, not a direct landslide outcome.\", \"missing_data_rule\": \"Missing remains unavailable; DEM NoData 0.0 is screened.\", \"normalization_method\": \"No new formula in this checkpoint; exploratory range reporting\", \"spatial_temporal_grain\": \"spatial pixel/cell\", \"unit\": \"metres\"}",
+      "created_at": "2026-11-22 14:32:29",
+      "updated_at": "2026-11-22T14:32:29.519506+00:00"
+    },
+    {
+      "feature_key": "gsi_proximity_km",
+      "feature_name": "GSI mapped location proximity",
+      "data_source": "GSI Figure 3.2 map-derived coordinates",
+      "spatial_temporal_grain": "spatial exploratory context",
+      "unit": "km",
+      "availability_state": "AVAILABLE_WITH_LIMITATION",
+      "normalization_method": "Nearest approximate inventory point; exploratory inverse-distance only",
+      "missing_data_rule": "Outside grid or missing coordinate remains unavailable.",
+      "limitations": "Approximate map-derived locations are not surveyed ground truth.",
+      "spec_json": "{\"availability_state\": \"AVAILABLE_WITH_LIMITATION\", \"data_source\": \"GSI Figure 3.2 map-derived coordinates\", \"feature_key\": \"gsi_proximity_km\", \"feature_name\": \"GSI mapped location proximity\", \"limitations\": \"Approximate map-derived locations are not surveyed ground truth.\", \"missing_data_rule\": \"Outside grid or missing coordinate remains unavailable.\", \"normalization_method\": \"Nearest approximate inventory point; exploratory inverse-distance only\", \"spatial_temporal_grain\": \"spatial exploratory context\", \"unit\": \"km\"}",
+      "created_at": "2026-11-22 14:32:29",
+      "updated_at": "2026-11-22T14:32:29.527274+00:00"
+    },
+    {
+      "feature_key": "insar_coherence",
+      "feature_name": "InSAR coherence",
+      "data_source": "PAIR_20261109_20261121 HyP3 coherence raster",
+      "spatial_temporal_grain": "pair-specific spatial observation",
+      "unit": "0-1",
+      "availability_state": "AVAILABLE_WITH_LIMITATION",
+      "normalization_method": "Direct 0-1 value; threshold is quality eligibility only",
+      "missing_data_rule": "NaN/NoData remain missing.",
+      "limitations": "Low coherence is unavailable evidence, not zero displacement.",
+      "spec_json": "{\"availability_state\": \"AVAILABLE_WITH_LIMITATION\", \"data_source\": \"PAIR_20261109_20261121 HyP3 coherence raster\", \"feature_key\": \"insar_coherence\", \"feature_name\": \"InSAR coherence\", \"limitations\": \"Low coherence is unavailable evidence, not zero displacement.\", \"missing_data_rule\": \"NaN/NoData remain missing.\", \"normalization_method\": \"Direct 0-1 value; threshold is quality eligibility only\", \"spatial_temporal_grain\": \"pair-specific spatial observation\", \"unit\": \"0-1\"}",
+      "created_at": "2026-11-22 14:32:29",
+      "updated_at": "2026-11-22T14:32:29.521598+00:00"
+    },
+    {
+      "feature_key": "insar_los_m",
+      "feature_name": "Relative LOS displacement",
+      "data_source": "PAIR_20261109_20261121 HyP3 LOS raster",
+      "spatial_temporal_grain": "pair-specific spatial observation",
+      "unit": "metres relative LOS",
+      "availability_state": "AVAILABLE_WITH_LIMITATION",
+      "normalization_method": "Optional absolute-range normalization for exploratory display only",
+      "missing_data_rule": "NaN, NoData and low-quality cells remain missing.",
+      "limitations": "Pair-specific phase reference; no vertical or velocity interpretation.",
+      "spec_json": "{\"availability_state\": \"AVAILABLE_WITH_LIMITATION\", \"data_source\": \"PAIR_20261109_20261121 HyP3 LOS raster\", \"feature_key\": \"insar_los_m\", \"feature_name\": \"Relative LOS displacement\", \"limitations\": \"Pair-specific phase reference; no vertical or velocity interpretation.\", \"missing_data_rule\": \"NaN, NoData and low-quality cells remain missing.\", \"normalization_method\": \"Optional absolute-range normalization for exploratory display only\", \"spatial_temporal_grain\": \"pair-specific spatial observation\", \"unit\": \"metres relative LOS\"}",
+      "created_at": "2026-11-22 14:32:29",
+      "updated_at": "2026-11-22T14:32:29.521008+00:00"
+    },
+    {
+      "feature_key": "rainfall_14day_mm",
+      "feature_name": "14-day rainfall accumulation",
+      "data_source": "Existing GPM IMERG V07C-derived study-area records",
+      "spatial_temporal_grain": "study-area temporal",
+      "unit": "mm",
+      "availability_state": "REQUIRES_RECONCILIATION",
+      "normalization_method": "Complete D through D-13 sum only",
+      "missing_data_rule": "Incomplete or discrepant windows remain unavailable.",
+      "limitations": "Study-area aggregate.",
+      "spec_json": "{\"availability_state\": \"REQUIRES_RECONCILIATION\", \"data_source\": \"Existing GPM IMERG V07C-derived study-area records\", \"feature_key\": \"rainfall_14day_mm\", \"feature_name\": \"14-day rainfall accumulation\", \"limitations\": \"Study-area aggregate.\", \"missing_data_rule\": \"Incomplete or discrepant windows remain unavailable.\", \"normalization_method\": \"Complete D through D-13 sum only\", \"spatial_temporal_grain\": \"study-area temporal\", \"unit\": \"mm\"}",
+      "created_at": "2026-11-22 14:32:29",
+      "updated_at": "2026-11-22T14:32:29.526401+00:00"
+    },
+    {
+      "feature_key": "rainfall_3day_mm",
+      "feature_name": "3-day rainfall accumulation",
+      "data_source": "Existing GPM IMERG V07C-derived study-area CSV",
+      "spatial_temporal_grain": "study-area temporal",
+      "unit": "mm",
+      "availability_state": "REQUIRES_RECONCILIATION",
+      "normalization_method": "No per-cell normalization; complete D/D-1/D-2 sums only",
+      "missing_data_rule": "Incomplete or discrepant windows remain unavailable.",
+      "limitations": "Study-area aggregate, not local pixel rainfall.",
+      "spec_json": "{\"availability_state\": \"REQUIRES_RECONCILIATION\", \"data_source\": \"Existing GPM IMERG V07C-derived study-area CSV\", \"feature_key\": \"rainfall_3day_mm\", \"feature_name\": \"3-day rainfall accumulation\", \"limitations\": \"Study-area aggregate, not local pixel rainfall.\", \"missing_data_rule\": \"Incomplete or discrepant windows remain unavailable.\", \"normalization_method\": \"No per-cell normalization; complete D/D-1/D-2 sums only\", \"spatial_temporal_grain\": \"study-area temporal\", \"unit\": \"mm\"}",
+      "created_at": "2026-11-22 14:32:29",
+      "updated_at": "2026-11-22T14:32:29.522215+00:00"
+    },
+    {
+      "feature_key": "rainfall_7day_mm",
+      "feature_name": "7-day rainfall accumulation",
+      "data_source": "Existing GPM IMERG V07C-derived study-area records",
+      "spatial_temporal_grain": "study-area temporal",
+      "unit": "mm",
+      "availability_state": "REQUIRES_RECONCILIATION",
+      "normalization_method": "Complete D through D-6 sum only",
+      "missing_data_rule": "Incomplete or discrepant windows remain unavailable.",
+      "limitations": "Study-area aggregate.",
+      "spec_json": "{\"availability_state\": \"REQUIRES_RECONCILIATION\", \"data_source\": \"Existing GPM IMERG V07C-derived study-area records\", \"feature_key\": \"rainfall_7day_mm\", \"feature_name\": \"7-day rainfall accumulation\", \"limitations\": \"Study-area aggregate.\", \"missing_data_rule\": \"Incomplete or discrepant windows remain unavailable.\", \"normalization_method\": \"Complete D through D-6 sum only\", \"spatial_temporal_grain\": \"study-area temporal\", \"unit\": \"mm\"}",
+      "created_at": "2026-11-22 14:32:29",
+      "updated_at": "2026-11-22T14:32:29.523538+00:00"
+    },
+    {
+      "feature_key": "slope_deg",
+      "feature_name": "Slope angle",
+      "data_source": "Local aligned slope raster",
+      "spatial_temporal_grain": "spatial pixel/cell",
+      "unit": "degrees",
+      "availability_state": "AVAILABLE",
+      "normalization_method": "Optional study-area percentile",
+      "missing_data_rule": "NoData or nonfinite values remain missing.",
+      "limitations": "Any threshold is exploratory unless supported by local evidence.",
+      "spec_json": "{\"availability_state\": \"AVAILABLE\", \"data_source\": \"Local aligned slope raster\", \"feature_key\": \"slope_deg\", \"feature_name\": \"Slope angle\", \"limitations\": \"Any threshold is exploratory unless supported by local evidence.\", \"missing_data_rule\": \"NoData or nonfinite values remain missing.\", \"normalization_method\": \"Optional study-area percentile\", \"spatial_temporal_grain\": \"spatial pixel/cell\", \"unit\": \"degrees\"}",
+      "created_at": "2026-11-22 14:32:29",
+      "updated_at": "2026-11-22T14:32:29.520067+00:00"
+    },
+    {
+      "feature_key": "unet_benchmark",
+      "feature_name": "Landslide4Sense U-Net benchmark",
+      "data_source": "Landslide4Sense H5 benchmark dataset",
+      "spatial_temporal_grain": "benchmark patch only",
+      "unit": "non-georeferenced mask coverage",
+      "availability_state": "BLOCKED",
+      "normalization_method": "No Tirumala normalization or georeferencing",
+      "missing_data_rule": "No valid georeferenced Tirumala input exists.",
+      "limitations": "No local accuracy claim; checkpoint is benchmark-only.",
+      "spec_json": "{\"availability_state\": \"BLOCKED\", \"data_source\": \"Landslide4Sense H5 benchmark dataset\", \"feature_key\": \"unet_benchmark\", \"feature_name\": \"Landslide4Sense U-Net benchmark\", \"limitations\": \"No local accuracy claim; checkpoint is benchmark-only.\", \"missing_data_rule\": \"No valid georeferenced Tirumala input exists.\", \"normalization_method\": \"No Tirumala normalization or georeferencing\", \"spatial_temporal_grain\": \"benchmark patch only\", \"unit\": \"non-georeferenced mask coverage\"}",
+      "created_at": "2026-11-22 14:32:29",
+      "updated_at": "2026-11-22T14:32:29.527986+00:00"
+    }
+  ],
+  "rainfall_rollup_validation": [
+    {
+      "validation_id": 1,
+      "record_date": "2026-08-01",
+      "daily_rainfall_mm": 5.5,
+      "recalculated_3day_mm": null,
+      "stored_database_3day_mm": 16.5,
+      "recalculated_7day_mm": null,
+      "stored_database_7day_mm": 38.5,
+      "recalculated_14day_mm": null,
+      "stored_database_14day_mm": 77.0,
+      "status": "MATCHED",
+      "discrepancy_mm": null,
+      "source_json": "{\"discrepancies\": [], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 2,
+      "record_date": "2026-08-02",
+      "daily_rainfall_mm": 6.1000000000000005,
+      "recalculated_3day_mm": null,
+      "stored_database_3day_mm": 18.3,
+      "recalculated_7day_mm": null,
+      "stored_database_7day_mm": 42.7,
+      "recalculated_14day_mm": null,
+      "stored_database_14day_mm": 85.4,
+      "status": "MATCHED",
+      "discrepancy_mm": null,
+      "source_json": "{\"discrepancies\": [], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 3,
+      "record_date": "2026-08-03",
+      "daily_rainfall_mm": 3.2,
+      "recalculated_3day_mm": 14.8,
+      "stored_database_3day_mm": 9.6,
+      "recalculated_7day_mm": null,
+      "stored_database_7day_mm": 22.4,
+      "recalculated_14day_mm": null,
+      "stored_database_14day_mm": 44.8,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 5.200000000000001,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=14.80, stored=9.60\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 4,
+      "record_date": "2026-08-04",
+      "daily_rainfall_mm": 0.6000000000000001,
+      "recalculated_3day_mm": 9.9,
+      "stored_database_3day_mm": 1.8,
+      "recalculated_7day_mm": null,
+      "stored_database_7day_mm": 4.2,
+      "recalculated_14day_mm": null,
+      "stored_database_14day_mm": 8.4,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 8.1,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=9.90, stored=1.80\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 5,
+      "record_date": "2026-08-05",
+      "daily_rainfall_mm": 1.3,
+      "recalculated_3day_mm": 5.1,
+      "stored_database_3day_mm": 3.9,
+      "recalculated_7day_mm": null,
+      "stored_database_7day_mm": 9.1,
+      "recalculated_14day_mm": null,
+      "stored_database_14day_mm": 18.2,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 1.1999999999999997,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=5.10, stored=3.90\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 6,
+      "record_date": "2026-08-06",
+      "daily_rainfall_mm": 7.0,
+      "recalculated_3day_mm": 8.9,
+      "stored_database_3day_mm": 21.0,
+      "recalculated_7day_mm": null,
+      "stored_database_7day_mm": 49.0,
+      "recalculated_14day_mm": null,
+      "stored_database_14day_mm": 98.0,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 12.1,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=8.90, stored=21.00\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 7,
+      "record_date": "2026-08-07",
+      "daily_rainfall_mm": 0.8,
+      "recalculated_3day_mm": 9.1,
+      "stored_database_3day_mm": 2.4,
+      "recalculated_7day_mm": 24.5,
+      "stored_database_7day_mm": 5.6,
+      "recalculated_14day_mm": null,
+      "stored_database_14day_mm": 11.2,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 18.9,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=9.10, stored=2.40\", \"7-day: recalculated=24.50, stored=5.60\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 8,
+      "record_date": "2026-08-08",
+      "daily_rainfall_mm": 0.4,
+      "recalculated_3day_mm": 8.2,
+      "stored_database_3day_mm": 1.2,
+      "recalculated_7day_mm": 19.4,
+      "stored_database_7day_mm": 2.8,
+      "recalculated_14day_mm": null,
+      "stored_database_14day_mm": 5.6,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 16.599999999999998,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=8.20, stored=1.20\", \"7-day: recalculated=19.40, stored=2.80\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 9,
+      "record_date": "2026-08-09",
+      "daily_rainfall_mm": 0.0,
+      "recalculated_3day_mm": 1.2,
+      "stored_database_3day_mm": 0.0,
+      "recalculated_7day_mm": 13.3,
+      "stored_database_7day_mm": 0.0,
+      "recalculated_14day_mm": null,
+      "stored_database_14day_mm": 0.0,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 13.3,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=1.20, stored=0.00\", \"7-day: recalculated=13.30, stored=0.00\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 10,
+      "record_date": "2026-08-10",
+      "daily_rainfall_mm": 1.5,
+      "recalculated_3day_mm": 1.9,
+      "stored_database_3day_mm": 4.5,
+      "recalculated_7day_mm": 11.6,
+      "stored_database_7day_mm": 10.5,
+      "recalculated_14day_mm": null,
+      "stored_database_14day_mm": 21.0,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 2.6,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=1.90, stored=4.50\", \"7-day: recalculated=11.60, stored=10.50\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 11,
+      "record_date": "2026-08-11",
+      "daily_rainfall_mm": 1.5,
+      "recalculated_3day_mm": 3.0,
+      "stored_database_3day_mm": 4.5,
+      "recalculated_7day_mm": 12.5,
+      "stored_database_7day_mm": 10.5,
+      "recalculated_14day_mm": null,
+      "stored_database_14day_mm": 21.0,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 2.0,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=3.00, stored=4.50\", \"7-day: recalculated=12.50, stored=10.50\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 12,
+      "record_date": "2026-08-12",
+      "daily_rainfall_mm": 1.0,
+      "recalculated_3day_mm": 4.0,
+      "stored_database_3day_mm": 3.0,
+      "recalculated_7day_mm": 12.2,
+      "stored_database_7day_mm": 7.0,
+      "recalculated_14day_mm": null,
+      "stored_database_14day_mm": 14.0,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 5.199999999999999,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=4.00, stored=3.00\", \"7-day: recalculated=12.20, stored=7.00\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 13,
+      "record_date": "2026-08-13",
+      "daily_rainfall_mm": 0.4,
+      "recalculated_3day_mm": 2.9,
+      "stored_database_3day_mm": 1.2,
+      "recalculated_7day_mm": 5.6,
+      "stored_database_7day_mm": 2.8,
+      "recalculated_14day_mm": null,
+      "stored_database_14day_mm": 5.6,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 2.8,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=2.90, stored=1.20\", \"7-day: recalculated=5.60, stored=2.80\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 14,
+      "record_date": "2026-08-14",
+      "daily_rainfall_mm": 1.0,
+      "recalculated_3day_mm": 2.4,
+      "stored_database_3day_mm": 3.0,
+      "recalculated_7day_mm": 5.8,
+      "stored_database_7day_mm": 7.0,
+      "recalculated_14day_mm": 30.3,
+      "stored_database_14day_mm": 14.0,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 16.3,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=2.40, stored=3.00\", \"7-day: recalculated=5.80, stored=7.00\", \"14-day: recalculated=30.30, stored=14.00\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 15,
+      "record_date": "2026-08-15",
+      "daily_rainfall_mm": 1.2000000000000002,
+      "recalculated_3day_mm": 2.6,
+      "stored_database_3day_mm": 3.6,
+      "recalculated_7day_mm": 6.6,
+      "stored_database_7day_mm": 8.4,
+      "recalculated_14day_mm": 26.0,
+      "stored_database_14day_mm": 16.8,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 9.2,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=2.60, stored=3.60\", \"7-day: recalculated=6.60, stored=8.40\", \"14-day: recalculated=26.00, stored=16.80\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 16,
+      "record_date": "2026-08-16",
+      "daily_rainfall_mm": 0.1,
+      "recalculated_3day_mm": 2.3,
+      "stored_database_3day_mm": 0.3,
+      "recalculated_7day_mm": 6.7,
+      "stored_database_7day_mm": 0.7,
+      "recalculated_14day_mm": 20.0,
+      "stored_database_14day_mm": 1.4,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 18.6,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=2.30, stored=0.30\", \"7-day: recalculated=6.70, stored=0.70\", \"14-day: recalculated=20.00, stored=1.40\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 17,
+      "record_date": "2026-08-17",
+      "daily_rainfall_mm": 0.0,
+      "recalculated_3day_mm": 1.3,
+      "stored_database_3day_mm": 0.0,
+      "recalculated_7day_mm": 5.2,
+      "stored_database_7day_mm": 0.0,
+      "recalculated_14day_mm": 16.8,
+      "stored_database_14day_mm": 0.0,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 16.8,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=1.30, stored=0.00\", \"7-day: recalculated=5.20, stored=0.00\", \"14-day: recalculated=16.80, stored=0.00\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 18,
+      "record_date": "2026-08-18",
+      "daily_rainfall_mm": 0.7000000000000001,
+      "recalculated_3day_mm": 0.8,
+      "stored_database_3day_mm": 2.1,
+      "recalculated_7day_mm": 4.4,
+      "stored_database_7day_mm": 4.9,
+      "recalculated_14day_mm": 16.9,
+      "stored_database_14day_mm": 9.8,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 7.099999999999998,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=0.80, stored=2.10\", \"7-day: recalculated=4.40, stored=4.90\", \"14-day: recalculated=16.90, stored=9.80\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 19,
+      "record_date": "2026-08-19",
+      "daily_rainfall_mm": 1.2000000000000002,
+      "recalculated_3day_mm": 1.9,
+      "stored_database_3day_mm": 3.6,
+      "recalculated_7day_mm": 4.6,
+      "stored_database_7day_mm": 8.4,
+      "recalculated_14day_mm": 16.8,
+      "stored_database_14day_mm": 16.8,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 3.8000000000000007,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=1.90, stored=3.60\", \"7-day: recalculated=4.60, stored=8.40\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 20,
+      "record_date": "2026-08-20",
+      "daily_rainfall_mm": 0.2,
+      "recalculated_3day_mm": 2.1,
+      "stored_database_3day_mm": 0.6,
+      "recalculated_7day_mm": 4.4,
+      "stored_database_7day_mm": 1.4,
+      "recalculated_14day_mm": 10.0,
+      "stored_database_14day_mm": 2.8,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 7.2,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=2.10, stored=0.60\", \"7-day: recalculated=4.40, stored=1.40\", \"14-day: recalculated=10.00, stored=2.80\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 21,
+      "record_date": "2026-08-21",
+      "daily_rainfall_mm": 0.0,
+      "recalculated_3day_mm": 1.4,
+      "stored_database_3day_mm": 0.0,
+      "recalculated_7day_mm": 3.4,
+      "stored_database_7day_mm": 0.0,
+      "recalculated_14day_mm": 9.2,
+      "stored_database_14day_mm": 0.0,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 9.2,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=1.40, stored=0.00\", \"7-day: recalculated=3.40, stored=0.00\", \"14-day: recalculated=9.20, stored=0.00\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 22,
+      "record_date": "2026-08-22",
+      "daily_rainfall_mm": 0.0,
+      "recalculated_3day_mm": 0.2,
+      "stored_database_3day_mm": 0.0,
+      "recalculated_7day_mm": 2.2,
+      "stored_database_7day_mm": 0.0,
+      "recalculated_14day_mm": 8.8,
+      "stored_database_14day_mm": 0.0,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 8.8,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=0.20, stored=0.00\", \"7-day: recalculated=2.20, stored=0.00\", \"14-day: recalculated=8.80, stored=0.00\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 23,
+      "record_date": "2026-08-23",
+      "daily_rainfall_mm": 6.7,
+      "recalculated_3day_mm": 6.7,
+      "stored_database_3day_mm": 20.1,
+      "recalculated_7day_mm": 8.8,
+      "stored_database_7day_mm": 46.9,
+      "recalculated_14day_mm": 15.5,
+      "stored_database_14day_mm": 93.8,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 78.3,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=6.70, stored=20.10\", \"7-day: recalculated=8.80, stored=46.90\", \"14-day: recalculated=15.50, stored=93.80\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 24,
+      "record_date": "2026-08-24",
+      "daily_rainfall_mm": 2.0,
+      "recalculated_3day_mm": 8.7,
+      "stored_database_3day_mm": 6.0,
+      "recalculated_7day_mm": 10.8,
+      "stored_database_7day_mm": 14.0,
+      "recalculated_14day_mm": 16.0,
+      "stored_database_14day_mm": 28.0,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 12.0,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=8.70, stored=6.00\", \"7-day: recalculated=10.80, stored=14.00\", \"14-day: recalculated=16.00, stored=28.00\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 25,
+      "record_date": "2026-08-25",
+      "daily_rainfall_mm": 0.4,
+      "recalculated_3day_mm": 9.1,
+      "stored_database_3day_mm": 1.2,
+      "recalculated_7day_mm": 10.5,
+      "stored_database_7day_mm": 2.8,
+      "recalculated_14day_mm": 14.9,
+      "stored_database_14day_mm": 5.6,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 9.3,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=9.10, stored=1.20\", \"7-day: recalculated=10.50, stored=2.80\", \"14-day: recalculated=14.90, stored=5.60\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 26,
+      "record_date": "2026-08-26",
+      "daily_rainfall_mm": 0.0,
+      "recalculated_3day_mm": 2.4,
+      "stored_database_3day_mm": 0.0,
+      "recalculated_7day_mm": 9.3,
+      "stored_database_7day_mm": 0.0,
+      "recalculated_14day_mm": 13.9,
+      "stored_database_14day_mm": 0.0,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 13.9,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=2.40, stored=0.00\", \"7-day: recalculated=9.30, stored=0.00\", \"14-day: recalculated=13.90, stored=0.00\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 27,
+      "record_date": "2026-08-27",
+      "daily_rainfall_mm": 0.0,
+      "recalculated_3day_mm": 0.4,
+      "stored_database_3day_mm": 0.0,
+      "recalculated_7day_mm": 9.1,
+      "stored_database_7day_mm": 0.0,
+      "recalculated_14day_mm": 13.5,
+      "stored_database_14day_mm": 0.0,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 13.5,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=0.40, stored=0.00\", \"7-day: recalculated=9.10, stored=0.00\", \"14-day: recalculated=13.50, stored=0.00\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 28,
+      "record_date": "2026-08-28",
+      "daily_rainfall_mm": 0.2,
+      "recalculated_3day_mm": 0.2,
+      "stored_database_3day_mm": 0.6,
+      "recalculated_7day_mm": 9.3,
+      "stored_database_7day_mm": 1.4,
+      "recalculated_14day_mm": 12.7,
+      "stored_database_14day_mm": 2.8,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 9.899999999999999,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=0.20, stored=0.60\", \"7-day: recalculated=9.30, stored=1.40\", \"14-day: recalculated=12.70, stored=2.80\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    },
+    {
+      "validation_id": 29,
+      "record_date": "2026-08-29",
+      "daily_rainfall_mm": 0.0,
+      "recalculated_3day_mm": 0.2,
+      "stored_database_3day_mm": 0.0,
+      "recalculated_7day_mm": 9.3,
+      "stored_database_7day_mm": 0.0,
+      "recalculated_14day_mm": 11.5,
+      "stored_database_14day_mm": 0.0,
+      "status": "REQUIRES_RECONCILIATION",
+      "discrepancy_mm": 11.5,
+      "source_json": "{\"discrepancies\": [\"3-day: recalculated=0.20, stored=0.00\", \"7-day: recalculated=9.30, stored=0.00\", \"14-day: recalculated=11.50, stored=0.00\"], \"file\": \"data\\\\processed\\\\rainfall\\\\tirumala\\\\tirumala_daily_rainfall_20260801_20260829.csv\", \"source\": \"NASA GPM IMERG V07C-derived CSV\"}",
+      "created_at": "2026-11-22 14:21:44"
+    }
+  ],
+  "risk_history": [
+    {
+      "history_id": 1,
+      "observation_date": "2026-08-29",
+      "total_cells": 2650,
+      "low_count": 1360,
+      "medium_count": 876,
+      "high_count": 414,
+      "mean_risk_score": 38.27,
+      "max_risk_score": 99.91,
+      "low_to_medium": 0,
+      "low_to_high": 0,
+      "medium_to_high": 0,
+      "medium_to_low": 0,
+      "high_to_medium": 0,
+      "high_to_low": 0,
+      "persistent_high_cells": 0,
+      "notes": null,
+      "created_at": "2026-11-21 05:10:12"
+    },
+    {
+      "history_id": 9,
+      "observation_date": "2026-08-29",
+      "total_cells": 2650,
+      "low_count": 1360,
+      "medium_count": 876,
+      "high_count": 414,
+      "mean_risk_score": 38.27,
+      "max_risk_score": 99.91,
+      "low_to_medium": 0,
+      "low_to_high": 0,
+      "medium_to_high": 0,
+      "medium_to_low": 0,
+      "high_to_medium": 0,
+      "high_to_low": 0,
+      "persistent_high_cells": 0,
+      "notes": null,
+      "created_at": "2026-11-21 08:48:59"
+    },
+    {
+      "history_id": 10,
+      "observation_date": "2026-08-29",
+      "total_cells": 2650,
+      "low_count": 1360,
+      "medium_count": 876,
+      "high_count": 414,
+      "mean_risk_score": 38.27,
+      "max_risk_score": 99.91,
+      "low_to_medium": 0,
+      "low_to_high": 0,
+      "medium_to_high": 0,
+      "medium_to_low": 0,
+      "high_to_medium": 0,
+      "high_to_low": 0,
+      "persistent_high_cells": 0,
+      "notes": null,
+      "created_at": "2026-11-21 08:49:01"
+    },
+    {
+      "history_id": 2,
+      "observation_date": "2026-11-21",
+      "total_cells": 2650,
+      "low_count": 1360,
+      "medium_count": 876,
+      "high_count": 414,
+      "mean_risk_score": 38.27,
+      "max_risk_score": 99.91,
+      "low_to_medium": 0,
+      "low_to_high": 0,
+      "medium_to_high": 0,
+      "medium_to_low": 0,
+      "high_to_medium": 0,
+      "high_to_low": 0,
+      "persistent_high_cells": 0,
+      "notes": null,
+      "created_at": "2026-11-21 05:17:41"
+    },
+    {
+      "history_id": 3,
+      "observation_date": "2026-11-21",
+      "total_cells": 2650,
+      "low_count": 1360,
+      "medium_count": 876,
+      "high_count": 414,
+      "mean_risk_score": 38.27,
+      "max_risk_score": 99.91,
+      "low_to_medium": 0,
+      "low_to_high": 0,
+      "medium_to_high": 0,
+      "medium_to_low": 0,
+      "high_to_medium": 0,
+      "high_to_low": 0,
+      "persistent_high_cells": 0,
+      "notes": null,
+      "created_at": "2026-11-21 05:42:02"
+    },
+    {
+      "history_id": 4,
+      "observation_date": "2026-11-21",
+      "total_cells": 2650,
+      "low_count": 1360,
+      "medium_count": 876,
+      "high_count": 414,
+      "mean_risk_score": 38.27,
+      "max_risk_score": 99.91,
+      "low_to_medium": 0,
+      "low_to_high": 0,
+      "medium_to_high": 0,
+      "medium_to_low": 0,
+      "high_to_medium": 0,
+      "high_to_low": 0,
+      "persistent_high_cells": 0,
+      "notes": null,
+      "created_at": "2026-11-21 07:58:41"
+    },
+    {
+      "history_id": 5,
+      "observation_date": "2026-11-21",
+      "total_cells": 2650,
+      "low_count": 1360,
+      "medium_count": 876,
+      "high_count": 414,
+      "mean_risk_score": 38.27,
+      "max_risk_score": 99.91,
+      "low_to_medium": 0,
+      "low_to_high": 0,
+      "medium_to_high": 0,
+      "medium_to_low": 0,
+      "high_to_medium": 0,
+      "high_to_low": 0,
+      "persistent_high_cells": 0,
+      "notes": null,
+      "created_at": "2026-11-21 08:08:31"
+    },
+    {
+      "history_id": 6,
+      "observation_date": "2026-11-21",
+      "total_cells": 2650,
+      "low_count": 1360,
+      "medium_count": 876,
+      "high_count": 414,
+      "mean_risk_score": 38.27,
+      "max_risk_score": 99.91,
+      "low_to_medium": 0,
+      "low_to_high": 0,
+      "medium_to_high": 0,
+      "medium_to_low": 0,
+      "high_to_medium": 0,
+      "high_to_low": 0,
+      "persistent_high_cells": 0,
+      "notes": null,
+      "created_at": "2026-11-21 08:42:24"
+    },
+    {
+      "history_id": 7,
+      "observation_date": "2026-11-21",
+      "total_cells": 2650,
+      "low_count": 1360,
+      "medium_count": 876,
+      "high_count": 414,
+      "mean_risk_score": 38.27,
+      "max_risk_score": 99.91,
+      "low_to_medium": 0,
+      "low_to_high": 0,
+      "medium_to_high": 0,
+      "medium_to_low": 0,
+      "high_to_medium": 0,
+      "high_to_low": 0,
+      "persistent_high_cells": 0,
+      "notes": null,
+      "created_at": "2026-11-21 08:48:46"
+    },
+    {
+      "history_id": 8,
+      "observation_date": "2026-11-21",
+      "total_cells": 2650,
+      "low_count": 1360,
+      "medium_count": 876,
+      "high_count": 414,
+      "mean_risk_score": 38.27,
+      "max_risk_score": 99.91,
+      "low_to_medium": 0,
+      "low_to_high": 0,
+      "medium_to_high": 0,
+      "medium_to_low": 0,
+      "high_to_medium": 0,
+      "high_to_low": 0,
+      "persistent_high_cells": 0,
+      "notes": null,
+      "created_at": "2026-11-21 08:48:48"
+    },
+    {
+      "history_id": 11,
+      "observation_date": "2026-11-21",
+      "total_cells": 2650,
+      "low_count": 1360,
+      "medium_count": 876,
+      "high_count": 414,
+      "mean_risk_score": 38.27,
+      "max_risk_score": 99.91,
+      "low_to_medium": 0,
+      "low_to_high": 0,
+      "medium_to_high": 0,
+      "medium_to_low": 0,
+      "high_to_medium": 0,
+      "high_to_low": 0,
+      "persistent_high_cells": 0,
+      "notes": null,
+      "created_at": "2026-11-21 10:17:52"
+    }
+  ],
+  "database_counts": {
+    "acquisitions": 20,
+    "insar_pairs": 3,
+    "rainfall_records": 29,
+    "spatial_evidence_grid": 7590,
+    "observation_snapshots": 45554,
+    "risk_history": 11,
+    "alerts": 33,
+    "pipeline_logs": 135,
+    "scheduler_state": 0,
+    "cesium_layers": 5,
+    "vegetation_indices": 0,
+    "monitoring_discovery_events": 4,
+    "monitoring_events": 29,
+    "temporal_insar_observations": 7590,
+    "hyp3_job_status_history": 1,
+    "sentinel_download_jobs": 0,
+    "sentinel_download_attempts": 0,
+    "sentinel_archive_validation": 0,
+    "sentinel_preprocessing_readiness": 0,
+    "sentinel_product_inventory": 0,
+    "insar_processing_runs": 8,
+    "insar_raster_validation": 16,
+    "insar_temporal_network": 1,
+    "insar_inversion_runs": 1
+  },
+  "blocked": [
+    "No genuine new Sentinel-1 data.",
+    "No paid HyP3 submission.",
+    "No real cumulative displacement or velocity.",
+    "GES DISC rainfall 401 remains unresolved.",
+    "U-Net is benchmark-only.",
+    "External notification delivery not verified."
+  ]
+}

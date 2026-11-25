@@ -1,0 +1,60 @@
+{
+  "generated_at": "2026-11-22T15:50:05.731513+00:00",
+  "phase": "4",
+  "overall_status": "WAITING_FOR_NEW_DATA",
+  "sentinel1": {
+    "status": "WAITING_FOR_NEW_DATA",
+    "products_found": 2,
+    "duplicate_products": 2,
+    "new_acquisitions": 0,
+    "candidate_pairs": 0,
+    "latest_acquisition": "2026-11-21",
+    "download_status": "METADATA_ONLY"
+  },
+  "rainfall": {
+    "status": "BLOCKED",
+    "existing_records": 29,
+    "existing_date_range": "2026-08-01/2026-08-29",
+    "cmr_metadata_status": "AVAILABLE",
+    "ges_disc_access_status": "HTTP_401",
+    "download_status": "NO_NEW_DOWNLOAD",
+    "rollups_status": "REQUIRES_RECONCILIATION"
+  },
+  "sentinel2": {
+    "status": "NOT_TESTED",
+    "local_data": "NO_LOCAL_VALIDATED_TIRUMALA_SET"
+  },
+  "land_cover": {
+    "status": "NOT_TESTED",
+    "available_official_source": "ESA WorldCover 10 m 2021",
+    "local_data": "NONE"
+  },
+  "hyP3": {
+    "status": "SUCCEEDED_EXISTING_JOB",
+    "job_id": "3889d809-88a3-4a93-89a5-258821932737",
+    "new_jobs_submitted": 0,
+    "credits_consumed_in_phase": 0
+  },
+  "database": {
+    "acquisition_count": 20,
+    "pair_count": 3,
+    "live_snapshot_count": 7590,
+    "temporal_observation_count": 7590
+  },
+  "latest_discovery_event": {
+    "event_id": 2,
+    "discovery_started_at": "2026-11-22T15:49:49.611433+00:00",
+    "discovery_completed_at": "2026-11-22T15:49:49.611446+00:00",
+    "status": "WAITING_FOR_NEW_DATA",
+    "satellite": "Sentinel-1",
+    "search_start": "2026-10-29",
+    "search_end": "2026-11-22",
+    "products_found": 2,
+    "duplicate_products": 2,
+    "new_acquisitions": 0,
+    "latest_acquisition_date": "2026-11-21",
+    "error_message": null,
+    "payload_json": "{\"duplicate_product_ids\": [\"b69aeace-3306-4e9b-94f3-a6d643296386\", \"220f79ba-248d-4e02-81ad-1f9f10d202ed\"], \"new_acquisition_ids\": [], \"products_found\": 2}",
+    "created_at": "2026-11-22 15:49:49"
+  }
+}

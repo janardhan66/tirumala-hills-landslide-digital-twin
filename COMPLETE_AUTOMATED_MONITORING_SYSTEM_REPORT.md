@@ -5,9 +5,12 @@
 > In particular, its `Success=True` run included warning/blocked stages and
 > reported zero satellite downloads. Do not treat those claims as proof of
 > end-to-end operation. See
-> [VERIFIED_IMPLEMENTATION_REPORT.md](./VERIFIED_IMPLEMENTATION_REPORT.md) and
+> [VERIFIED_IMPLEMENTATION_REPORT.md](./VERIFIED_IMPLEMENTATION_REPORT.md),
+> [LIVE_INSAR_TO_CESIUM_REPORT.md](./LIVE_INSAR_TO_CESIUM_REPORT.md), and
 > [REMAINING_WORK_AND_CONFIGURATION_REPORT.md](./REMAINING_WORK_AND_CONFIGURATION_REPORT.md)
-> for the evidence-based status.
+> for the evidence-based status. The 09-21 November 2026 HyP3 observation
+> is the first independently verified live InSAR-to-Cesium workflow; it does
+> not establish repeated continuous monitoring or calibrated prediction.
 
 **Project Title:** Landslide Monitoring and Risk Assessment Using Remote Sensing-Enabled Digital Twin and Intelligent Agent  
 **Study Area:** Tirumala Hills, Tirupati District, Andhra Pradesh, India (13.639°N–13.693°N, 79.337°E–79.423°E)  

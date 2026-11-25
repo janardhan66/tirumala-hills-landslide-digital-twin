@@ -11,6 +11,33 @@ html, body, #cesiumContainer {
 }
 
 /* Header Telemetry Bar */
+.hud-science-banner {
+    position: absolute;
+    z-index: 101;
+    left: 16px;
+    bottom: 24px;
+    max-width: 520px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 9px 12px;
+    border: 1px solid rgba(245, 158, 11, 0.48);
+    border-radius: 10px;
+    background: rgba(41, 37, 21, 0.94);
+    color: #fbbf24;
+    font-size: 11px;
+    line-height: 1.35;
+    box-shadow: 0 8px 24px rgba(2, 8, 23, 0.34);
+}
+
+.hud-science-banner strong {
+    color: #fef3c7;
+}
+
+.hud-science-banner span {
+    color: #fcd34d;
+}
+
 .hud-header {
     position: absolute;
     top: 14px;
@@ -1119,6 +1146,13 @@ body.panel-collapsed .hud-alert-banner {
 }
 
 @media (max-width: 760px) {
+    .hud-science-banner {
+        left: 8px;
+        bottom: 8px;
+        max-width: calc(100vw - 16px);
+        font-size: 9.5px;
+    }
+
     .hud-header {
         top: 8px;
         left: 8px;

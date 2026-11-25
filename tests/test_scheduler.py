@@ -7,8 +7,15 @@ def test_scheduler_uses_one_serial_pipeline_job():
 
     assert scheduler is not None
     jobs = scheduler.get_jobs()
-    assert [job.id for job in jobs] == ["pipeline_trigger"]
-    assert jobs[0].trigger.interval.total_seconds() == (
+    assert sorted(job.id for job in jobs) == [
+        "hyp3_status_check",
+        "phase5_status_export",
+        "pipeline_trigger",
+        "sentinel1_discovery",
+        "stage5_status_export",
+    ]
+    pipeline_job = scheduler.get_job("pipeline_trigger")
+    assert pipeline_job.trigger.interval.total_seconds() == (
         SCHEDULER.monitoring_interval_hours * 60 * 60
     )
-    assert jobs[0].max_instances == 1
+    assert pipeline_job.max_instances == 1

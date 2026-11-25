@@ -10,7 +10,7 @@ import json
 import sys
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -51,7 +51,7 @@ class WarningLevel:
 class AlertPayload:
     """Structured alert for human review."""
     alert_id: str = field(default_factory=lambda: str(uuid.uuid4()))
-    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     trigger_rule: str = ""
     severity: str = "INFO"  # INFO, WARNING, CRITICAL
     warning_level: str = WarningLevel.WATCH  # Normal, Watch, Elevated concern, High concern
@@ -314,7 +314,7 @@ def export_alerts_geojson(alerts: List[AlertPayload], output_path: Optional[str]
 
     fc = {
         "type": "FeatureCollection",
-        "generated_at": datetime.utcnow().isoformat(),
+        "generated_at": datetime.now(timezone.utc).isoformat(),
         "total_alerts": len(features),
         "features": features,
     }

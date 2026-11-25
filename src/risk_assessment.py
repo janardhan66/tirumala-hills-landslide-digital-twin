@@ -20,6 +20,41 @@ WEIGHTS = {
 }
 
 
+def explain_risk_row(row: Mapping[str, object]) -> dict:
+    """Explain the existing empirical risk score without implying calibration."""
+    explanations = []
+    availability = {}
+    for component in ("slope_component", "terrain_component", "insar_component", "temporal_component"):
+        value = row.get(component) if isinstance(row, Mapping) else None
+        available = value is not None and pd.notna(value)
+        availability[component] = bool(available)
+        if not available:
+            explanations.append(f"{component}: missing; excluded from score")
+            continue
+        explanations.append(
+            f"{component}: available, component value {float(value):.2f}/100"
+        )
+
+    score = row.get("risk_score")
+    category = row.get("risk_category")
+    coverage = row.get("risk_evidence_coverage")
+    return {
+        "risk_score": None if score is None or pd.isna(score) else round(float(score), 2),
+        "risk_category": str(category) if category is not None else "Unavailable",
+        "evidence_coverage_percent": (
+            None
+            if coverage is None or pd.isna(coverage)
+            else round(float(coverage), 1)
+        ),
+        "factor_availability": availability,
+        "explanation": explanations,
+        "disclaimer": (
+            "This is a relative empirical evidence index, not a calibrated "
+            "landslide probability or confirmed landslide warning."
+        ),
+    }
+
+
 def _numeric_column(frame: pd.DataFrame, candidates: list[str]) -> pd.Series | None:
     for name in candidates:
         if name in frame.columns:

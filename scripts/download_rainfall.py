@@ -66,21 +66,62 @@ class IMERGDownloader:
         )
         return f"{base}/{year}/{month}/{filename}"
 
+    def _find_cmr_granule(self, date: datetime, product: str) -> Optional[Tuple[str, str]]:
+        """Resolve an official IMERG granule through NASA CMR metadata."""
+        short_name = "GPM_3IMERGDL" if product == "late" else "GPM_3IMERGDF"
+        date_str = date.strftime("%Y-%m-%d")
+        temporal = f"{date_str}T00:00:00Z,{date_str}T23:59:59Z"
+        response = requests.get(
+            "https://cmr.earthdata.nasa.gov/search/granules.json",
+            params={
+                "short_name": short_name,
+                "version": "07",
+                "temporal": temporal,
+                "page_size": 20,
+            },
+            timeout=60,
+        )
+        response.raise_for_status()
+        entries = response.json().get("feed", {}).get("entry", [])
+        for entry in entries:
+            title = str(entry.get("title", ""))
+            if ".nc4" not in title.lower():
+                continue
+            for link in entry.get("links", []):
+                href = str(link.get("href", ""))
+                if (
+                    href.startswith("https://")
+                    and "gesdisc.earthdata.nasa.gov/data/" in href
+                    and href.lower().endswith(".nc4")
+                ):
+                    return href, title
+        return None
+
     def _download_daily_tif(self, date: datetime) -> Optional[Tuple[Path, str]]:
         """Download a daily IMERG GeoTIFF, preferring Final over Late."""
         date_str = date.strftime("%Y-%m-%d")
         session = self._get_session()
         for product in ("final", "late"):
             quality = product.upper()
+            granule = self._find_cmr_granule(date, product)
+            if granule is None:
+                logger.info("No CMR granule is available for %s %s.", quality, date_str)
+                continue
+            url, title = granule
+            extension = ".nc4"
             out_path = self.raw_dir / (
-                f"imerg_daily_{product}_{date.strftime('%Y%m%d')}.tif"
+                f"imerg_daily_{product}_{date.strftime('%Y%m%d')}{extension}"
             )
             if out_path.is_file():
                 logger.debug("Already cached: %s", out_path.name)
                 return out_path, quality
 
-            url = self._build_url(date, product=product)
-            logger.info("Downloading IMERG %s for %s: %s", quality, date_str, url[:80])
+            logger.info(
+                "Downloading official CMR IMERG %s granule for %s: %s",
+                quality,
+                date_str,
+                title,
+            )
             response = session.get(url, timeout=120, allow_redirects=True, stream=True)
             partial_path = out_path.with_name(out_path.name + ".part")
             try:
@@ -122,22 +163,100 @@ class IMERGDownloader:
 
     def _extract_tirumala_rainfall(self, tif_path: Path) -> Optional[float]:
         """Extract mean rainfall over Tirumala from a global IMERG GeoTIFF."""
-        import rasterio
-        from rasterio.warp import transform_bounds
-        from rasterio.windows import from_bounds
+        if tif_path.suffix.lower() in {".nc4", ".nc"}:
+            import h5py
 
-        with rasterio.open(tif_path) as src:
-            if src.crs is None:
-                raise ValueError(f"IMERG raster has no CRS: {tif_path}")
-            bounds = STUDY_AREA.bbox
-            if src.crs.to_epsg() != STUDY_AREA.epsg_geographic:
-                bounds = transform_bounds(
-                    f"EPSG:{STUDY_AREA.epsg_geographic}", src.crs, *bounds
+            with h5py.File(tif_path, "r") as granule:
+                candidates = []
+
+                def collect(name, obj):
+                    if isinstance(obj, h5py.Dataset) and name.lower().endswith(
+                        ("precipitation", "precipitationcal")
+                    ):
+                        candidates.append(name)
+
+                granule.visititems(collect)
+                if not candidates:
+                    raise ValueError(
+                        f"IMERG NetCDF granule has no precipitation dataset: {tif_path}"
+                    )
+                precipitation = np.asarray(granule[candidates[0]][:], dtype=np.float64)
+                latitude = None
+                longitude = None
+                for possible in (
+                    "/Grid/lat",
+                    "/Grid/latitude",
+                    "lat",
+                    "latitude",
+                ):
+                    if possible in granule:
+                        latitude = np.asarray(granule[possible][:], dtype=np.float64)
+                        break
+                for possible in (
+                    "/Grid/lon",
+                    "/Grid/longitude",
+                    "lon",
+                    "longitude",
+                ):
+                    if possible in granule:
+                        longitude = np.asarray(granule[possible][:], dtype=np.float64)
+                        break
+                for name in ("lat", "latitude", "lon", "longitude"):
+                    if name in granule:
+                        if name.startswith("lat"):
+                            latitude = np.asarray(granule[name][:], dtype=np.float64)
+                        else:
+                            longitude = np.asarray(granule[name][:], dtype=np.float64)
+                    for possible in (
+                        f"/Grid/{name}",
+                        f"/Grid/{name}itude" if name.startswith("lat") else f"/Grid/{name}",
+                    ):
+                        if possible in granule:
+                            if name.startswith("lat"):
+                                latitude = np.asarray(granule[possible][:], dtype=np.float64)
+                            else:
+                                longitude = np.asarray(granule[possible][:], dtype=np.float64)
+                if latitude is None or longitude is None:
+                    raise ValueError(
+                        f"IMERG NetCDF granule has no latitude/longitude arrays: {tif_path}"
+                    )
+
+                while precipitation.ndim > 2:
+                    precipitation = np.take(precipitation, 0, axis=0)
+                lat_mask = (
+                    (latitude >= STUDY_AREA.bbox_south)
+                    & (latitude <= STUDY_AREA.bbox_north)
                 )
-            window = from_bounds(*bounds, transform=src.transform)
-            data = src.read(1, window=window, masked=True)
+                lon_mask = (
+                    (longitude >= STUDY_AREA.bbox_west)
+                    & (longitude <= STUDY_AREA.bbox_east)
+                )
+                if precipitation.shape == (latitude.size, longitude.size):
+                    data = precipitation[np.ix_(lat_mask, lon_mask)]
+                elif precipitation.shape == (longitude.size, latitude.size):
+                    data = precipitation[np.ix_(lon_mask, lat_mask)]
+                else:
+                    raise ValueError(
+                        f"IMERG NetCDF precipitation shape {precipitation.shape} "
+                        f"does not match lat/lon sizes."
+                    )
+                values = np.asarray(data, dtype=np.float64).ravel()
+        else:
+            import rasterio
+            from rasterio.warp import transform_bounds
+            from rasterio.windows import from_bounds
 
-        values = np.asarray(data.compressed(), dtype=np.float64)
+            with rasterio.open(tif_path) as src:
+                if src.crs is None:
+                    raise ValueError(f"IMERG raster has no CRS: {tif_path}")
+                bounds = STUDY_AREA.bbox
+                if src.crs.to_epsg() != STUDY_AREA.epsg_geographic:
+                    bounds = transform_bounds(
+                        f"EPSG:{STUDY_AREA.epsg_geographic}", src.crs, *bounds
+                    )
+                window = from_bounds(*bounds, transform=src.transform)
+                data = src.read(1, window=window, masked=True)
+            values = np.asarray(data.compressed(), dtype=np.float64)
         valid = values[
             np.isfinite(values)
             & (values >= 0)

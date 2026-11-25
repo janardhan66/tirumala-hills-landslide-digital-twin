@@ -1,0 +1,40 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Segoe UI, Arial","primaryTextColor":"#172033","lineColor":"#64748b","fontSize":"16px"}}}%%
+flowchart LR
+    subgraph Sources["Data Sources"]
+        S1["Sentinel-1 SAR<br/>HyP3 InSAR"]
+        DEM["DEM and Terrain<br/>Elevation / Slope / Aspect"]
+        GPM["GPM IMERG<br/>Rainfall Context"]
+        GSI["GSI Historical<br/>Landslide Locations"]
+    end
+
+    subgraph Processing["Preprocessing and Alignment"]
+        PRE["Preprocessing and<br/>Quality Filtering"]
+        GRID["EPSG:32644<br/>69 x 110 Grid / 80 m"]
+    end
+
+    subgraph Engine["Live Evidence and Storage"]
+        RISK["Empirical Evidence<br/>Assessment Engine"]
+        DB[("SQLite Monitoring<br/>Database")]
+        AL["Scheduler and<br/>Alert Records"]
+    end
+
+    subgraph Interfaces["Presentation and Assistance"]
+        ST["Streamlit<br/>Monitoring Dashboard"]
+        CES["CesiumJS<br/>3D Digital Twin"]
+        GEM["Gemini<br/>Project Assistant"]
+    end
+
+    S1 --> PRE
+    DEM --> PRE
+    GPM --> PRE
+    GSI --> PRE
+    PRE --> GRID
+    GRID --> RISK
+    RISK --> DB
+    DB --> ST
+    DB --> CES
+    DB --> GEM
+    DB --> AL
+
+    RISK -.->|"Relative empirical evidence index / not calibrated probability"| ST
+    AL -.->|"Periodic / event-driven"| ST

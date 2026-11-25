@@ -97,8 +97,15 @@ async function initCesiumTwin() {
 
         // Poll the atomic sync marker; refresh layers only after a new export.
         await checkLiveSync(true);
+        await checkStage4Status();
+        await checkStage5Status();
+        await checkPhase3Status();
+        await checkFinalStatus();
         setInterval(async () => {
             await checkLiveSync(false);
+            await checkStage5Status();
+            await checkPhase3Status();
+            await checkFinalStatus();
         }, 10000);
 
         console.log("Tirumala 3D evidence viewer initialized.");
@@ -109,6 +116,76 @@ async function initCesiumTwin() {
 }
 
 let lastSeenSyncUtc = null;
+
+async function checkPhase3Status() {
+    try {
+        const resp = await fetch(cacheBustedUrl("./data/phase3_gis_status.json"));
+        if (!resp.ok) return;
+        const status = await resp.json();
+        const statusEl = document.getElementById("statusText");
+        if (statusEl) {
+            statusEl.innerText =
+                `Phase 3 GIS: ${status.status || "NOT_TESTED"} · ` +
+                `GSI: ${status.gsi_inventory?.record_count || 0} approximate points`;
+        }
+    } catch (err) {
+        console.warn("Phase 3 GIS status notice:", err);
+    }
+}
+
+async function checkStage5Status() {
+    try {
+        const resp = await fetch(cacheBustedUrl("./data/stage5_monitoring_status.json"));
+        if (!resp.ok) return;
+        const status = await resp.json();
+        const statusEl = document.getElementById("statusText");
+        if (statusEl) {
+            statusEl.innerText =
+                `Stage 5: ${status.overall_status || "NOT_TESTED"} · ` +
+                `Discovery: ${status.discovery?.status || "NOT_TESTED"} · ` +
+                `SBAS: ${status.sbas?.real_ready ? "READY" : "INSUFFICIENT_DATA"}`;
+        }
+    } catch (err) {
+        console.warn("Stage 5 status notice:", err);
+    }
+}
+
+async function checkFinalStatus() {
+    try {
+        const resp = await fetch(cacheBustedUrl("./data/master_final_status.json"));
+        if (!resp.ok) return;
+        const status = await resp.json();
+        const statusEl = document.getElementById("statusText");
+        if (statusEl) {
+            statusEl.innerText =
+                `Final: ${status.overall_status || "DEMONSTRATION_READY_WITH_LIMITATIONS"} · ` +
+                `Risk: ${status.project?.risk_model || "EMPIRICAL_EVIDENCE_INDEX"} · ` +
+                `InSAR: ${status.project?.temporal_inversion || "NOT_RELIABLE_WITH_SINGLE_PAIR"}`;
+        }
+    } catch (err) {
+        console.warn("Final integration status notice:", err);
+    }
+}
+
+async function checkStage4Status() {
+    try {
+        const resp = await fetch(cacheBustedUrl("./data/stage4_status.json"));
+        if (!resp.ok) {
+            return;
+        }
+        const status = await resp.json();
+        const statusEl = document.getElementById("statusText");
+        if (statusEl) {
+            const state = status.overall_status || "NOT_TESTED";
+            const processed = status.latest_processed_acquisition || "None";
+            statusEl.innerText =
+                `Stage 4: ${state} · Processed: ${processed} · ` +
+                `Valid edges: ${status.network?.valid_edge_count ?? 0}`;
+        }
+    } catch (err) {
+        console.warn("Stage 4 status notice:", err);
+    }
+}
 
 // Dynamic In-Memory Refresh without Full Page Reload
 async function checkLiveSync(force = false) {
@@ -245,6 +322,34 @@ async function loadDynamicGISLayers() {
             updateLegendFromLayer(layer);
         }
     }
+
+    // Wire up quick layer preset buttons
+    const presetButtons = document.querySelectorAll(".btn-layer-preset");
+    presetButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const targetId = btn.dataset.layer;
+            presetButtons.forEach(b => b.classList.toggle("active", b === btn));
+            
+            // Set target layer visible, others hidden
+            for (const layer of layerManifest.layers) {
+                const isTarget = layer.id === targetId;
+                const chk = document.getElementById(`chk_${layer.id}`);
+                if (chk) chk.checked = isTarget;
+                
+                if (layer.id === "los" && activeInsarPair) {
+                    for (const [pairId, pairModel] of Object.entries(temporalLosModels)) {
+                        pairModel.show = isTarget && pairId === activeInsarPair.pair_id;
+                    }
+                } else if (terrainPrimitives[layer.id]) {
+                    terrainPrimitives[layer.id].show = isTarget;
+                }
+                
+                if (isTarget && layer.legend) {
+                    updateLegendFromLayer(layer);
+                }
+            }
+        });
+    });
 }
 
 async function loadTemporalInSARModels() {
@@ -334,6 +439,25 @@ function setupTemporalControls() {
             console.warn(`Unknown InSAR pair "${requestedPairId}"; selecting the latest available pair.`);
         }
     }
+
+    // Populate epoch quick-select pills
+    const pillsContainer = document.getElementById("pairPillsContainer");
+    if (pillsContainer) {
+        pillsContainer.innerHTML = "";
+        temporalPairs.forEach((pair, idx) => {
+            const pill = document.createElement("button");
+            pill.type = "button";
+            pill.className = `btn-pair-pill ${idx === selectedIndex ? "active" : ""}`;
+            pill.id = `pill_pair_${idx}`;
+            pill.innerText = pair.label;
+            pill.title = `${pair.reference_date} → ${pair.secondary_date}`;
+            pill.addEventListener("click", () => {
+                selectTemporalPair(idx, true);
+            });
+            pillsContainer.appendChild(pill);
+        });
+    }
+
     slider.value = String(selectedIndex);
     panel.hidden = false;
     selectTemporalPair(selectedIndex, false);
@@ -346,8 +470,16 @@ function selectTemporalPair(index, updateUrl) {
     }
     activeInsarPair = pair;
 
+    // Highlight active pill
+    document.querySelectorAll(".btn-pair-pill").forEach((pill, idx) => {
+        pill.classList.toggle("active", idx === index);
+    });
+
     const losCheckbox = document.getElementById("chk_los");
-    const layerVisible = losCheckbox ? losCheckbox.checked : false;
+    if (losCheckbox && !losCheckbox.checked) {
+        losCheckbox.checked = true;
+    }
+    const layerVisible = losCheckbox ? losCheckbox.checked : true;
     for (const [pairId, model] of Object.entries(temporalLosModels)) {
         model.show = layerVisible && pairId === pair.pair_id;
     }
@@ -552,6 +684,13 @@ function setupClickInspector() {
 
 // Update On-Click HUD Card
 function updateInspectorHUD(lat, lon, elev, cellData) {
+    const inspectorData = document.getElementById("inspectorData");
+    if (inspectorData && inspectorData.hidden) {
+        inspectorData.hidden = false;
+        const toggleBtn = document.getElementById("btnToggleInspector");
+        if (toggleBtn) toggleBtn.setAttribute("aria-expanded", "true");
+    }
+
     document.getElementById("cardCoord").innerText = `${lat.toFixed(4)}°N, ${lon.toFixed(4)}°E`;
     document.getElementById("cardElevation").innerText = `${elev.toFixed(1)} m`;
 
@@ -560,6 +699,8 @@ function updateInspectorHUD(lat, lon, elev, cellData) {
         const elevPct = Math.min(100, Math.max(0, ((elev - 180.0) / 720.0) * 100));
         meterElevation.style.width = `${elevPct.toFixed(0)}%`;
     }
+
+    const evidenceEl = document.getElementById("cardEvidence");
 
     if (cellData) {
         document.getElementById("cardSlope").innerText = `${cellData.slope.toFixed(1)}°`;
@@ -577,20 +718,31 @@ function updateInspectorHUD(lat, lon, elev, cellData) {
             if (losMeters === null || losMeters === undefined) losMeters = cellData.los;
             if (coherence === null || coherence === undefined) coherence = cellData.corr;
         }
-        document.getElementById("cardLos").innerText =
-            losMeters !== null && losMeters !== undefined
-                ? `${(Number(losMeters) * 1000).toFixed(1)} mm`
-                : "N/A";
-        document.getElementById("cardCorr").innerText =
-            coherence !== null && coherence !== undefined
-                ? Number(coherence).toFixed(2)
-                : "N/A";
+        const losDispMm = losMeters !== null && losMeters !== undefined
+            ? `${(Number(losMeters) * 1000).toFixed(1)} mm`
+            : "N/A";
+        const cohStr = coherence !== null && coherence !== undefined
+            ? Number(coherence).toFixed(2)
+            : "N/A";
+
+        document.getElementById("cardLos").innerText = losDispMm;
+        document.getElementById("cardCorr").innerText = cohStr;
         document.getElementById("cardRain").innerText = cellData.rain_3d !== null ? `${cellData.rain_3d} mm` : "N/A";
 
         const riskPill = document.getElementById("cardRisk");
         const category = cellData.category || "Low";
         riskPill.innerText = category;
         riskPill.className = `risk-pill risk-${category.includes("Multiple") || category.includes("High") ? "High" : category.includes("Moderate") ? "Medium" : "Low"}`;
+
+        if (evidenceEl) {
+            const slopeVal = Number(cellData.slope) || 0;
+            const slopeHazard = slopeVal >= 25 ? "Steep Escarpment (>25°)" : slopeVal >= 15 ? "Moderate Slope" : "Gentle Plateau";
+            const rainVal = cellData.rain_3d !== null && cellData.rain_3d !== undefined ? `${cellData.rain_3d} mm` : "0 mm";
+            evidenceEl.innerHTML = `• <b>Morphology:</b> ${slopeHazard} (${slopeVal.toFixed(1)}°)<br>` +
+                `• <b>InSAR LOS Look:</b> ${losDispMm} (Quality Coherence γ=${cohStr})<br>` +
+                `• <b>NASA GPM Precipitation:</b> 3-day cum. ${rainVal}<br>` +
+                `• <b>Multi-Factor Vulnerability:</b> ${category}`;
+        }
     } else {
         document.getElementById("cardSlope").innerText = "N/A";
         document.getElementById("cardLos").innerText = "N/A";
@@ -601,6 +753,10 @@ function updateInspectorHUD(lat, lon, elev, cellData) {
         const riskPill = document.getElementById("cardRisk");
         riskPill.innerText = "Study Area";
         riskPill.className = "risk-pill risk-Low";
+
+        if (evidenceEl) {
+            evidenceEl.innerText = "Point outside dense grid cell boundaries. Click within the Tirumala catchment.";
+        }
     }
 }
 
@@ -745,6 +901,46 @@ function setupControls() {
             } else {
                 document.exitFullscreen().catch(err => console.warn(err));
             }
+        });
+    }
+
+    // Panel toggle and close
+    const btnTogglePanel = document.getElementById("btnTogglePanel");
+    if (btnTogglePanel) {
+        btnTogglePanel.addEventListener("click", () => {
+            document.body.classList.toggle("panel-collapsed");
+            const isCollapsed = document.body.classList.contains("panel-collapsed");
+            btnTogglePanel.setAttribute("aria-expanded", String(!isCollapsed));
+        });
+    }
+
+    const btnClosePanel = document.getElementById("btnClosePanel");
+    if (btnClosePanel) {
+        btnClosePanel.addEventListener("click", () => {
+            document.body.classList.add("panel-collapsed");
+            if (btnTogglePanel) btnTogglePanel.setAttribute("aria-expanded", "false");
+        });
+    }
+
+    // Inspector collapse/expand toggle
+    const btnToggleInspector = document.getElementById("btnToggleInspector");
+    if (btnToggleInspector) {
+        btnToggleInspector.addEventListener("click", () => {
+            const inspectorData = document.getElementById("inspectorData");
+            if (inspectorData) {
+                inspectorData.hidden = !inspectorData.hidden;
+                btnToggleInspector.setAttribute("aria-expanded", String(!inspectorData.hidden));
+                btnToggleInspector.innerText = inspectorData.hidden ? "⌄" : "⌃";
+            }
+        });
+    }
+
+    // Close alert summary banner
+    const btnCloseAlert = document.getElementById("btnCloseAlert");
+    if (btnCloseAlert) {
+        btnCloseAlert.addEventListener("click", () => {
+            const banner = document.getElementById("hudAlertBanner");
+            if (banner) banner.style.display = "none";
         });
     }
 

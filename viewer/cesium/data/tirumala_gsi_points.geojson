@@ -1,5 +1,6 @@
 {
   "type": "FeatureCollection",
+  "name": "tirumala_gsi_phase3_evidence",
   "features": [
     {
       "type": "Feature",
@@ -14,7 +15,9 @@
         "id": "GSI_FIG32_01",
         "source": "GSI Figure 3.2",
         "quality": "map-derived approximate",
-        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+        "coordinate_type": "map-derived approximate",
+        "terrain_available": false,
+        "insar_quality_pass": false
       }
     },
     {
@@ -30,7 +33,9 @@
         "id": "GSI_FIG32_02",
         "source": "GSI Figure 3.2",
         "quality": "map-derived approximate",
-        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+        "coordinate_type": "map-derived approximate",
+        "terrain_available": true,
+        "insar_quality_pass": true
       }
     },
     {
@@ -46,7 +51,9 @@
         "id": "GSI_FIG32_03",
         "source": "GSI Figure 3.2",
         "quality": "map-derived approximate",
-        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+        "coordinate_type": "map-derived approximate",
+        "terrain_available": false,
+        "insar_quality_pass": false
       }
     },
     {
@@ -62,7 +69,9 @@
         "id": "GSI_FIG32_04",
         "source": "GSI Figure 3.2",
         "quality": "map-derived approximate",
-        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+        "coordinate_type": "map-derived approximate",
+        "terrain_available": true,
+        "insar_quality_pass": true
       }
     },
     {
@@ -78,7 +87,9 @@
         "id": "GSI_FIG32_05",
         "source": "GSI Figure 3.2",
         "quality": "map-derived approximate",
-        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+        "coordinate_type": "map-derived approximate",
+        "terrain_available": false,
+        "insar_quality_pass": false
       }
     },
     {
@@ -94,7 +105,9 @@
         "id": "GSI_FIG32_06",
         "source": "GSI Figure 3.2",
         "quality": "map-derived approximate",
-        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+        "coordinate_type": "map-derived approximate",
+        "terrain_available": true,
+        "insar_quality_pass": true
       }
     },
     {
@@ -110,7 +123,9 @@
         "id": "GSI_FIG32_07",
         "source": "GSI Figure 3.2",
         "quality": "map-derived approximate",
-        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+        "coordinate_type": "map-derived approximate",
+        "terrain_available": true,
+        "insar_quality_pass": true
       }
     },
     {
@@ -126,7 +141,9 @@
         "id": "GSI_FIG32_08",
         "source": "GSI Figure 3.2",
         "quality": "map-derived approximate",
-        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+        "coordinate_type": "map-derived approximate",
+        "terrain_available": false,
+        "insar_quality_pass": false
       }
     },
     {
@@ -142,7 +159,9 @@
         "id": "GSI_FIG32_09",
         "source": "GSI Figure 3.2",
         "quality": "map-derived approximate",
-        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+        "coordinate_type": "map-derived approximate",
+        "terrain_available": true,
+        "insar_quality_pass": true
       }
     },
     {
@@ -158,7 +177,9 @@
         "id": "GSI_FIG32_10",
         "source": "GSI Figure 3.2",
         "quality": "map-derived approximate",
-        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+        "coordinate_type": "map-derived approximate",
+        "terrain_available": true,
+        "insar_quality_pass": false
       }
     },
     {
@@ -174,7 +195,9 @@
         "id": "GSI_FIG32_11",
         "source": "GSI Figure 3.2",
         "quality": "map-derived approximate",
-        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+        "coordinate_type": "map-derived approximate",
+        "terrain_available": true,
+        "insar_quality_pass": false
       }
     },
     {
@@ -190,7 +213,9 @@
         "id": "GSI_FIG32_12",
         "source": "GSI Figure 3.2",
         "quality": "map-derived approximate",
-        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+        "coordinate_type": "map-derived approximate",
+        "terrain_available": true,
+        "insar_quality_pass": false
       }
     },
     {
@@ -206,7 +231,9 @@
         "id": "GSI_FIG32_13",
         "source": "GSI Figure 3.2",
         "quality": "map-derived approximate",
-        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+        "coordinate_type": "map-derived approximate",
+        "terrain_available": true,
+        "insar_quality_pass": true
       }
     },
     {
@@ -222,7 +249,9 @@
         "id": "GSI_FIG32_14",
         "source": "GSI Figure 3.2",
         "quality": "map-derived approximate",
-        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+        "coordinate_type": "map-derived approximate",
+        "terrain_available": true,
+        "insar_quality_pass": true
       }
     },
     {
@@ -238,7 +267,9 @@
         "id": "GSI_FIG32_15",
         "source": "GSI Figure 3.2",
         "quality": "map-derived approximate",
-        "note": "Clearly separable red incidence symbol in right-hand enlarged panel"
+        "coordinate_type": "map-derived approximate",
+        "terrain_available": true,
+        "insar_quality_pass": false
       }
     }
   ]

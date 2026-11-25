@@ -25,6 +25,9 @@ CREATE TABLE IF NOT EXISTS acquisitions (
     start_time       TEXT,                      -- ISO 8601 timestamp
     end_time         TEXT,
     polarisation     TEXT,                      -- 'VV+VH', 'VV', etc.
+    acquisition_timestamp TEXT,
+    beam_mode        TEXT,
+    spatial_coverage TEXT,
     cloud_cover      REAL,                      -- Sentinel-2 only (percentage)
     footprint_wkt    TEXT,                      -- WKT geometry
     file_path        TEXT,                      -- Local download path
@@ -63,6 +66,13 @@ CREATE TABLE IF NOT EXISTS insar_pairs (
     valid_pixels         INTEGER,
     mean_coherence       REAL,
     quality_notes        TEXT,
+    orbit_direction      TEXT,
+    relative_orbit       INTEGER,
+    orbit_compatibility  TEXT,
+    spatial_overlap_percent REAL,
+    quality_status       TEXT DEFAULT 'PENDING',
+    selection_method     TEXT,
+    output_archive       TEXT,
     error_message        TEXT,
     created_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -71,6 +81,42 @@ CREATE TABLE IF NOT EXISTS insar_pairs (
 );
 
 CREATE INDEX IF NOT EXISTS idx_pair_dates ON insar_pairs(reference_date, secondary_date);
+
+CREATE TABLE IF NOT EXISTS temporal_insar_observations (
+    observation_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cell_id TEXT NOT NULL,
+    pair_id TEXT NOT NULL,
+    reference_date TEXT NOT NULL,
+    secondary_date TEXT NOT NULL,
+    acquisition_date TEXT NOT NULL,
+    los_displacement_m REAL,
+    coherence REAL,
+    quality_status TEXT NOT NULL DEFAULT 'NOT_TESTED',
+    nodata_status TEXT NOT NULL DEFAULT 'UNKNOWN',
+    source_raster TEXT,
+    processing_metadata TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(cell_id) REFERENCES spatial_evidence_grid(cell_id),
+    FOREIGN KEY(pair_id) REFERENCES insar_pairs(pair_id),
+    UNIQUE(cell_id, pair_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_temporal_insar_cell_date
+    ON temporal_insar_observations(cell_id, acquisition_date);
+
+CREATE TABLE IF NOT EXISTS hyp3_job_status_history (
+    history_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pair_id TEXT NOT NULL,
+    job_id TEXT NOT NULL,
+    status TEXT NOT NULL,
+    status_checked_at TIMESTAMP NOT NULL,
+    error_message TEXT,
+    payload_json TEXT,
+    FOREIGN KEY(pair_id) REFERENCES insar_pairs(pair_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_hyp3_history_job_status
+    ON hyp3_job_status_history(job_id, status_checked_at);
 
 -- ============================================================
 -- 3. Daily Rainfall Records
@@ -147,6 +193,8 @@ CREATE TABLE IF NOT EXISTS observation_snapshots (
 CREATE INDEX IF NOT EXISTS idx_obs_cell_date ON observation_snapshots(cell_id, observation_date);
 CREATE INDEX IF NOT EXISTS idx_obs_date ON observation_snapshots(observation_date);
 CREATE INDEX IF NOT EXISTS idx_obs_risk ON observation_snapshots(risk_category);
+CREATE UNIQUE INDEX IF NOT EXISTS ux_observation_snapshot_cell_date
+    ON observation_snapshots(cell_id, observation_date);
 
 -- ============================================================
 -- 6. Risk History (Aggregated Per Observation Date)
@@ -203,6 +251,8 @@ CREATE TABLE IF NOT EXISTS alerts (
 
 CREATE INDEX IF NOT EXISTS idx_alert_status ON alerts(verification_status);
 CREATE INDEX IF NOT EXISTS idx_alert_time ON alerts(alert_timestamp);
+CREATE UNIQUE INDEX IF NOT EXISTS ux_alert_rule_observation
+    ON alerts(trigger_rule, observation_date);
 
 -- ============================================================
 -- 8. Pipeline Execution Logs
@@ -277,3 +327,149 @@ CREATE TABLE IF NOT EXISTS vegetation_indices (
 );
 
 CREATE INDEX IF NOT EXISTS idx_veg_cell_date ON vegetation_indices(cell_id, observation_date);
+
+-- ============================================================
+-- 12. Stage 5 Monitoring Discovery and Event History
+-- ============================================================
+CREATE TABLE IF NOT EXISTS monitoring_discovery_events (
+    event_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    discovery_started_at TIMESTAMP NOT NULL,
+    discovery_completed_at TIMESTAMP,
+    status TEXT NOT NULL,
+    satellite TEXT NOT NULL DEFAULT 'Sentinel-1',
+    search_start TEXT,
+    search_end TEXT,
+    products_found INTEGER DEFAULT 0,
+    duplicate_products INTEGER DEFAULT 0,
+    new_acquisitions INTEGER DEFAULT 0,
+    latest_acquisition_date TEXT,
+    error_message TEXT,
+    payload_json TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS monitoring_events (
+    event_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    event_type TEXT NOT NULL,
+    status TEXT NOT NULL,
+    subject_id TEXT,
+    message TEXT NOT NULL,
+    payload_json TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_monitoring_discovery_created
+    ON monitoring_discovery_events(created_at);
+CREATE INDEX IF NOT EXISTS idx_monitoring_events_type_created
+    ON monitoring_events(event_type, created_at);
+
+-- ============================================================
+-- Stage 6 Checkpoint 4: Experimental Feature Engineering
+-- ============================================================
+CREATE TABLE IF NOT EXISTS environmental_feature_definitions (
+    feature_key TEXT PRIMARY KEY,
+    feature_name TEXT NOT NULL,
+    data_source TEXT NOT NULL,
+    spatial_temporal_grain TEXT NOT NULL,
+    unit TEXT,
+    availability_state TEXT NOT NULL,
+    normalization_method TEXT,
+    missing_data_rule TEXT NOT NULL,
+    limitations TEXT,
+    spec_json TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS experimental_feature_runs (
+    run_id TEXT PRIMARY KEY,
+    run_status TEXT NOT NULL,
+    run_date TEXT NOT NULL,
+    observation_date TEXT,
+    input_sources TEXT,
+    result_status TEXT NOT NULL,
+    result_json TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS experimental_feature_values (
+    run_id TEXT NOT NULL,
+    cell_id TEXT NOT NULL,
+    feature_key TEXT NOT NULL,
+    feature_value REAL,
+    quality_status TEXT NOT NULL,
+    source_dataset TEXT,
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(run_id, cell_id, feature_key),
+    FOREIGN KEY(run_id) REFERENCES experimental_feature_runs(run_id),
+    FOREIGN KEY(cell_id) REFERENCES spatial_evidence_grid(cell_id),
+    FOREIGN KEY(feature_key) REFERENCES environmental_feature_definitions(feature_key)
+);
+
+-- ============================================================
+-- 13. Stage 6 Environmental Data Integration
+-- ============================================================
+CREATE TABLE IF NOT EXISTS environmental_dataset_registry (
+    dataset_key TEXT PRIMARY KEY,
+    dataset_name TEXT NOT NULL,
+    source TEXT NOT NULL,
+    dataset_type TEXT NOT NULL,
+    observation_date TEXT,
+    processing_date TEXT,
+    crs TEXT,
+    resolution_m REAL,
+    coverage_type TEXT,
+    file_path TEXT,
+    quality_status TEXT NOT NULL DEFAULT 'NOT_TESTED',
+    missing_data_percent REAL,
+    metadata_json TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS spatial_factor_availability (
+    cell_id TEXT NOT NULL,
+    observation_date TEXT,
+    dem_available INTEGER NOT NULL DEFAULT 0,
+    slope_available INTEGER NOT NULL DEFAULT 0,
+    aspect_available INTEGER NOT NULL DEFAULT 0,
+    rainfall_available INTEGER NOT NULL DEFAULT 0,
+    gsi_available INTEGER NOT NULL DEFAULT 0,
+    insar_los_available INTEGER NOT NULL DEFAULT 0,
+    insar_coherence_available INTEGER NOT NULL DEFAULT 0,
+    unet_available INTEGER NOT NULL DEFAULT 0,
+    quality_status TEXT NOT NULL DEFAULT 'NOT_TESTED',
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(cell_id, observation_date),
+    FOREIGN KEY(cell_id) REFERENCES spatial_evidence_grid(cell_id)
+);
+
+CREATE TABLE IF NOT EXISTS rainfall_rollup_validation (
+    validation_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    record_date TEXT NOT NULL UNIQUE,
+    daily_rainfall_mm REAL,
+    recalculated_3day_mm REAL,
+    stored_database_3day_mm REAL,
+    recalculated_7day_mm REAL,
+    stored_database_7day_mm REAL,
+    recalculated_14day_mm REAL,
+    stored_database_14day_mm REAL,
+    status TEXT NOT NULL,
+    discrepancy_mm REAL,
+    source_json TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS gsi_spatial_mapping (
+    inventory_id TEXT PRIMARY KEY,
+    latitude REAL NOT NULL,
+    longitude REAL NOT NULL,
+    cell_id TEXT,
+    source TEXT NOT NULL,
+    coordinate_quality TEXT NOT NULL,
+    proximity_km REAL,
+    quality_status TEXT NOT NULL,
+    FOREIGN KEY(cell_id) REFERENCES spatial_evidence_grid(cell_id)
+);

@@ -11,6 +11,8 @@ from datetime import datetime
 from urllib.parse import quote
 import streamlit.components.v1 as components
 import sys
+import subprocess
+import urllib.request
 
 # ============================================================
 # PAGE CONFIGURATION
@@ -27,6 +29,49 @@ st.set_page_config(
 BASE_DIR = Path(__file__).resolve().parent.parent
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
+
+
+def ensure_cesium_server() -> tuple[bool, str]:
+    """Start the local Cesium HTTP server when it is not already running."""
+    health_url = "http://127.0.0.1:8088/index.html"
+    try:
+        with urllib.request.urlopen(health_url, timeout=2) as response:
+            if response.status == 200:
+                return True, "http://127.0.0.1:8088"
+    except Exception:
+        pass
+
+    server_script = BASE_DIR / "scripts" / "serve_3d_viewer.py"
+    if not server_script.is_file():
+        return False, "Cesium server script is missing"
+
+    try:
+        creation_flags = 0
+        if sys.platform.startswith("win"):
+            creation_flags = getattr(subprocess, "DETACHED_PROCESS", 0)
+            creation_flags |= getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0)
+        subprocess.Popen(
+            [sys.executable, str(server_script)],
+            cwd=str(BASE_DIR),
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            creationflags=creation_flags,
+        )
+
+        for _ in range(20):
+            try:
+                with urllib.request.urlopen(health_url, timeout=2) as response:
+                    if response.status == 200:
+                        return True, "http://127.0.0.1:8088"
+            except Exception:
+                pass
+            import time
+            time.sleep(0.25)
+    except Exception as exc:
+        return False, str(exc)
+
+    return False, "Cesium server did not become available"
 
 from src.digital_twin.terrain_3d import (
     TERRAIN_OVERLAYS,
@@ -3459,7 +3504,7 @@ st.sidebar.markdown(
 
 st.sidebar.link_button(
     "🚀 Open 3D Cesium Studio (8088)",
-    "http://localhost:8088",
+    "http://127.0.0.1:8088",
     type="secondary",
     use_container_width=True,
 )
@@ -3868,37 +3913,6 @@ with st.expander("🔬 Deep Dive Analytical Research Lab and Diagnostic Tools (M
             "No default score is substituted."
         )
     else:
-        st.subheader("Spatial Risk Assessment")
-        st.markdown("### Risk Category Distribution")
-
-        category_order = ["Low", "Medium", "High"]
-        category_counts = (
-            risk_df["risk_category"]
-            .value_counts()
-            .reindex(category_order, fill_value=0)
-        )
-        total_observations = int(category_counts.sum())
-        count_cols = st.columns(3)
-
-        count_cols[0].metric(
-            "🟢 LOW Risk", f"{int(category_counts['Low']):,}",
-            f"{category_counts['Low'] / total_observations * 100:.1f}%" if total_observations else "0%"
-        )
-        count_cols[1].metric(
-            "🟡 MEDIUM Risk", f"{int(category_counts['Medium']):,}",
-            f"{category_counts['Medium'] / total_observations * 100:.1f}%" if total_observations else "0%"
-        )
-        count_cols[2].metric(
-            "🔴 HIGH Risk", f"{int(category_counts['High']):,}",
-            f"{category_counts['High'] / total_observations * 100:.1f}%" if total_observations else "0%"
-        )
-
-        st.markdown("#### Observation Distribution")
-        chart_df = pd.DataFrame({
-            "Risk Category": category_order,
-            "Observations": [int(category_counts[label]) for label in category_order]
-        }).set_index("Risk Category")
-        st.bar_chart(chart_df, use_container_width=True)
         coordinate_columns = {"latitude", "longitude"}
         if coordinate_columns.issubset(risk_df.columns):
             map_data = risk_df.copy()
@@ -4058,15 +4072,19 @@ with st.expander("🔬 Deep Dive Analytical Research Lab and Diagnostic Tools (M
                         + " Select a pair to view its own LOS layer; this control does not calculate a temporal difference."
                     )
 
+                    cesium_running, cesium_status = ensure_cesium_server()
                     viewer_url = (
-                        "http://localhost:8088/index.html?pair_id="
+                        "http://127.0.0.1:8088/index.html?pair_id="
                         + quote(selected_pair["pair_id"], safe="")
                     )
                     col_c1, col_c2 = st.columns([1, 3])
                     with col_c1:
                         st.link_button("🚀 Open Full-Screen 3D Viewer", viewer_url, type="primary")
                     with col_c2:
-                        st.caption("Active local 3D server: `http://localhost:8088`. To start if offline: `python scripts/serve_3d_viewer.py`.")
+                        if cesium_running:
+                            st.caption("Active local 3D server: `http://127.0.0.1:8088`")
+                        else:
+                            st.error(f"3D server unavailable: {cesium_status}")
 
                     components.iframe(viewer_url, height=680, scrolling=True)
 
@@ -4177,95 +4195,3 @@ with st.expander("🔬 Deep Dive Analytical Research Lab and Diagnostic Tools (M
         )
 
 
-    # ============================================================
-    # U-NET PREDICTION HISTORY AND LATEST REPORT
-    # ============================================================
-    st.header(
-        "🧩 U-Net Prediction History & Latest Report"
-    )
-    st.caption(
-        "Saved upload results are shown here as history. This section may contain "
-        "previous uploads even when no file is currently selected above."
-    )
-
-    segmentation_report_files = list(
-        SEGMENTATION_AGENT_FILE.parent.glob(
-            f"{SEGMENTATION_REPORT_PREFIX}*.csv"
-        )
-    )
-    if SEGMENTATION_AGENT_FILE.exists():
-        segmentation_report_files.append(SEGMENTATION_AGENT_FILE)
-
-    # Build a comparison table from all individually saved prediction reports.
-    if segmentation_report_files:
-        history_frames = []
-        for report_file in segmentation_report_files:
-            try:
-                report_part = pd.read_csv(report_file)
-                if not report_part.empty:
-                    history_frames.append(report_part)
-            except (OSError, ValueError, pd.errors.ParserError):
-                continue
-
-        if history_frames:
-            history_df = pd.concat(history_frames, ignore_index=True)
-            if "timestamp" in history_df.columns:
-                history_df["timestamp"] = pd.to_datetime(
-                    history_df["timestamp"], errors="coerce"
-                )
-                history_df = history_df.sort_values(
-                    "timestamp", ascending=False, na_position="last"
-                )
-
-            if "predicted_landslide_percentage" in history_df.columns:
-                history_df["screening_level"] = history_df[
-                    "predicted_landslide_percentage"
-                ].apply(
-                    lambda value: classify_uploaded_image_coverage(
-                        safe_float(value)
-                    )[0]
-                )
-
-            history_columns = {
-                "timestamp": "Assessment time",
-                "source_file": "Uploaded image",
-                "predicted_landslide_pixels": "Predicted pixels",
-                "predicted_landslide_percentage": "Segmented coverage (%)",
-                "average_confidence": "Mean predicted-positive score",
-                "screening_level": "Coverage band",
-                "agent_action": "Agent action",
-            }
-            visible_columns = [
-                column for column in history_columns if column in history_df.columns
-            ]
-            comparison_df = history_df[visible_columns].rename(
-                columns=history_columns
-            ).copy()
-            if "Assessment time" in comparison_df.columns:
-                comparison_df["Assessment time"] = comparison_df[
-                    "Assessment time"
-                ].dt.strftime("%Y-%m-%d %H:%M:%S")
-            if "Mean predicted-positive score" in comparison_df.columns:
-                comparison_df["Mean predicted-positive score"] = (
-                    pd.to_numeric(
-                        comparison_df["Mean predicted-positive score"],
-                        errors="coerce"
-                    ) * 100
-                ).round(2)
-            if "Segmented coverage (%)" in comparison_df.columns:
-                comparison_df["Segmented coverage (%)"] = pd.to_numeric(
-                    comparison_df["Segmented coverage (%)"], errors="coerce"
-                ).round(2)
-
-            st.subheader("Uploaded Image Comparison")
-            st.caption(
-                f"{len(comparison_df):,} saved assessment(s). New uploads are "
-                "compared using their own U-Net segmentation outputs."
-            )
-            st.dataframe(
-                comparison_df,
-                hide_index=True,
-                use_container_width=True
-            )
-        else:
-            st.info("No readable prediction history is available yet.")

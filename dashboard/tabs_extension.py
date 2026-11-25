@@ -17,7 +17,7 @@ import os
 import csv
 from html import escape
 import subprocess
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
@@ -263,192 +263,18 @@ def render_tab_overview(df, temporal_df, rainfall_df, gsi_df):
         )
         st.plotly_chart(fig_donut, use_container_width=True, config={"displaylogo": False})
 
-    # Interactive Google Gemini Intelligent Agent
-    render_gemini_assistant()
-
-
-# -----------------------------------------------------------------------------
-# INTERACTIVE GEMINI AGENT COMPONENT
-# -----------------------------------------------------------------------------
-def render_gemini_assistant():
-    st.markdown("---")
-    st.markdown(
-        """
-        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.8) 100%);
-                    border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 14px; padding: 20px; margin-top: 10px;
-                    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="background: linear-gradient(135deg, #0284c7 0%, #6366f1 100%); border-radius: 10px; padding: 6px 10px; font-size: 18px;">🤖</div>
-                    <div>
-                        <div style="font-weight: 800; font-size: 16px; color: #f8fafc;">Ask Google Gemini Intelligent Agent</div>
-                        <div style="font-size: 12px; color: #94a3b8;">Grounded in live database telemetry, Tirumala InSAR evidence, and terrain features</div>
-                    </div>
-                </div>
-                <span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.5);
-                             color: #34d399; font-size: 11.5px; font-weight: 700; padding: 4px 12px; border-radius: 20px;">
-                    ● ACTIVE
-                </span>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    # Preset quick question buttons styled as chips
-    st.markdown("<div style='margin-top: 12px;'></div>", unsafe_allow_html=True)
-    q_cols = st.columns(3)
-    preset_q = None
-    with q_cols[0]:
-        if st.button("📍 Ghat Road Slope Zones", use_container_width=True):
-            preset_q = "What are the most vulnerable slope zones along Ghat Road 1 and Ghat Road 2 in Tirumala Hills?"
-    with q_cols[1]:
-        if st.button("🌧️ Rainfall Hazard Thresholds", use_container_width=True):
-            preset_q = "How does 3-day accumulated rainfall affect landslide risk in the Tirumala region?"
-    with q_cols[2]:
-        if st.button("📐 InSAR Displacement & Coherence", use_container_width=True):
-            preset_q = "Explain why InSAR coherence gamma >= 0.50 is critical for verifying ground displacement."
-
-    col_input, col_ask = st.columns([5, 1])
-    with col_input:
-        default_val = preset_q if preset_q else ""
-        user_query = st.text_input(
-            "Question for Intelligent Agent",
-            value=default_val,
-            placeholder="Ask about Tirumala landslide risk, InSAR displacement, rainfall thresholds, or mitigation...",
-            label_visibility="collapsed",
-        )
-    with col_ask:
-        trigger_ask = st.button("💬 Ask AI", type="primary", use_container_width=True) or (preset_q is not None)
-
-    if trigger_ask and user_query:
-        with st.spinner("🤖 Gemini Intelligent Agent formulating response..."):
-            try:
-                from google import genai
-                api_key = os.environ.get("GEMINI_API_KEY")
-                if not api_key:
-                    st.error("GEMINI_API_KEY is not set in .env.")
-                    return
-                client = genai.Client(api_key=api_key)
-
-                # Ground live project facts in fixed, read-only database queries.
-                db = get_db()
-                with db.cursor() as cur:
-                    latest_discovered = cur.execute(
-                        "SELECT acquisition_date, download_status, satellite "
-                        "FROM acquisitions ORDER BY created_at DESC LIMIT 1"
-                    ).fetchone()
-                    latest_downloaded = cur.execute(
-                        "SELECT acquisition_date, satellite FROM acquisitions "
-                        "WHERE download_status = 'DOWNLOADED' "
-                        "ORDER BY acquisition_date DESC LIMIT 1"
-                    ).fetchone()
-                latest_rain = db.get_latest_rainfall_date()
-
-                with db.cursor() as cur:
-                    temporal_observations = cur.execute(
-                        "SELECT COUNT(*), "
-                        "SUM(CASE WHEN quality_status='VALID' AND los_displacement_m IS NOT NULL THEN 1 ELSE 0 END) "
-                        "FROM temporal_insar_observations"
-                    ).fetchone()
-                temporal_total = temporal_observations[0] if temporal_observations else 0
-                temporal_valid = temporal_observations[1] or 0 if temporal_observations else 0
-                processed_pairs = db.get_insar_pairs(status="PROCESSED")
-                valid_pairs = sum(
-                    1 for pair in processed_pairs
-                    if pair.get("quality_status") in {"VALID", "PROCESSED"}
-                )
-                st.warning(
-                    "Stage 3 time-series status: INSUFFICIENT DATA — "
-                    f"{temporal_total} traceable temporal rows, {temporal_valid} valid LOS rows, "
-                    f"and {valid_pairs} processed pair(s). "
-                    "A cumulative LOS series or reliable LOS velocity is not reported with one pair."
-                )
-                rain_rec = db.get_rainfall_range(latest_rain, latest_rain) if latest_rain else []
-                rain_3d = rain_rec[0].get("rolling_3day_mm") if rain_rec else None
-                rain_7d = rain_rec[0].get("rolling_7day_mm") if rain_rec else None
-                risk_summary = db.get_risk_summary()
-                active_alerts = db.get_active_alerts()
-                alert_count = len(active_alerts)
-                alert_titles = ", ".join(
-                    a.get("trigger_rule", "") for a in active_alerts[:3]
-                ) or "None"
-                processed_pairs = db.get_insar_pairs(status="PROCESSED")
-                latest_pair = processed_pairs[0] if processed_pairs else None
-                unavailable = "Not available"
-                documentation = []
-                for document in (PATHS.root / "README.md", PATHS.root / "PROJECT_AUDIT.md"):
-                    if document.is_file():
-                        documentation.append(
-                            f"--- {document.name} ---\n"
-                            + document.read_text(encoding="utf-8")[:5000]
-                        )
-                project_docs = "\n\n".join(documentation)
-
-                system_context = (
-                    "You are the Intelligent Landslide Monitoring Agent for Tirumala Hills, Tirupati, Andhra Pradesh, India.\n"
-                    "Treat the current database telemetry and supplied project documentation as evidence. "
-                    "Report missing values as unavailable; do not infer missing data or claim prediction certainty.\n"
-                    "Current database telemetry:\n"
-                    f"- Latest discovered catalog entry: {dict(latest_discovered) if latest_discovered else unavailable}\n"
-                    f"- Latest downloaded product: {dict(latest_downloaded) if latest_downloaded else unavailable}\n"
-                    f"- Latest rainfall observation: {latest_rain or unavailable}; "
-                    f"3-day={rain_3d if rain_3d is not None else unavailable} mm; "
-                    f"7-day={rain_7d if rain_7d is not None else unavailable} mm\n"
-                    f"- Latest stored risk assessment: {risk_summary.get('observation_date') or unavailable}; "
-                    f"high-evidence share={risk_summary.get('high_pct') if risk_summary.get('total_cells') else unavailable}% "
-                    f"of {risk_summary.get('total_cells', 0)} cells\n"
-                    f"- Pending human-review alerts: {alert_count} ({alert_titles})\n"
-                    f"- Latest processed InSAR pair: {latest_pair or unavailable}\n"
-                    "Project documentation excerpts:\n"
-                    f"{project_docs}\n\n"
-                    "Answer using the evidence above. Do not execute SQL or modify monitoring records."
-                )
-
-                preferred_model = os.environ.get("GEMINI_MODEL", "gemini-3.1-flash-lite").strip()
-                candidate_models = list(dict.fromkeys([
-                    preferred_model,
-                    "gemini-2.5-flash",
-                    "gemini-2.5-pro",
-                    "gemini-2.5-flash-lite",
-                ]))
-                res = None
-                for candidate in candidate_models:
-                    try:
-                        res = client.models.generate_content(
-                            model=candidate,
-                            contents=f"{system_context}\n\nUser Question: {user_query}",
-                        )
-                        if res and res.text:
-                            break
-                    except Exception:
-                        continue
-                if res and res.text:
-                    st.markdown(
-                        f"""
-                        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.85) 100%);
-                                    border: 1px solid rgba(56, 189, 248, 0.4); border-left: 4px solid #38bdf8;
-                                    border-radius: 12px; padding: 20px 24px; margin-top: 16px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);">
-                            <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #38bdf8; font-size: 14.5px; margin-bottom: 10px;">
-                                <span>🤖 Gemini Intelligent Agent:</span>
-                            </div>
-                            <div style="color: #f1f5f9; font-size: 14px; line-height: 1.7;">
-                                {escape(res.text).replace(chr(10), '<br>')}
-                            </div>
-                        </div>
-                        """,
-                        unsafe_allow_html=True,
-                    )
-            except Exception as e:
-                st.error(f"Error querying Gemini Agent: {e}")
-
 
 # -----------------------------------------------------------------------------
 # TAB 2: INTERACTIVE 3D DIGITAL TWIN
 # -----------------------------------------------------------------------------
 def render_tab_3d_digital_twin(base_dir, create_terrain_figure_func, overlays_list):
     st.subheader("🏔️ Realistic 3D Digital Twin of Tirumala Hills")
-    st.caption("Interactive WebGL 3D environment constructed from real 80m SRTM DEM, Copernicus Sentinel-1 InSAR fringes, Horn's slope, and GSI historical hazards.")
+    st.caption("Interactive 80 m UTM 44N terrain environment with DEM, Sentinel-1 InSAR evidence, Horn's slope, rainfall context and GSI historical locations.")
+    st.warning(
+        "Scientific scope: the risk index is an empirical relative evidence index, "
+        "InSAR LOS is 1-D line-of-sight displacement rather than vertical subsidence, "
+        "and the viewer does not issue confirmed landslide warnings."
+    )
 
     # 3D Quick Command Deck Bar
     st.markdown(
@@ -853,72 +679,6 @@ def render_tab_monitoring():
 # TAB 4: RISK ASSESSMENT & INTERACTIVE WHAT-IF SIMULATOR
 # -----------------------------------------------------------------------------
 def render_tab_risk_assessment(df):
-    st.subheader("⚠️ Multi-Criteria Relative Landslide Evidence Assessment")
-    st.caption("Evidence synthesis combines available slope (40%), terrain geometry (25%), InSAR displacement (20%), and temporal pair difference (15%). Rainfall is shown separately because the available rainfall values are not spatially resolved.")
-
-    db = get_db()
-    c1, c2, c3 = st.columns([2, 1.5, 1.5])
-
-    with c1:
-        st.markdown("#### Methodology & Indicator Weights")
-        st.markdown(
-            r"""
-            $$\text{Risk Score} = 0.40 \times \text{Slope Pct} + 0.25 \times \text{Terrain Flag} + 0.20 \times \text{InSAR Flag} + 0.15 \times \text{Temporal Flag}$$
-            - **Slope Component (40%):** Local percentile rank of Horn's slope ($0^\circ–47.3^\circ$).
-            - **Terrain Component (25%):** High elevation ($>500\text{ m}$) & steep terrain ($>25^\circ$).
-            - **InSAR Component (20%):** Significant LOS displacement ($>15\text{ mm}$) with coherence $\gamma \ge 0.65$.
-            - **Temporal Component (15%):** Upper-quartile differential displacement between Pair 1 & Pair 2.
-            """
-        )
-
-    with c2:
-        st.markdown("#### Evidence Score Thresholds")
-        st.markdown(
-            r"""
-            - 🟢 **Low Evidence:** Score $< 33.33$
-            - 🟡 **Medium Evidence:** $33.33 \le \text{Score} < 66.67$
-            - 🔴 **High Evidence:** $\text{Score} \ge 66.67$
-            """
-        )
-
-    with c3:
-        mean_score = 42.8
-        if not df.empty and "agent_evidence_score" in df.columns:
-            mean_score = float(df["agent_evidence_score"].mean())
-
-        fig_gauge = go.Figure(go.Indicator(
-            mode="gauge+number",
-            value=mean_score,
-            number={'suffix': " /100", 'font': {'size': 24, 'color': '#f8fafc'}},
-            title={'text': "<b>Tirumala Hazard Index</b><br><span style='font-size:11px;color:#94a3b8;'>Mean Terrain Vulnerability</span>", 'font': {'size': 13, 'color': '#f8fafc'}},
-            gauge={
-                'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': "#94a3b8"},
-                'bar': {'color': "#38bdf8", 'thickness': 0.25},
-                'bgcolor': "rgba(15, 23, 42, 0.6)",
-                'borderwidth': 1,
-                'bordercolor': "rgba(255, 255, 255, 0.1)",
-                'steps': [
-                    {'range': [0, 33.33], 'color': 'rgba(16, 185, 129, 0.25)'},
-                    {'range': [33.33, 66.67], 'color': 'rgba(245, 158, 11, 0.25)'},
-                    {'range': [66.67, 100], 'color': 'rgba(239, 68, 68, 0.25)'}
-                ],
-                'threshold': {
-                    'line': {'color': "#ef4444", 'width': 3},
-                    'thickness': 0.8,
-                    'value': 66.67
-                }
-            }
-        ))
-        fig_gauge.update_layout(
-            template="plotly_dark",
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(0,0,0,0)",
-            height=200,
-            margin=dict(l=10, r=10, t=25, b=10)
-        )
-        st.plotly_chart(fig_gauge, use_container_width=True, config={"displaylogo": False})
-
-    st.markdown("---")
     st.markdown("### 🎛️ Interactive 'What-If' Compound Risk Simulator")
     st.caption("Sensitivity analysis recalculates categories from the current spatial evidence; it is not a calibrated prediction. Missing indicators are excluded per cell.")
 
@@ -971,6 +731,7 @@ def render_tab_risk_assessment(df):
 
     st.markdown("---")
     st.markdown("#### Historical Assessment Epochs & Transitions")
+    db = get_db()
     hist = db.get_risk_history()
     if hist:
         hdf = pd.DataFrame(hist)
@@ -1036,79 +797,76 @@ def render_tab_automation():
     except (OSError, json.JSONDecodeError):
         sync_status = {}
 
+    cdse_configured = bool(
+        os.environ.get("CDSE_USERNAME") and os.environ.get("CDSE_PASSWORD")
+    )
+    earthdata_configured = bool(
+        (
+            os.environ.get("EARTHDATA_USERNAME")
+            and os.environ.get("EARTHDATA_PASSWORD")
+        )
+        or (
+            os.environ.get("HYP3_USERNAME")
+            and os.environ.get("HYP3_PASSWORD")
+        )
+    )
+    hyp3_configured = earthdata_configured
+    try:
+        import urllib.request
+        with urllib.request.urlopen("http://127.0.0.1:8088/", timeout=1.5) as response:
+            cesium_available = response.status == 200
+    except Exception:
+        cesium_available = False
+
+    def _provider_card(title, icon, configured, detail):
+        state = "CONFIGURED" if configured else "NOT CONFIGURED"
+        border = "16, 185, 129" if configured else "245, 158, 11"
+        state_color = "#34d399" if configured else "#fbbf24"
+        return (
+            '<div style="background: rgba(15, 23, 42, 0.8); '
+            f'border: 1px solid rgba({border}, 0.45); border-radius: 12px; '
+            'padding: 14px 16px;">'
+            '<div style="display: flex; align-items: center; justify-content: space-between;">'
+            f'<span style="font-weight: 700; color: {state_color}; font-size: 13px;">'
+            f'{icon} {escape(title)}</span>'
+            f'<span style="background: {state_color}; color: #082f49; '
+            f'font-size: 10px; font-weight: 800; padding: 2px 7px; '
+            f'border-radius: 10px;">{state}</span></div>'
+            f'<div style="font-size: 11.5px; color: #94a3b8; margin-top: 5px;">'
+            f'{escape(detail)}</div></div>'
+        )
+
     st.markdown(
-        """
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 18px;">
-            <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(15, 23, 42, 0.8) 100%);
-                        border: 1px solid rgba(16, 185, 129, 0.45); border-radius: 12px; padding: 14px 16px;">
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <span style="font-weight: 700; color: #34d399; font-size: 13px;">🛰️ Copernicus CDSE</span>
-                    <span style="background: #10b981; color: #064e3b; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 10px;">ACTIVE</span>
-                </div>
-                <div style="font-size: 11.5px; color: #94a3b8; margin-top: 5px;">
-                    Account: <b style="color: #f1f5f9;">yarramjanardhanreddy3</b><br>
-                    Sentinel-1 SAR OData Crawl
-                </div>
-            </div>
-            <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(15, 23, 42, 0.8) 100%);
-                        border: 1px solid rgba(16, 185, 129, 0.45); border-radius: 12px; padding: 14px 16px;">
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <span style="font-weight: 700; color: #34d399; font-size: 13px;">🌧️ NASA Earthdata</span>
-                    <span style="background: #10b981; color: #064e3b; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 10px;">ACTIVE</span>
-                </div>
-                <div style="font-size: 11.5px; color: #94a3b8; margin-top: 5px;">
-                    User: <b style="color: #f1f5f9;">jagan8919</b><br>
-                    GPM IMERG Daily Rainfall V07C
-                </div>
-            </div>
-            <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(15, 23, 42, 0.8) 100%);
-                        border: 1px solid rgba(16, 185, 129, 0.45); border-radius: 12px; padding: 14px 16px;">
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <span style="font-weight: 700; color: #34d399; font-size: 13px;">⚡ ASF HyP3 Cloud</span>
-                    <span style="background: #10b981; color: #064e3b; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 10px;">ACTIVE</span>
-                </div>
-                <div style="font-size: 11.5px; color: #94a3b8; margin-top: 5px;">
-                    User: <b style="color: #f1f5f9;">jagan8919</b><br>
-                    Interferogram Processing Queue
-                </div>
-            </div>
-            <div style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(15, 23, 42, 0.8) 100%);
+        '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 18px;">'
+        + _provider_card(
+            "Copernicus CDSE",
+            "🛰️",
+            cdse_configured,
+            "Sentinel-1/2 discovery; configuration does not confirm authentication.",
+        )
+        + _provider_card(
+            "NASA Earthdata",
+            "🌧️",
+            earthdata_configured,
+            "IMERG and Earthdata access; GES DISC status remains separate.",
+        )
+        + _provider_card(
+            "ASF HyP3",
+            "⚡",
+            hyp3_configured,
+            "InSAR cloud processing; existing verified pair is preserved.",
+        )
+        + """
+            <div style="background: rgba(15, 23, 42, 0.8);
                         border: 1px solid rgba(56, 189, 248, 0.45); border-radius: 12px; padding: 14px 16px;">
                 <div style="display: flex; align-items: center; justify-content: space-between;">
                     <span style="font-weight: 700; color: #38bdf8; font-size: 13px;">🌐 Cesium 3D Server</span>
-                    <span style="background: #38bdf8; color: #082f49; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 10px;">ONLINE</span>
+                    <span style="background: """ + ("#34d399" if cesium_available else "#fbbf24") + """; color: #082f49; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 10px;">""" + ("ONLINE" if cesium_available else "OFFLINE") + """</span>
                 </div>
                 <div style="font-size: 11.5px; color: #94a3b8; margin-top: 5px;">
                     Host: <b style="color: #f1f5f9;">http://localhost:8088</b><br>
-                    SRTM DEM WebGL Terrain Studio
+                    Existing real 80 m DEM WebGL Terrain Studio
                 </div>
-            </div>
-        </div>
-
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; padding: 14px 18px; margin-bottom: 20px;">
-            <div style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: #38bdf8; letter-spacing: 0.5px; margin-bottom: 8px;">
-                🔄 Continuous Automated Monitoring Pipeline Flow
-            </div>
-            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 11.5px;">
-                <span style="background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 6px 10px; color: #f1f5f9;">
-                    🛰️ 1. CDSE & NASA Ingestion
-                </span>
-                <span style="color: #38bdf8; font-weight: 800;">➔</span>
-                <span style="background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 6px 10px; color: #f1f5f9;">
-                    📐 2. InSAR & Topo Matrix
-                </span>
-                <span style="color: #38bdf8; font-weight: 800;">➔</span>
-                <span style="background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 6px 10px; color: #f1f5f9;">
-                    🧠 3. 14-ch U-Net Screening
-                </span>
-                <span style="color: #38bdf8; font-weight: 800;">➔</span>
-                <span style="background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 6px 10px; color: #f1f5f9;">
-                    ⚠️ 4. SQLite Spatial Scoring
-                </span>
-                <span style="color: #38bdf8; font-weight: 800;">➔</span>
-                <span style="background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 8px; padding: 6px 10px; color: #34d399; font-weight: 700;">
-                    🌐 5. Cesium 3D Live Twin
-                </span>
             </div>
         </div>
         """,
@@ -1173,8 +931,9 @@ def render_tab_automation():
         if st.button("📡 Check Satellite Data", use_container_width=True):
             from scripts.download_sentinel1 import Sentinel1Downloader
             s1_dl = Sentinel1Downloader(dry_run=True)
-            start_date = (datetime.utcnow() - pd.Timedelta(days=30)).strftime("%Y-%m-%d")
-            res = s1_dl.run(start_date, datetime.utcnow().strftime("%Y-%m-%d"))
+            end_date = datetime.now(timezone.utc)
+            start_date = (end_date - pd.Timedelta(days=30)).strftime("%Y-%m-%d")
+            res = s1_dl.run(start_date, end_date.strftime("%Y-%m-%d"))
             st.info(f"Satellite check: {res.get('searched',0)} products found.")
     with b3:
         if st.button("🔄 Sync Database & Export 3D", use_container_width=True):

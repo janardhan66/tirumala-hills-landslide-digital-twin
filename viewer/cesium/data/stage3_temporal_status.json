@@ -1,0 +1,50 @@
+{
+  "generated_at": "2026-11-22T10:02:32.549366+00:00",
+  "study_area": "Tirumala Hills",
+  "node_count": 5,
+  "edge_count": 3,
+  "valid_edge_count": 1,
+  "connected_components": 4,
+  "component_sizes": [
+    1,
+    1,
+    1,
+    2
+  ],
+  "temporal_observation_count": 7590,
+  "valid_observation_count": 5034,
+  "insufficient_observation_count": 2556,
+  "time_series_status": "INSUFFICIENT_DATA",
+  "velocity_status": "NOT_RELIABLE_WITH_SINGLE_PAIR",
+  "reference_convention": "LOS displacement is relative to each pair's own phase reference and is not vertical displacement.",
+  "pair_status": [
+    {
+      "pair_id": "PAIR_20261109_20261121",
+      "reference_date": "2026-11-09",
+      "secondary_date": "2026-11-21",
+      "processing_status": "PROCESSED",
+      "quality_status": "VALID",
+      "valid_pixels": 7245,
+      "mean_coherence": 0.589436948299408
+    },
+    {
+      "pair_id": "PAIR_20260817_20260829",
+      "reference_date": "2026-08-17",
+      "secondary_date": "2026-08-29",
+      "processing_status": "PROCESSED",
+      "quality_status": "PENDING",
+      "valid_pixels": 2957,
+      "mean_coherence": 0.68
+    },
+    {
+      "pair_id": "PAIR_20260805_20260817",
+      "reference_date": "2026-08-05",
+      "secondary_date": "2026-08-17",
+      "processing_status": "PROCESSED",
+      "quality_status": "PENDING",
+      "valid_pixels": 3085,
+      "mean_coherence": 0.62
+    }
+  ],
+  "synthetic_disclaimer": "Synthetic values may test the inversion only and are never written as Tirumala observations."
+}

@@ -1,0 +1,23 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Segoe UI, Arial","primaryTextColor":"#172033","lineColor":"#64748b","fontSize":"16px"}}}%%
+flowchart LR
+    L4["Landslide4Sense<br/>3,799 HDF5 Patches"]
+
+    subgraph RF["Random Forest Benchmark"]
+        RF1["Slope and Elevation Features"]
+        RF2["Patch-Group Train/Test Split"]
+        RF3["RF v2 Benchmark Evaluation"]
+        RF1 --> RF2 --> RF3
+    end
+
+    subgraph UN["U-Net Benchmark"]
+        UN1["14-channel HDF5 Images"]
+        UN2["Landslide/No-landslide Masks"]
+        UN3["Segmentation Checkpoint"]
+        UN1 --> UN2 --> UN3
+    end
+
+    L4 --> RF1
+    L4 --> UN1
+    RF3 --> LIM["Experimental benchmark only<br/>Not validated for Tirumala"]
+    UN3 --> LIM
+    LIM --> LIVE["Not integrated into the live<br/>empirical Tirumala risk map"]

@@ -148,3 +148,11 @@ outputs/validation_visuals/
 
 !outputs/boundary_refitted_plane_analysis_v1/
 !outputs/boundary_refitted_plane_analysis_v1/refitted_plane_summary.csv
+# Additional deployment exclusions
+.venv-raster-check/
+.pytest_cache/
+database/*.db
+database/*.db-shm
+database/*.db-wal
+database/backups/
+logs/

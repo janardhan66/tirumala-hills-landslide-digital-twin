@@ -40,6 +40,64 @@ class HyP3Processor:
         self.output_dir = output_dir or PATHS.processed_dinsar
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
+    def estimate_processing_cost(self, looks: str = "20x4") -> int:
+        """Return the HyP3 GAMMA 20x4 cost published by the service, if available."""
+        try:
+            import hyp3_sdk
+            hyp3 = hyp3_sdk.HyP3(
+                username=CREDENTIALS.earthdata_username,
+                password=CREDENTIALS.earthdata_password,
+            )
+            costs = hyp3.costs()
+            insar = costs.get("INSAR_GAMMA", {})
+            table = insar.get("cost_table", {})
+            return int(table.get(looks, 10))
+        except Exception as exc:
+            logger.warning("Could not query HyP3 processing cost: %s", exc)
+            return 10
+
+    def submit_approved_pair(
+        self,
+        granule_ref: str,
+        granule_sec: str,
+        reference_date: str,
+        secondary_date: str,
+        approval_granted: bool,
+    ) -> str:
+        """Submit only after explicit user authorization for quota consumption."""
+        if not approval_granted:
+            raise PermissionError(
+                "HyP3 submission requires explicit approval before credits/quota are consumed."
+            )
+        pair_id = self.submit_pair(
+            granule_ref,
+            granule_sec,
+            reference_date,
+            secondary_date,
+        )
+        cost = self.estimate_processing_cost(INSAR.hyp3_looks)
+        pair = next(
+            (item for item in self.db.get_insar_pairs() if item["pair_id"] == pair_id),
+            None,
+        )
+        if pair:
+            checked_at = datetime.now(timezone.utc).isoformat()
+            self.db.update_insar_pair(
+                pair_id,
+                submitted_at=checked_at,
+                last_status_check_at=checked_at,
+                expected_credit_cost=cost,
+                job_config_json=json.dumps({
+                    "job_type": "INSAR_GAMMA",
+                    "looks": INSAR.hyp3_looks,
+                    "include_dem": True,
+                    "include_inc_map": True,
+                    "include_displacement_maps": True,
+                    "phase_filter_parameter": INSAR.hyp3_phase_filter,
+                }, sort_keys=True),
+            )
+        return pair_id
+
     def submit_pair(
         self, granule_ref: str, granule_sec: str,
         reference_date: str, secondary_date: str
@@ -132,6 +190,17 @@ class HyP3Processor:
             processing_mode="hyp3",
             processing_status="SUBMITTED",
             hyp3_job_id=job_id,
+            submitted_at=datetime.now(timezone.utc).isoformat(),
+            last_status_check_at=datetime.now(timezone.utc).isoformat(),
+            expected_credit_cost=self.estimate_processing_cost(INSAR.hyp3_looks),
+            job_config_json=json.dumps({
+                "job_type": "INSAR_GAMMA",
+                "looks": INSAR.hyp3_looks,
+                "include_dem": True,
+                "include_inc_map": True,
+                "include_displacement_maps": True,
+                "phase_filter_parameter": INSAR.hyp3_phase_filter,
+            }, sort_keys=True),
         )
         logger.info("HyP3 job submitted: %s", job_id)
         return pair_id
@@ -143,7 +212,13 @@ class HyP3Processor:
         except ImportError as exc:
             raise RuntimeError("hyp3_sdk is required to check HyP3 jobs.") from exc
 
-        pairs = self.db.get_insar_pairs(status="SUBMITTED")
+        all_pairs = self.db.get_insar_pairs()
+        pairs = [
+            pair for pair in all_pairs
+            if pair.get("processing_status") in {
+                "SUBMITTED", "PENDING", "RUNNING", "SUCCEEDED"
+            }
+        ]
         if pair_id != "all":
             pairs = [pair for pair in pairs if pair["pair_id"] == pair_id]
         if not pairs:
@@ -171,6 +246,23 @@ class HyP3Processor:
                 continue
 
             job = hyp3.get_job_by_id(job_id)
+            status = str(job.status_code)
+            payload = {
+                "job_id": getattr(job, "job_id", job_id),
+                "status_code": status,
+                "request_time": str(getattr(job, "request_time", "")),
+                "job_type": getattr(job, "job_type", None),
+            }
+            self.db.record_hyp3_status(
+                pair["pair_id"],
+                job_id,
+                status,
+                payload=payload,
+                error_message=(
+                    getattr(job, "error", None)
+                    or (f"HyP3 status: {status}" if status == "FAILED" else None)
+                ),
+            )
             if job.status_code == "SUCCEEDED":
                 logger.info("HyP3 job complete: %s", job.job_id)
                 files = [Path(file) for file in job.download_files(self.output_dir)]
@@ -184,14 +276,29 @@ class HyP3Processor:
                 pair_dir = self.output_dir / pair["pair_id"]
                 pair_dir.mkdir(parents=True, exist_ok=True)
                 import zipfile
+                import tempfile
+                import shutil
                 for downloaded_file in files:
                     if downloaded_file.suffix.lower() == ".zip" and zipfile.is_zipfile(downloaded_file):
                         with zipfile.ZipFile(downloaded_file) as archive:
-                            archive.extractall(pair_dir)
+                            bad_member = archive.testzip()
+                            if bad_member:
+                                raise IOError(
+                                    f"HyP3 ZIP integrity failure for {downloaded_file.name}: "
+                                    f"corrupt member {bad_member}"
+                                )
+                            with tempfile.TemporaryDirectory(prefix="hyp3_extract_") as temp_dir:
+                                temp_path = Path(temp_dir)
+                                archive.extractall(temp_path)
+                                for extracted_file in temp_path.rglob("*"):
+                                    if not extracted_file.is_file():
+                                        continue
+                                    destination = pair_dir / extracted_file.name
+                                    if extracted_file.resolve() != destination.resolve():
+                                        shutil.copy2(extracted_file, destination)
                     elif downloaded_file.is_file():
                         destination = pair_dir / downloaded_file.name
                         if downloaded_file.resolve() != destination.resolve():
-                            import shutil
                             shutil.copy2(downloaded_file, destination)
                 self.db.update_insar_pair(
                     pair["pair_id"],
@@ -250,8 +357,12 @@ class HyP3Processor:
 
         pair_output = PATHS.processed_dinsar / pair_id
         pair_output.mkdir(parents=True, exist_ok=True)
-        los_output = pair_output / "los_disp_80m.tif"
-        coherence_output = pair_output / "coherence_80m.tif"
+        if pair_id == "PAIR_20261109_20261121":
+            los_output = pair_output / "tirumala_live_los_disp_80m.tif"
+            coherence_output = pair_output / "tirumala_live_coherence_80m.tif"
+        else:
+            los_output = pair_output / "los_disp_80m.tif"
+            coherence_output = pair_output / "coherence_80m.tif"
         clip_to_aoi(
             str(los_candidates[0]),
             str(los_output),
@@ -266,6 +377,22 @@ class HyP3Processor:
             resolution=INSAR.hyp3_resolution,
             reference_path=str(PATHS.dem_tif),
         )
+
+        validation = validate_hyp3_rasters(los_output, coherence_output)
+        if not validation["valid"]:
+            self.db.update_insar_pair(
+                pair_id,
+                processing_status="FAILED",
+                quality_status="INVALID",
+                output_validation_status="INVALID",
+                error_message="; ".join(validation["errors"]),
+                quality_notes=json.dumps(validation, sort_keys=True),
+            )
+            return {
+                "status": "FAILED",
+                "pairs_processed": 0,
+                "message": "HyP3 output validation failed: " + "; ".join(validation["errors"]),
+            }
 
         valid_pixels = None
         mean_coherence = None
@@ -283,6 +410,8 @@ class HyP3Processor:
             coherence_tif=str(coherence_output),
             valid_pixels=valid_pixels,
             mean_coherence=mean_coherence,
+            quality_status="VALID",
+            output_validation_status="VALID",
             quality_notes=(
                 "LOS and coherence rasters aligned to the Tirumala 80 m grid; "
                 "LOS is not a vertical displacement measurement."
@@ -513,6 +642,68 @@ def apply_coherence_mask(
     return masked
 
 
+def validate_hyp3_rasters(los_path: Path, coherence_path: Path) -> Dict:
+    """Validate LOS/coherence GeoTIFF units, CRS, grid and usable pixels."""
+    import rasterio
+
+    with rasterio.open(los_path) as los_source:
+        los = los_source.read(1, masked=True)
+        los_profile = {
+            "crs": str(los_source.crs),
+            "shape": los_source.shape,
+            "resolution": tuple(float(v) for v in los_source.res),
+            "bounds": tuple(float(v) for v in los_source.bounds),
+            "nodata": los_source.nodata,
+        }
+    with rasterio.open(coherence_path) as coherence_source:
+        coherence = coherence_source.read(1, masked=True)
+        coherence_profile = {
+            "crs": str(coherence_source.crs),
+            "shape": coherence_source.shape,
+            "resolution": tuple(float(v) for v in coherence_source.res),
+            "bounds": tuple(float(v) for v in coherence_source.bounds),
+            "nodata": coherence_source.nodata,
+        }
+
+    errors = []
+    if los_profile["crs"] != "EPSG:32644":
+        errors.append("LOS CRS is not EPSG:32644.")
+    if coherence_profile["crs"] != "EPSG:32644":
+        errors.append("Coherence CRS is not EPSG:32644.")
+    if los_profile["shape"] != coherence_profile["shape"]:
+        errors.append("LOS and coherence shapes differ.")
+    if los_profile["resolution"] != coherence_profile["resolution"]:
+        errors.append("LOS and coherence resolutions differ.")
+    if los_profile["bounds"] != coherence_profile["bounds"]:
+        errors.append("LOS and coherence bounds differ.")
+
+    los_values = los.compressed()
+    coherence_values = coherence.compressed()
+    if los_values.size == 0:
+        errors.append("LOS raster has no valid pixels.")
+    if coherence_values.size == 0:
+        errors.append("Coherence raster has no valid pixels.")
+    elif np.any((coherence_values < 0) | (coherence_values > 1)):
+        errors.append("Coherence values fall outside 0-1.")
+
+    if los_values.size:
+        los_profile["valid_pixels"] = int(los_values.size)
+        los_profile["min_m"] = float(los_values.min())
+        los_profile["max_m"] = float(los_values.max())
+        los_profile["unit"] = "meters (LOS)"
+    if coherence_values.size:
+        coherence_profile["valid_pixels"] = int(coherence_values.size)
+        coherence_profile["min"] = float(coherence_values.min())
+        coherence_profile["max"] = float(coherence_values.max())
+
+    return {
+        "valid": not errors,
+        "errors": errors,
+        "los": los_profile,
+        "coherence": coherence_profile,
+    }
+
+
 def process_new_insar_pairs(db=None) -> dict:
     """
     Automated InSAR processing pipeline evaluator.
@@ -541,63 +732,23 @@ def process_new_insar_pairs(db=None) -> dict:
             "message": f"Processed {processed_count} downloaded HyP3 InSAR pair(s).",
         }
 
-    if CREDENTIALS.earthdata_username and CREDENTIALS.earthdata_password:
-        downloaded_s1 = db.get_acquisitions_by_status(
-            "Sentinel-1", download_status="DOWNLOADED", processing_status="UNPROCESSED"
-        )
-        downloaded_s1 = [
-            acquisition for acquisition in downloaded_s1
-            if acquisition.get("product_type") == "SLC"
-        ]
-        pair_registrations = 0
-        for reference in downloaded_s1:
-            try:
-                reference_date = datetime.strptime(
-                    reference["acquisition_date"], "%Y-%m-%d"
-                ).date()
-            except (KeyError, TypeError, ValueError):
-                continue
-            for secondary in downloaded_s1:
-                try:
-                    secondary_date = datetime.strptime(
-                        secondary["acquisition_date"], "%Y-%m-%d"
-                    ).date()
-                except (KeyError, TypeError, ValueError):
-                    continue
-                baseline = (secondary_date - reference_date).days
-                if baseline <= 0 or baseline < INSAR.min_temporal_baseline_days:
-                    continue
-                if baseline > INSAR.max_temporal_baseline_days:
-                    continue
-                pair_id = (
-                    f"PAIR_{reference_date:%Y%m%d}_{secondary_date:%Y%m%d}"
-                )
-                if db.acquisition_exists(reference["acquisition_id"]) and db.acquisition_exists(
-                    secondary["acquisition_id"]
-                ):
-                    existing = [
-                        pair for pair in db.get_insar_pairs()
-                        if pair["pair_id"] == pair_id
-                    ]
-                    if existing:
-                        continue
-                    try:
-                        submitted_processor.submit_pair(
-                            reference["acquisition_id"],
-                            secondary["acquisition_id"],
-                            reference_date.isoformat(),
-                            secondary_date.isoformat(),
-                        )
-                        pair_registrations += 1
-                    except (ValueError, RuntimeError) as exc:
-                        logger.warning("Could not submit candidate pair %s: %s", pair_id, exc)
-                        continue
-        if pair_registrations:
-            return {
-                "status": "SUCCESS",
-                "pairs_processed": pair_registrations,
-                "message": f"Submitted {pair_registrations} new HyP3 InSAR pair(s).",
-            }
+    with db.cursor() as cur:
+        downloaded_s1 = cur.execute(
+            "SELECT * FROM acquisitions "
+            "WHERE satellite = 'Sentinel-1' "
+            "AND download_status = 'DOWNLOADED' "
+            "AND processing_status = 'UNPROCESSED'"
+        ).fetchall()
+    if downloaded_s1:
+        return {
+            "status": "READY",
+            "pending_count": len(downloaded_s1),
+            "pairs_processed": 0,
+            "message": (
+                "Valid downloaded acquisitions require explicit pair approval "
+                "before HyP3 submission; no job was submitted automatically."
+            ),
+        }
 
     pending_pairs = db.get_pending_insar_pairs() if hasattr(db, "get_pending_insar_pairs") else []
     if not pending_pairs:

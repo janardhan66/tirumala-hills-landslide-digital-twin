@@ -55,6 +55,11 @@ repository.
 
 ## 3. System architecture
 
+For an implementation-ready target design, including component boundaries,
+processing stages, API contracts, storage, deployment profiles, and scientific
+guardrails, see
+[`PROPOSED_SYSTEM_ARCHITECTURE.md`](./PROPOSED_SYSTEM_ARCHITECTURE.md).
+
 ```text
 Sentinel-1 HyP3 products ──┐
 DEM and derived slope ─────┼─> prepared rasters / feature tables ─┐
@@ -257,6 +262,28 @@ local data assets and are not included in Git.
 Local dashboard smoke-test screenshot:
 
 ![Tirumala Hills Streamlit dashboard landing page](./results/digital_twin/tirumala_dashboard_screenshot.png)
+
+## 9A. Verified live 09-21 November 2026 InSAR workflow
+
+An independently successful ASF HyP3 workflow is implemented and verified for
+HyP3 job `3889d809-88a3-4a93-89a5-258821932737`. The job was succeeded,
+downloaded as a validated 281781751-byte ZIP, and inspected. The package
+contains LOS displacement, vertical displacement, coherence, unwrapped phase,
+incidence angle, DEM, amplitude and water-mask rasters at 80 m in EPSG:32644.
+
+For the Tirumala AOI, LOS and coherence were aligned to 69 x 110 cells.
+Coherence >= 0.50 and valid LOS values produced 5,034 quality-screened cells.
+No missing or nodata value was replaced with zero. The pair observation is
+stored as `PAIR_20261109_20261121` with secondary date `2026-11-21`.
+
+The live result was upserted into SQLite, included in the empirical
+multi-criteria evidence-score reassessment, and exported to the CesiumJS
+manifest, timeline, lookup, PNG texture and GLB model. Cesium synchronization
+reported `SYNCHRONIZED` with 7,590 observed cells.
+
+This is **one verified live InSAR-to-Cesium workflow**, not continuous
+multi-temporal monitoring. It does not establish a calibrated landslide
+probability or validate the vertical-displacement assumption.
 
 ## 10. Experimental results
 

@@ -9,6 +9,14 @@
 
 ## 1. System Architecture Overview
 
+### Verified implementation status
+
+The implemented research prototype has a verified one-cycle live InSAR workflow:
+ASF HyP3 job `3889d809-88a3-4a93-89a5-258821932737` succeeded, was downloaded,
+validated, clipped and aligned to EPSG:32644 at 80 m, stored in SQLite and
+exported to the CesiumJS viewer for 21 November 2026. This does not prove
+fully repeated, unattended multi-temporal monitoring.
+
 The system is structured as a multi-tiered, modular geospatial intelligence and digital twin platform:
 
 ```text

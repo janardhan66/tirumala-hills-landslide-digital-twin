@@ -1,9 +1,9 @@
 {
-  "last_sync_utc": "2026-11-22T04:50:58.524514+00:00",
-  "latest_observation_date": "2026-08-29",
+  "last_sync_utc": "2026-11-24T13:25:18.211957+00:00",
+  "latest_observation_date": "2026-11-21",
   "latest_rainfall_date": "2026-08-29",
-  "total_cells": 4083,
-  "observed_cells": 4083,
-  "active_alerts_count": 32,
+  "total_cells": 7590,
+  "observed_cells": 7590,
+  "active_alerts_count": 4,
   "status": "SYNCHRONIZED"
 }

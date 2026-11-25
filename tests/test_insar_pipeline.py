@@ -131,6 +131,37 @@ class TestHyP3Processor(unittest.TestCase):
         self.assertEqual(pair["processing_status"], "FAILED")
         self.assertIn("returned no files", pair["error_message"])
 
+    def test_job_submission_requires_explicit_approval(self):
+        with self.assertRaisesRegex(PermissionError, "explicit approval"):
+            self.processor.submit_approved_pair(
+                "missing-ref",
+                "missing-sec",
+                "2026-08-05",
+                "2026-08-17",
+                approval_granted=False,
+            )
+
+    def test_hyp3_status_history_persists_across_restart(self):
+        self._add_pair(
+            "PAIR_20260805_20260817",
+            "ref",
+            "sec",
+            "2026-08-05",
+            "2026-08-17",
+            "job-history",
+        )
+        self.db.record_hyp3_status(
+            "PAIR_20260805_20260817",
+            "job-history",
+            "RUNNING",
+            payload={"status_code": "RUNNING"},
+        )
+        restarted = DatabaseManager(Path(self.temp_dir.name) / "insar.db")
+        history = restarted.get_hyp3_status_history("job-history")
+        self.assertEqual(len(history), 1)
+        self.assertEqual(history[0]["status"], "RUNNING")
+        restarted.close()
+
 
 if __name__ == "__main__":
     unittest.main()

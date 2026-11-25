@@ -282,6 +282,10 @@ def export_cesium_lookups(db):
             pair1_dir / "tirumala_corr_80m_gsi_aoi_pair_05_17.tif",
         ),
         "PAIR_20260817_20260829": (PATHS.los_tif, PATHS.corr_tif),
+        "PAIR_20261109_20261121": (
+            PATHS.processed_dinsar / "PAIR_20261109_20261121" / "tirumala_live_los_disp_80m.tif",
+            PATHS.processed_dinsar / "PAIR_20261109_20261121" / "tirumala_live_coherence_80m.tif",
+        ),
     }
     temporal_pair_data = {}
     for pair_id, (los_path, coherence_path) in pair_raster_paths.items():
@@ -317,6 +321,8 @@ def export_cesium_lookups(db):
             pair2_data = temporal_pair_data.get("PAIR_20260817_20260829")
             pair1_valid = pair1_data is not None and pair1_data[2][row_idx, col_idx]
             pair2_valid = pair2_data is not None and pair2_data[2][row_idx, col_idx]
+            pair3_data = temporal_pair_data.get("PAIR_20261109_20261121")
+            pair3_valid = pair3_data is not None and pair3_data[2][row_idx, col_idx]
             lookup_data.append({
                 "id": cid,
                 "row": row_idx,
@@ -331,6 +337,8 @@ def export_cesium_lookups(db):
                 "los_pair_17_29_m": float(pair2_data[0][row_idx, col_idx]) if pair2_valid else None,
                 "corr_pair_05_17": float(pair1_data[1][row_idx, col_idx]) if pair1_valid else None,
                 "corr_pair_17_29": float(pair2_data[1][row_idx, col_idx]) if pair2_valid else None,
+                "los_pair_20261109_20261121_m": float(pair3_data[0][row_idx, col_idx]) if pair3_valid else None,
+                "corr_pair_20261109_20261121": float(pair3_data[1][row_idx, col_idx]) if pair3_valid else None,
                 "rain_3d": rain_3d,
                 "score": obs.get("risk_score"),
                 "category": obs.get("risk_category"),

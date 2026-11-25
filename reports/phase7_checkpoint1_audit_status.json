@@ -1,0 +1,133 @@
+{
+  "phase": "PHASE7_CHECKPOINT1",
+  "audit_status": "PASS_WITH_LIMITATIONS",
+  "audit_scope": "inspection_only",
+  "implementation_started": false,
+  "database_modified": false,
+  "model_training_started": false,
+  "synthetic_observations_inserted": false,
+  "paid_hyp3_jobs_submitted": false,
+  "large_satellite_downloads_started": false,
+  "random_forest": {
+    "v2_model": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\models\\landslide_random_forest_v2.joblib",
+    "earlier_model": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\models\\landslide_random_forest.joblib",
+    "library": "scikit-learn",
+    "algorithm": "RandomForestClassifier",
+    "actual_features": [
+      "slope",
+      "elevation"
+    ],
+    "target": "label",
+    "class_labels": [
+      0,
+      1
+    ],
+    "v2_training_data": "data/features/landslide4sense_rf_training_v3.csv",
+    "v2_training_samples": 190644,
+    "v2_unique_patches": 3799,
+    "v2_class_distribution": {
+      "0": 98774,
+      "1": 91870
+    },
+    "v2_hyperparameters": {
+      "n_estimators": 200,
+      "random_state": 42,
+      "n_jobs": -1,
+      "class_weight": "balanced"
+    },
+    "earlier_training_source": "UNKNOWN",
+    "earlier_training_samples": null,
+    "earlier_evaluation_metrics": null
+  },
+  "reproduced_v2_evaluation": {
+    "train_patches": 3039,
+    "test_patches": 760,
+    "patch_overlap": 0,
+    "train_samples": 151706,
+    "test_samples": 38938,
+    "test_class_distribution": {
+      "0": 19760,
+      "1": 19178
+    },
+    "accuracy": 0.5626637218141661,
+    "balanced_accuracy": 0.5623651906093479,
+    "precision": 0.5575984990619137,
+    "recall": 0.5423923245385337,
+    "f1": 0.5498903074035895,
+    "confusion_matrix": [
+      [11507, 8253],
+      [8776, 10402]
+    ]
+  },
+  "scientific_validation": {
+    "tirumala_validated": false,
+    "training_geography": "Landslide4Sense benchmark",
+    "moghalrajpuram_model_is_tirumala_model": false,
+    "independent_tirumala_test": "UNKNOWN_NOT_FOUND",
+    "calibrated_probability": false,
+    "cumulative_displacement_established": false,
+    "one_live_insar_pair_quality_validated": true
+  },
+  "tirumala_risk_pipeline": {
+    "source": "empirical_evidence_index",
+    "random_forest_integrated": false,
+    "weights": {
+      "slope": 0.40,
+      "terrain": 0.25,
+      "insar": 0.20,
+      "temporal": 0.15
+    },
+    "rainfall_in_formula": false,
+    "stored_in_sqlite": true,
+    "exported_to_cesium": true,
+    "dashboard_uses_empirical_risk": true,
+    "dashboard_uses_random_forest": false
+  },
+  "grid_and_data_quality": {
+    "spatial_grid_cells": 7590,
+    "dem_valid_cells": 4083,
+    "insar_quality_valid_cells": 5034,
+    "canonical_crs": "EPSG:32644",
+    "canonical_resolution_m": 80,
+    "rainfall_records": 29,
+    "rainfall_spatial_type": "study-area aggregate",
+    "gsi_points": 15,
+    "gsi_coordinate_quality": "map-derived approximate"
+  },
+  "explainability": {
+    "feature_importance_available": true,
+    "per_prediction_rf_explanation_available": false,
+    "shap_available": false,
+    "confidence_uncertainty_available": false,
+    "empirical_factor_availability_available": true
+  },
+  "major_blockers": [
+    "No independent Tirumala RF ground-truth labels",
+    "RF training is Landslide4Sense benchmark data",
+    "No RF predictions are integrated into the Tirumala spatial grid",
+    "No RF probability calibration or uncertainty analysis",
+    "Training patch geography and CRS are unknown",
+    "V3 contains 12388 exact duplicate rows",
+    "Moghalrajpuram training dataset and metrics are unknown",
+    "Sklearn artifact serialization version differs from active environment",
+    "Only one quality-valid live InSAR epoch is available"
+  ],
+  "backup": {
+    "path": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\database\\backups\\monitoring_phase7_checkpoint1_20261123T042431Z.db",
+    "integrity_check": "ok",
+    "observation_snapshots": 45554
+  },
+  "tests": {
+    "relevant_passed": 23,
+    "relevant_failed": 0,
+    "relevant_warnings": 8,
+    "full_passed": 149,
+    "full_failed": 0,
+    "full_warnings": 11,
+    "full_subtests_passed": 6,
+    "skipped": 0
+  },
+  "report_path": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\PHASE7_CHECKPOINT1_RANDOM_FOREST_AND_RISK_AUDIT.md",
+  "json_path": "C:\\Users\\yarra\\OneDrive\\Desktop\\landslide_digital_twin\\reports\\phase7_checkpoint1_audit_status.json",
+  "checkpoint2_waiting_for_approval": true
+}

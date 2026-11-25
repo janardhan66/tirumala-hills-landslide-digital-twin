@@ -1,0 +1,65 @@
+{
+  "generated_at": "2026-11-24T13:06:17.973598+00:00",
+  "stage": "5",
+  "overall_status": "SCHEDULER_NOT_RUNNING",
+  "discovery": {
+    "status": "WAITING_FOR_NEW_DATA",
+    "last_discovery": "2026-11-23T15:36:51.157834+00:00",
+    "latest_acquisition": "2026-11-21",
+    "products_found": 2,
+    "duplicate_products": 2,
+    "new_acquisitions": 0,
+    "error": null
+  },
+  "scheduler": {
+    "status": "NOT_RUNNING",
+    "running": false,
+    "pid": null,
+    "next_execution": "2026-11-24T02:36:47.713521+05:30",
+    "updated_at": "2026-11-23T21:11:49.535446+05:30"
+  },
+  "processing": {
+    "candidate_pairs": 0,
+    "completed_hyp3_jobs": 1,
+    "failed_hyp3_jobs": 0,
+    "latest_processed_acquisition": "2026-11-21",
+    "last_pipeline_run": {
+      "run_id": "RUN_20261123_150649_566b94",
+      "stage_name": "evaluate_alerts",
+      "status": "SUCCESS",
+      "completed_at": "2026-11-23T15:11:37.171697",
+      "message": "Alerts evaluation: 2 alerts generated."
+    }
+  },
+  "network": {
+    "node_count": 5,
+    "edge_count": 3,
+    "valid_edge_count": 1,
+    "connected_components": 4,
+    "component_sizes": [
+      1,
+      1,
+      1,
+      2
+    ]
+  },
+  "sbas": {
+    "real_ready": false,
+    "cumulative_displacement": "INSUFFICIENT_DATA",
+    "velocity": "VELOCITY_NOT_AVAILABLE",
+    "reference_consistency": "NOT_ESTABLISHED_ACROSS_PAIRS",
+    "temporal_observation_count": 7590,
+    "valid_temporal_observation_count": 5034
+  },
+  "digital_twin": {
+    "status": "AVAILABLE",
+    "latest_valid_observation": "2026-11-21",
+    "terrain": "EXISTING_REAL_PROJECT_DEM",
+    "existing_live_pair": "PAIR_20261109_20261121"
+  },
+  "data_freshness": {
+    "latest_discovered_acquisition": "2026-11-21",
+    "latest_processed_acquisition": "2026-11-21",
+    "timestamp": "2026-11-24T13:06:17.973630+00:00"
+  }
+}

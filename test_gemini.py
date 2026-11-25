@@ -9,9 +9,17 @@ import os
 import sys
 from pathlib import Path
 from dotenv import load_dotenv
+import pytest
 
 
-def test_gemini_connection():
+def check_gemini_connection():
+    api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+    env_path = Path(__file__).resolve().parent / ".env"
+    if env_path.exists():
+        load_dotenv(dotenv_path=env_path)
+        api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+    if not api_key:
+        pytest.skip("GEMINI_API_KEY is not configured.")
     print("=" * 60)
     print("  Google Gemini API Connection Test")
     print("  Project: Tirumala Hills Landslide Monitoring")
@@ -67,7 +75,19 @@ def test_gemini_connection():
         "gemini-2.5-flash",
         "gemini-2.5-flash-lite",
     ]
-    candidate_models = [model for model in candidate_models if model]
+    try:
+        for listed_model in client.models.list():
+            model_name = getattr(listed_model, "name", "")
+            if isinstance(model_name, str):
+                model_name = model_name.split("/")[-1]
+            if model_name and "gemini" in model_name.lower():
+                candidate_models.append(model_name)
+    except Exception as list_err:
+        print(f"[WARN] Could not list available models: {list_err}")
+    candidate_models = list(dict.fromkeys(
+        model for model in candidate_models
+        if model and "image" not in model.lower()
+    ))
     test_prompt = "Explain landslide monitoring in two simple sentences."
 
     print(f"\n[INFO] Sending test prompt: \"{test_prompt}\"")
@@ -135,6 +155,19 @@ def test_gemini_connection():
     return True
 
 
+def test_gemini_connection():
+    api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+    env_path = Path(__file__).resolve().parent / ".env"
+    if env_path.exists():
+        load_dotenv(dotenv_path=env_path)
+        api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+    if not api_key:
+        pytest.skip("GEMINI_API_KEY is not configured.")
+    if os.environ.get("GEMINI_LIVE_TEST", "").strip().lower() not in {"1", "true", "yes"}:
+        pytest.skip("Live Gemini test is opt-in; set GEMINI_LIVE_TEST=1.")
+    assert check_gemini_connection() is True
+
+
 if __name__ == "__main__":
-    success = test_gemini_connection()
+    success = check_gemini_connection()
     sys.exit(0 if success else 1)

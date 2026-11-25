@@ -1,0 +1,68 @@
+{
+  "audit_name": "Final Submission Project Health Audit",
+  "execution_date": "2026-11-23",
+  "overall_status": "PASS WITH LIMITATIONS",
+  "database": {
+    "canonical_database": "database/monitoring.db",
+    "backup_path": "database/backups/monitoring_final_submission_20261123T084307Z.db",
+    "configuration_backup_path": "database/backups/final_submission_config_20261123T084307Z",
+    "integrity": "ok",
+    "counts": {
+      "observation_snapshots": 45554,
+      "risk_history": 2,
+      "alerts": 33,
+      "pipeline_logs": 144,
+      "temporal_insar_observations": 7590,
+      "insar_pairs": 3,
+      "acquisitions": 20,
+      "rainfall_records": 29,
+      "notification_deliveries": 0
+    }
+  },
+  "backend": {
+    "database": "WORKING",
+    "integration": "WORKING",
+    "exports": "WORKING_WITH_LIMITATIONS",
+    "cesium_synchronization": "WORKING_WITH_LIMITATIONS",
+    "scheduler": "WORKING_WITH_LIMITATIONS",
+    "alerts": "WORKING",
+    "notification_delivery": "BLOCKED_BY_EXTERNAL_DEPENDENCY"
+  },
+  "dashboard": {
+    "syntax": "WORKING",
+    "runtime_http": "NOT_REACHABLE",
+    "gemini": "IMPLEMENTED_NOT_FULLY_VERIFIED",
+    "cesium": "IMPLEMENTED_NOT_FULLY_VERIFIED"
+  },
+  "cesium": {
+    "terrain_assets": "IMPLEMENTED_AND_VERIFIED",
+    "three_insar_epochs": "IMPLEMENTED_AND_VERIFIED",
+    "gsi_points": "IMPLEMENTED",
+    "live_http_server": "NOT_REACHABLE"
+  },
+  "testing": {
+    "phase7_relevant": {
+      "passed": 23,
+      "failed": 0,
+      "warnings": 8
+    },
+    "full_suite": {
+      "passed": 150,
+      "failed": 0,
+      "warnings": 12,
+      "subtests_passed": 6
+    }
+  },
+  "aiml": {
+    "independent_tirumala_ground_truth_sufficient": false,
+    "random_forest_training_recommended": false,
+    "model_training_performed": false,
+    "benchmark_duplicates": 12388,
+    "sentinel2_complete": false,
+    "cell_level_rainfall_ready": false
+  },
+  "production_database_modified": false,
+  "production_risk_formula_modified": false,
+  "frontend_modified": false,
+  "next_recommended_task": "Start existing Streamlit and Cesium servers; verify browser behavior, credentials and external-service status."
+}

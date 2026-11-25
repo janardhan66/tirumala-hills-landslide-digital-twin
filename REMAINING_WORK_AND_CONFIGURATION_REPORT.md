@@ -1,23 +1,62 @@
 # Remaining Work and Configuration Report
 
 **Assessment date:** 2026-11-22 (local time, UTC+5:30)  
-**Current state:** Partial implementation; live end-to-end operation remains
-blocked and unverified.
+**Current state:** One live HyP3-to-SQLite-to-Cesium workflow is verified.
+Repeated unattended monitoring and live raw-SLC/IMERG ingestion remain
+incomplete or blocked.
+
+## Verified on 2026-11-22
+
+- Dependencies, including APScheduler and HyP3 SDK, are installed.
+- 84 Python tests passed, with 6 subtests passed.
+- The canonical Streamlit dashboard responds with HTTP 200 on port 8501.
+- The master pipeline dry run completes successfully.
+- The scheduler daemon is running with a 6-hour interval.
+- Scheduler and pipeline telemetry files are being published.
+- Sentinel-1 and Sentinel-2 discovery use the CDSE API safely.
+- Missing CDSE/NASA credentials are reported without downloading or
+  fabricating products.
+- SAFE and Sentinel-2 archive handling is implemented; complete S2 bands are
+  clipped and reprojected to the canonical 80 m grid.
+- HyP3 job submission, status checking, download extraction, and LOS/coherence
+  alignment are implemented behind credential checks.
+- HyP3 job `3889d809-88a3-4a93-89a5-258821932737` succeeded and its product
+  ZIP was downloaded and integrity-tested.
+- Live LOS/coherence rasters were aligned to 69 x 110 cells at 80 m and stored
+  for pair `PAIR_20261109_20261121`.
+- Cesium timeline, texture, GLB model and sync status include 21 November 2026.
+- Telegram and SMTP delivery functions have credential and response validation.
+- Gemini credentials load and live model generation was verified successfully
+  with `gemini-3.1-flash-lite`; no secret values are printed.
+- Dashboard startup now loads the U-Net lazily, only when uploaded HDF5
+  inference or model information is requested.
+- Research CSV loaders use a 5-minute Streamlit cache; scheduler and pipeline
+  telemetry use a 5-second cache.
+- Streamlit file watching is disabled and the local server configuration is
+  pinned to `127.0.0.1:8501`.
+- CDSE OAuth authentication was validated successfully.
+- Live CDSE discovery found one Sentinel-1 product for 20–22 November 2026.
+- HyP3 authentication was validated and account job discovery completed
+  successfully.
+- NASA Earthdata credentials load in the downloader, but Final/Late historical
+  file URL probes returned 404 for the configured endpoint/version. The
+  rainfall stage remains safely blocked rather than writing synthetic records.
 
 ## Blockers to end-to-end operation
 
-1. **CDSE authentication and downloads — BLOCKED.** The current environment
-   has no `CDSE_USERNAME` or `CDSE_PASSWORD`. The last recorded search found
-   11 products but downloaded none. No actual product download was performed
-   during this verification.
-2. **NASA IMERG retrieval — BLOCKED.** `EARTHDATA_USERNAME` and
-   `EARTHDATA_PASSWORD` are absent. The 29 database rainfall rows are existing
-   records; no new observation was ingested during this verification.
-3. **Sentinel SAFE preprocessing — INCOMPLETE.** The current worker validates
-   an archive header/manifest but does not unpack SAFE products, extract
-   bands, clip new products to the AOI, or align them to the analytical grid.
-   The worker deliberately leaves acquisitions `UNPROCESSED`.
-4. **Automatic InSAR processing — INCOMPLETE/BLOCKED.** SNAP GPT is present
+1. **CDSE downloads — PARTIAL.** OAuth authentication and live metadata
+   discovery are verified. A complete direct raw-SLC download did not finish;
+   the invalid 3104964608-byte reference partial archive was quarantined.
+   Final range/size/ZIP/resume verification needs one completed download.
+2. **NASA IMERG retrieval — BLOCKED.** CMR collection and `.nc4` granule
+   discovery are implemented and official Late granule metadata was found.
+   GES DISC returned HTTP 401 with the configured Earthdata session. Existing
+   rainfall rows are preserved and no rainfall was fabricated.
+3. **Sentinel SAFE preprocessing — PARTIAL.** SAFE/Sentinel-2 archive
+   handling is implemented with integrity and temporary extraction, but a
+   completed raw Sentinel-1 full download and complete S2 band set are still
+   required for end-to-end preprocessing.
+4. **Automatic InSAR processing — PARTIAL.** SNAP GPT is present
    at `C:\Program Files\esa-snap\bin\gpt.exe` and `hyp3_sdk` is installed.
    `process_insar.py` contains a SNAP graph scaffold and manual HyP3
    submit/status helpers, but the scheduled `process_new_insar_pairs()` path

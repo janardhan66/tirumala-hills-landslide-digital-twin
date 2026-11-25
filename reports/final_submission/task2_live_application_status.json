@@ -1,0 +1,81 @@
+{
+  "task": "FINAL_SUBMISSION_SPRINT_TASK2",
+  "execution_date": "2026-11-23",
+  "overall_status": "PASS WITH LIMITATIONS",
+  "streamlit": {
+    "url": "http://127.0.0.1:8501",
+    "pid": 26360,
+    "port": 8501,
+    "health_status": 200,
+    "startup_status": "RUNNING",
+    "browser_status": "LOADED",
+    "tabs": {
+      "overview": "VERIFIED",
+      "3d_digital_twin": "VERIFIED",
+      "continuous_monitoring": "VERIFIED",
+      "risk_assessment": "VERIFIED",
+      "automation_status": "VERIFIED",
+      "alerts": "VERIFIED"
+    },
+    "startup_warnings": [
+      "use_container_width deprecation warnings",
+      "invalid theme sidebar color warnings"
+    ]
+  },
+  "cesium": {
+    "url": "http://127.0.0.1:8088",
+    "pid": 26368,
+    "port": 8088,
+    "health_status": 200,
+    "startup_status": "RUNNING",
+    "browser_status": "LOADED",
+    "terrain": "VERIFIED",
+    "controls": "VERIFIED",
+    "slope_switching": "VERIFIED",
+    "epoch_switching": "VERIFIED",
+    "gsi_points": "VERIFIED",
+    "cell_inspector": "RENDERED_NOT_CLICK_VERIFIED",
+    "missing_assets": [
+      "favicon.ico"
+    ]
+  },
+  "database": {
+    "integrity": "ok",
+    "production_modified": false,
+    "counts": {
+      "observation_snapshots": 45554,
+      "risk_history": 2,
+      "alerts": 33,
+      "pipeline_logs": 144,
+      "temporal_insar_observations": 7590,
+      "notification_deliveries": 0
+    }
+  },
+  "gemini": {
+    "credential_configured": true,
+    "live_api_status": "SUCCESS",
+    "browser_response_tested": false
+  },
+  "notifications": {
+    "telegram_configured": false,
+    "smtp_configured": false,
+    "test_message_sent": false,
+    "delivery_status": "NOT_VERIFIED"
+  },
+  "tests": {
+    "phase7_relevant": {
+      "passed": 23,
+      "failed": 0,
+      "warnings": 8
+    },
+    "full_suite": {
+      "passed": 150,
+      "failed": 0,
+      "warnings": 12,
+      "subtests_passed": 6
+    }
+  },
+  "model_training_performed": false,
+  "production_risk_formula_modified": false,
+  "frontend_modified": false
+}

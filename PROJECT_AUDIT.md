@@ -235,3 +235,5 @@ Each component is classified into one of four states:
 | **Phase 10: Unified Backend, DB & Dashboard**| **PARTIAL; DB TESTED** | Verify live synchronization through the dashboard | High |
 | **Phase 11: Automated Alerting & Reports** | **PARTIAL; RULES TESTED** | Configure and verify notifications and field-review workflow | Medium |
 | **Phase 12: End-to-End Validation** | **OFFLINE TEST SUITE PASSES** | Run credentialed end-to-end validation on real observations | High |
+| **First Live HyP3-to-Cesium Observation** | **PASS** | Downloaded, validated, aligned, stored and exported 09-21 Nov 2026 evidence | High |
+| **Repeated Automated Monitoring Cycles** | **NOT TESTED** | Run multiple real satellite/InSAR cycles without manual intervention | Very High |

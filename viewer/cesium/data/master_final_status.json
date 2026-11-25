@@ -1,0 +1,85 @@
+{
+  "generated_at": "2026-11-24T13:25:20.023494+00:00",
+  "overall_status": "DEMONSTRATION_READY_WITH_LIMITATIONS",
+  "project": {
+    "satellite_monitoring": "WAITING_FOR_NEW_DATA",
+    "temporal_inversion": "NOT_RELIABLE_WITH_SINGLE_PAIR",
+    "risk_model": "EMPIRICAL_EVIDENCE_INDEX",
+    "alert_delivery": "LOCAL_EVIDENCE_ALERTS_NOT_EXTERNALLY_VERIFIED",
+    "u_net": "BENCHMARK_ONLY_NO_LOCAL_VALIDATION"
+  },
+  "risk": {
+    "count": 2650,
+    "category": "Low",
+    "score": 31.78,
+    "distribution": {
+      "Low": 1360,
+      "Medium": 876,
+      "High": 414
+    }
+  },
+  "factor_availability": {
+    "dem": "AVAILABLE",
+    "slope": "AVAILABLE",
+    "aspect": "AVAILABLE",
+    "insar_los": "AVAILABLE_WITH_REFERENCE_LIMITATION",
+    "insar_coherence": "AVAILABLE",
+    "gsi_history": "AVAILABLE_AS_APPROXIMATE_LOCATIONS",
+    "rainfall": "AVAILABLE_AGGREGATE_WITH_RECONCILIATION_LIMITATION",
+    "unet": "BENCHMARK_METADATA_ONLY"
+  },
+  "monitoring_history": {
+    "latest_discovered_acquisition": "2026-11-21",
+    "latest_processed_acquisition": "2026-11-21",
+    "latest_discovery_event": {
+      "discovery_completed_at": "2026-11-23T15:36:51.157834+00:00",
+      "status": "WAITING_FOR_NEW_DATA",
+      "products_found": 2,
+      "duplicate_products": 2,
+      "new_acquisitions": 0
+    },
+    "latest_risk_history": {
+      "observation_date": "2026-11-21",
+      "mean_risk_score": 38.27,
+      "max_risk_score": 99.91,
+      "low_count": 1360,
+      "medium_count": 876,
+      "high_count": 414
+    },
+    "alert_count": 5
+  },
+  "preservation": {
+    "acquisitions": 20,
+    "insar_pairs": 3,
+    "rainfall_records": 29,
+    "spatial_evidence_grid": 7590,
+    "observation_snapshots": 11673,
+    "risk_history": 2,
+    "alerts": 5,
+    "pipeline_logs": 155,
+    "scheduler_state": 4,
+    "cesium_layers": 5,
+    "vegetation_indices": 0,
+    "monitoring_discovery_events": 18,
+    "monitoring_events": 67,
+    "temporal_insar_observations": 7590,
+    "hyp3_job_status_history": 1,
+    "sentinel_download_jobs": 0,
+    "sentinel_download_attempts": 0,
+    "sentinel_archive_validation": 0,
+    "sentinel_preprocessing_readiness": 0,
+    "sentinel_product_inventory": 0,
+    "insar_processing_runs": 12,
+    "insar_raster_validation": 24,
+    "insar_temporal_network": 1,
+    "insar_inversion_runs": 1
+  },
+  "limitations": [
+    "No real cumulative LOS displacement or velocity is shown.",
+    "No missing rainfall or InSAR data is treated as zero.",
+    "GES DISC rainfall access remains blocked.",
+    "Telegram and SMTP delivery are not verified.",
+    "U-Net benchmark metadata is not local Tirumala validation.",
+    "GSI coordinates are approximate map-derived locations."
+  ]
+}

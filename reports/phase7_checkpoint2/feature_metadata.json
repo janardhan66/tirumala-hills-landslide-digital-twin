@@ -1,0 +1,200 @@
+{
+  "checkpoint": "phase7_checkpoint2",
+  "execution_timestamp_utc": "2026-11-23T08:42:36.861107+00:00",
+  "canonical_grid": {
+    "rows": 69,
+    "columns": 110,
+    "cells": 7590,
+    "crs": "EPSG:32644",
+    "resolution_m": 80.0
+  },
+  "rasters": [
+    {
+      "file_path": "data/processed/dinsar/tirumala/gsi_aoi/tirumala_dem_80m_gsi_aoi.tif",
+      "crs": "EPSG:32644",
+      "pixel_size_m": [
+        80.0,
+        80.0
+      ],
+      "width": 110,
+      "height": 69,
+      "bounds": [
+        319720.0,
+        1508840.0,
+        328520.0,
+        1514360.0
+      ],
+      "transform": [
+        80.0,
+        0.0,
+        319720.0,
+        0.0,
+        -80.0,
+        1514360.0
+      ],
+      "nodata": 0.0,
+      "valid_pixel_count": 4083,
+      "missing_pixel_count": 3507
+    },
+    {
+      "file_path": "data/processed/dinsar/tirumala/gsi_aoi/tirumala_slope_80m_gsi_aoi.tif",
+      "crs": "EPSG:32644",
+      "pixel_size_m": [
+        80.0,
+        80.0
+      ],
+      "width": 110,
+      "height": 69,
+      "bounds": [
+        319720.0,
+        1508840.0,
+        328520.0,
+        1514360.0
+      ],
+      "transform": [
+        80.0,
+        0.0,
+        319720.0,
+        0.0,
+        -80.0,
+        1514360.0
+      ],
+      "nodata": 0.0,
+      "valid_pixel_count": 3692,
+      "missing_pixel_count": 3898
+    },
+    {
+      "file_path": "data/processed/dinsar/tirumala/gsi_aoi/tirumala_aspect_80m_gsi_aoi.tif",
+      "crs": "EPSG:32644",
+      "pixel_size_m": [
+        80.0,
+        80.0
+      ],
+      "width": 110,
+      "height": 69,
+      "bounds": [
+        319720.0,
+        1508840.0,
+        328520.0,
+        1514360.0
+      ],
+      "transform": [
+        80.0,
+        0.0,
+        319720.0,
+        0.0,
+        -80.0,
+        1514360.0
+      ],
+      "nodata": -9999.0,
+      "valid_pixel_count": 4083,
+      "missing_pixel_count": 3507
+    },
+    {
+      "file_path": "data/processed/dinsar/tirumala/gsi_aoi/PAIR_20261109_20261121/tirumala_live_los_disp_80m.tif",
+      "crs": "EPSG:32644",
+      "pixel_size_m": [
+        80.0,
+        80.0
+      ],
+      "width": 110,
+      "height": 69,
+      "bounds": [
+        319720.0,
+        1508840.0,
+        328520.0,
+        1514360.0
+      ],
+      "transform": [
+        80.0,
+        0.0,
+        319720.0,
+        0.0,
+        -80.0,
+        1514360.0
+      ],
+      "nodata": null,
+      "valid_pixel_count": 7240,
+      "missing_pixel_count": 350
+    },
+    {
+      "file_path": "data/processed/dinsar/tirumala/gsi_aoi/PAIR_20261109_20261121/tirumala_live_coherence_80m.tif",
+      "crs": "EPSG:32644",
+      "pixel_size_m": [
+        80.0,
+        80.0
+      ],
+      "width": 110,
+      "height": 69,
+      "bounds": [
+        319720.0,
+        1508840.0,
+        328520.0,
+        1514360.0
+      ],
+      "transform": [
+        80.0,
+        0.0,
+        319720.0,
+        0.0,
+        -80.0,
+        1514360.0
+      ],
+      "nodata": null,
+      "valid_pixel_count": 7245,
+      "missing_pixel_count": 345
+    },
+    {
+      "file_path": "data/processed/dinsar/tirumala/gsi_aoi/tirumala_temporal_los_change_05_17_to_17_29.tif",
+      "crs": "EPSG:32644",
+      "pixel_size_m": [
+        80.0,
+        80.0
+      ],
+      "width": 110,
+      "height": 69,
+      "bounds": [
+        319720.0,
+        1508840.0,
+        328520.0,
+        1514360.0
+      ],
+      "transform": [
+        80.0,
+        0.0,
+        319720.0,
+        0.0,
+        -80.0,
+        1514360.0
+      ],
+      "nodata": null,
+      "valid_pixel_count": 2569,
+      "missing_pixel_count": 5021
+    }
+  ],
+  "rainfall": {
+    "status": "unavailable_at_cell_level",
+    "file": "data/processed/rainfall/tirumala/tirumala_rainfall_features_20260801_20260829.csv",
+    "records": 29,
+    "date_range": [
+      "2026-08-01",
+      "2026-08-29"
+    ],
+    "unit": "mm",
+    "aggregation": "study-area aggregate",
+    "mismatch": "Multiple rainfall CSV/date rollups use differing grid_cells and source periods; no reconciled pixel raster exists."
+  },
+  "sentinel2": {
+    "status": "unavailable",
+    "usable_bands": [],
+    "land_cover": "unavailable"
+  },
+  "gsi_distance": {
+    "status": "available_experimental",
+    "method": "Euclidean distance from 80 m grid cell center to nearest map-derived GSI point",
+    "crs": "EPSG:32644",
+    "units": "metres and kilometres",
+    "point_count": 15,
+    "point_provenance": "GSI Figure 3.2 map-derived approximate points"
+  }
+}
